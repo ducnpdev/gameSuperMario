@@ -1,0 +1,290 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\simon.png	176	224	248
+1	textures\mario.png	255	255	255
+99	textures\brickfloor.png	176	224	248
+556	textures\tilemap\map2.png	176	224	248
+2	textures\tilemap\map2Brick.png	176	224	248
+70	textures\misc.png	176	224	248
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# ---------Small MARIO 
+# idle right
+10000	247	0	260	15	1
+# walk right
+10001	305	0	322	33	1
+10002	275	0	292	15	1
+
+#attact right
+10003	305	0	330	33	0
+10004	275	0	300	33	0
+10005	245	0	270	33	0
+# sit down right
+10006	335	0	360	33	0
+
+# idle left
+10014	186	0	200	15	1
+
+#walk left
+10015	124	0	141	15	1
+10016	155	0	172	15	1
+
+# sit down left
+10020	125	0	150	33	0
+# attact left
+10017	155	0	180	33	0
+10018	185	0	210	33	0
+10019	215	0	240	33	0
+# jump right
+10021	395	80	411	97	1
+
+# jump left
+10022	35	79	52	96	1
+
+# Simon die 
+10099	0	0	32	32	1
+
+# ----------- BIGGGG Mario
+# Idle Left
+10023	185	155	200	181	1
+# walk left
+10025	154	155	172	181	1
+10026	124	155	142	181	1
+# Idle Right
+10024	245	154	260	181	1
+# walk right
+10027	275	155	292	181	1
+10028	305	155	322	181	1
+# Idle Left jump
+10029	33	274	52	302	1
+# Idle Right jump
+10030	394	274	412	301	1
+
+# idle right attact
+10031	242	633	265	662	1
+# idle left attact
+10032	181	633	203	662	1
+# walk right attact
+10033	271	633	294	662	1
+10034	302	633	324	662	1
+# walk left attact
+10035	151	633	174	662	1
+10036	121	633	144	662	1
+# jump right attact
+10037	391	753	416	781	1
+# jump left attact
+10038	30	753	54	781	1
+# sitdown right Simon 
+10039	425	228	440	258	1
+# sitdown left Simon 
+10040	5	228	20	258	1
+# sitdown right Simon attact
+10041	421	708	444	737	1
+# sitdown left Simon attact
+10042	1	708	24	737	1
+# Simon Level 3 attak right
+10043	330	633	355	663	1
+# simon level 3 attack left
+10044	90	633	116	663	1
+# level 1 to 2 ->Idle Left
+10045	424	1563	438	1589	1
+# level 1 to 2 ->Idle Right
+10046	8	1560	23	1586	1
+#  level 2 to 3
+10047	545	21	559	34	70
+# level 2 to 3
+10048	560	22	574	34	1
+
+# level 3 wag tail right
+10049	302	793	325	821	1
+10050	391	753	415	781	1
+10051	361	793	385	822	1
+# level 3 wag tail left
+10052	121	793	144	821	1
+10053	30	753	54	781	1
+10054	60	793	84	822	1
+
+#BRICK
+20001	0	0	16	16	2
+
+# money
+80001	303	99	313	115	70
+80002	322	99	330	115	70
+80003	340	99	347	115	70
+80004	250	120	260	135	70
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ======= MARIO SMAIL =========
+#idle small right
+100	10000	100
+#idle small left
+101	10014	100
+#walk right small
+102	10000	100	10001	100	10002	100
+#walk left small
+103	10014	100	10015	100	10016	100
+#sit down right
+104	10006	100
+#sit down left
+105	10020	100
+#attact right 
+106	10003	100	10004	100	10005	100
+# attact left
+107	10017	100	10018	100	10019	100
+# jump right
+108	10021	100	10021	100	10021	100
+# jump left
+109	10022	100	10022	100	10022	100
+
+# idle big right
+110	10024	100
+# idle big left
+111	10023	100
+
+# jump big right
+114	10030	100
+# jump big left
+115	10029	100
+
+# walk right big
+112	10024	100	10027	100	10028	100
+
+# walk left big
+113	10023	100	10025	100	10026	100
+
+# up level small to big ->right
+117	10046	100	10024	100
+
+#idle attact BIG right
+118	10031	100
+#idle attact BIG left
+119	10032	100
+#walk right BIG
+120	10031	100	10033	100	10034	100
+#walk left BIG
+121	10032	100	10035	100	10036	100
+# jump BIG attact right
+122	10037	100
+# jump BIG attact left
+123	10038	100
+# Sitdow BIG right
+124	10039	100
+# Sitdown BIG left
+125	10040	100
+# Sitdow BIG attact right
+126	10041	100
+# Sitdown BIG attact left
+127	10042	100
+
+# simon level 3 attack right
+128	10031	100	10043	100	10044	100
+# simon level 3 attack left
+129	10032	100	10044	100	10043	100
+
+# up level 1 to 2 ->left
+130	10045	100	10023	100
+
+# up level 2 to 3
+131	10047	100	10048	100
+
+# level 3 wag tail right
+132	10049	50	10050	50	10051	50
+# level 3 wag tail left
+133	10052	50	10053	50	10054	50
+
+#die
+199	10099	100
+
+# ======== BRICK =========
+201	20001	100
+
+# ==== money =========
+801	80004	100
+802	80001	100	80002	100	80003	100
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+
+# MARIO
+1	199	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	117	118	119	120	121	122	123	124	125	126	127	128	129	130	131	132	133
+# BRICK 
+2	201
+# money
+8	801	802
+
+[OBJECTS]
+
+# brick floor
+
+9	160	0	2	16	16
+9	176	0	2	16	16
+9	192	0	2	16	16
+9	208	0	2	16	16
+9	224	0	2	16	16
+9	240	0	2	16	16
+9	256	0	2	16	16
+9	272	0	2	16	16
+9	288	0	2	16	16
+9	304	0	2	16	16
+9	320	0	2	16	16
+9	336	0	2	16	16
+
+9	112	32	2	16	16
+9	112	48	2	16	16
+9	112	64	2	16	16
+9	112	80	2	16	16
+9	112	96	2	16	16
+9	112	112	2	16	16
+9	112	128	2	16	16
+9	112	144	2	16	16
+
+9	128	160	2	16	16
+9	144	160	2	16	16
+9	160	160	2	16	16
+9	176	160	2	16	16
+9	192	160	2	16	16
+9	208	160	2	16	16
+9	224	160	2	16	16
+9	240	160	2	16	16
+
+9	256	144	2	16	16
+
+9	272	128	2	16	16
+9	288	112	2	16	16
+9	304	96	2	16	16
+9	320	80	2	16	16
+9	336	64	2	16	16
+9	352	64	2	16	16
+9	368	64	2	16	16
+9	384	48	2	16	16
+9	384	32	2	16	16
+
+# money
+8	272	80	8
+8	192	80	8
+8	256	96	8
+8	240	96	8
+8	224	96	8
+8	208	96	8
+8	256	64	8
+8	240	64	8
+8	224	64	8
+8	208	64	8
+
+# MARIO
+0	150.0	0	1	
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	  355	20	 0	    370	   30	     1
+
+[TILEMAP]
+# world 1 canh phia duoi
+2
+
+

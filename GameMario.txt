@@ -1,0 +1,9 @@
+Lan 1:
+	- Background: 
+	- Mario full state:	+ di
+				+ chay (nhanh, cham)
+				+ nhay, nhay cao
+				+ lon, ban lua, duoi
+				+ ngoi
+	- Read render attack !!!
+	-- commit handle Jump and attack 

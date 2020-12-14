@@ -1,0 +1,168 @@
+void CPlayScene::Update(DWORD dt)
+{
+	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
+	// TO-DO: This is a "dirty" way, need a more organized way 
+	
+	// check if game if game is pausing 
+	// and if it need to be unpause
+	UnPause();
+	vector<LPGAMEOBJECT> coObjects;
+	vector<LPGAMEOBJECT> marioCoObjects; // arr mario NOT coliding in object all game
+	vector<LPGAMEOBJECT> brickCoObjects;
+	vector<LPGAMEOBJECT> mushroomCoObjects;
+	vector<LPGAMEOBJECT> goombaCoObjects;
+	vector<LPGAMEOBJECT> OtherCoObjects;
+	vector<LPGAMEOBJECT> tailCoObject;
+	vector<LPGAMEOBJECT> flowerCoObject;
+
+	for (size_t i = 1; i < objects.size(); i++)	
+	{
+		// //
+		if (dynamic_cast<CBrick*>(objects[i])) {
+			tailCoObject.push_back(objects[i]);
+			// tmpMarioCoObject.push_back(objects[i]);
+		}
+		// //
+
+		if (dynamic_cast<CEnemies*>(objects[i])) {
+			tailCoObject.push_back(objects[i]);
+			// tmpMarioCoObject.push_back(objects[i]);
+		}
+		// // //
+		if(objects[i]->type == OBJECT_TYPE_BRICK || objects[i]->type == OBJECT_TYPE_BRICK_FLOOR || 
+			 objects[i]->type == OBJECT_TYPE_MUSHROOM || objects[i]->type == OBJECT_TYPE_TURTLE 
+			 || objects[i]->type == OBJECT_TYPE_GOOMBA 
+			|| objects[i]->type == OBJECT_TYPE_GOOMBA_FLY || objects[i]->type == OBJECT_TYPE_HOLD
+			|| objects[i]->type == OBJECT_TYPE_LEAF || objects[i]->type == OBJECT_TYPE_BULLET
+		){
+			coObjects.push_back(objects[i]);
+		}
+		 if(objects[i]->type == OBJECT_TYPE_BRICK || objects[i]->type == OBJECT_TYPE_BRICK_FLOOR){
+			mushroomCoObjects.push_back(objects[i]);
+		 }
+		 if (objects[i]->type == OBJECT_TYPE_TAIL) {
+			 OtherCoObjects.push_back(objects[i]);
+		 }
+		
+	}
+	
+	// if pausing we only update player
+	if (isPause) {
+		player->Update(dt, &coObjects);
+	} else {
+	//
+		for (size_t i = 0; i < objects.size(); i++)
+		{	
+			// // //
+			
+			// // //
+		
+			if (objects[i]->type == OBJECT_TYPE_TAIL) {
+				objects[i]->Update(dt, &OtherCoObjects);
+			}
+			else if (objects[i]->type == OBJECT_TYPE_MUSHROOM) {
+				if (objects[i]->GetState() == STATE_MUSHROOM_DIE ) {
+					player->y -= 20;
+					if (player->GetLevel() == MARIO_LEVEL_1) {
+						Pause();
+						player->SetLevel(MARIO_LEVEL_2);
+					}
+					else if (player->GetLevel() == MARIO_LEVEL_2) {
+						Pause();
+						player->SetLevel(MARIO_LEVEL_3);
+					}
+					objects[i]->deleteObject(objects, i); continue;
+				}
+				else {
+					objects[i]->Update(dt, &mushroomCoObjects);
+				}
+			}
+			else if (objects[i]->type != OBJECT_TYPE_MUSHROOM) {
+				if (objects[i]->type == OBJECT_TYPE_BRICK && objects[i]->GetState() == BRICK_STATE_DIE) {
+					CBrick* brick = static_cast<CBrick*>(objects[i]);
+					if (brick->GetTypeItemRender() == BRICK_ITEM_RENDER_MONEY) {
+						CMoney* money = new CMoney(objects[i]->x, objects[i]->y);
+						CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+						LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_MONEY);
+						money->SetPosition(objects[i]->x, objects[i]->y);
+						money->SetAnimationSet(ani_set);
+						objects.push_back(money);
+					}
+					else if (brick->GetTypeItemRender() == BRICK_ITEM_RENDER_NUMBER) {
+						CNumber* number = new CNumber(objects[i]->x, objects[i]->y);
+						CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+						LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
+						number->SetPosition(objects[i]->x, objects[i]->y);
+						number->SetAnimationSet(ani_set);
+						objects.push_back(number);
+					}
+					else if (brick->GetTypeItemRender() == BRICK_ITEM_RENDER_MUSHROOM) {
+						CMushroom* mushroom = new CMushroom();
+						CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+						LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_MUSHROOM);
+						mushroom->SetPosition(objects[i]->x, objects[i]->y - 15);
+						mushroom->SetAnimationSet(ani_set);
+						objects.push_back(mushroom);
+					}
+					else if (brick->GetTypeItemRender() == BRICK_ITEM_RENDER_LEAF) {
+						CItemLeaf* leaf = new CItemLeaf(objects[i]->x, objects[i]->y);
+						CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+						LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_LEAF);
+						leaf->SetPosition(objects[i]->x, objects[i]->y);
+						leaf->SetAnimationSet(ani_set);
+						objects.push_back(leaf);
+					}
+
+					objects[i]->SetState(BRICK_STATE_DONE);
+				}
+
+				else if (objects[i]->type == OBJECT_TYPE_GOOMBA && objects[i]->GetState() == GOOMBA_STATE_DIE) {
+					CNumber* number = new CNumber(objects[i]->x, objects[i]->y);
+					CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
+					number->SetPosition(objects[i]->x, objects[i]->y);
+					number->SetAnimationSet(ani_set);
+					objects.push_back(number);
+					objects[i]->deleteObject(objects, i); continue;
+				}
+				
+				else if (objects[i]->type == OBJECT_TYPE_NUMBER && objects[i]->GetState() == STATE_NUMBER_DIE) {
+					objects[i]->deleteObject(objects, i); continue;
+				}
+				else if (objects[i]->type == OBJECT_TYPE_LEAF && objects[i]->GetState() == STATE_LEAF_DIE) {
+					objects[i]->deleteObject(objects, i); continue;
+				}
+				else if (objects[i]->type == OBJECT_TYPE_MONEY && objects[i]->GetState() == STATE_MONEY_DIE) {
+					objects[i]->deleteObject(objects, i); continue;
+				}
+				else {
+					objects[i]->Update(dt, &coObjects);
+					//objects[i]->Update(dt, &tailCoObject);
+				}
+			}
+
+			
+
+			if (dynamic_cast<CTail*>(objects[i])) {
+				// vector<LPGAMEOBJECT> tmpTailCoObjects;
+				// tmpTailCoObjects.insert(tmpTailCoObjects.begin(), flowerCoObject.begin(), flowerCoObject.end());
+				objects[i]->Update(dt, &tailCoObject);
+			}
+
+		}
+	}
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	if (player == NULL) return; 
+	//DebugOut(L"boolean:", player->pauseGame);
+
+	// Update camera to follow mario
+	float cx, cy;
+	player->GetPosition(cx, cy);
+
+	CGame *game = CGame::GetInstance();
+	cx -= game->GetScreenWidth() / 2;
+	cy -= game->GetScreenHeight() / 2;
+	if (cx > 0.0f && cx < 2512.f) {
+		CGame::GetInstance()->SetCamPos((int)cx, 0.0f /*cy*/);
+	}
+}

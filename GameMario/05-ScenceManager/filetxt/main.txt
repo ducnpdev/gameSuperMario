@@ -1,0 +1,12 @@
+[SETTINGS]
+start	4
+#scene list
+[SCENES]
+1	filetxt\scene1.txt	filetxt\tileMap\map1.txt
+2	filetxt\scene2.txt	filetxt\tileMap\map2.txt
+# scene intro
+3	filetxt\intro.txt	filetxt\tileMap\intro.txt
+# world map
+4	filetxt\worldmap.txt	filetxt\tileMap\worldMap.txt
+#2	filetxt\scene2.txt
+#4	filetxt\scene-test.txt

@@ -1,0 +1,44 @@
+0. item
+đồng tiền có sẵn -----> Done
+
+1.
+brick phải có 3 loại:
+nền   --->Done
+đánh mất   ---->  
+đánh ra item  ---> Done
+
+
+2.
+đẩy  hết các object vào mảng tương ứng của nó
+vd gạch là vào mảng gạch
+
+3.
+tạo  mảng va chạm từ 1 cho các vật thể tương ưng
+vd: mảng va chạm của player là: quái + item + brick
+
+mảng va  chạm của quái là: brick
+
+mảng va  chạm của đuôi là: brick và quái
+
+mảng va chạm của item: brick
+
+4. xử lý va chạm của đuôi ----------> done
+
+5. bay
+
+6. UI 
+
+7. chuyển scene ---> done
+
+8. dưới ống cống   ---> done  
+
+9.chạy đà
+
+10.bay  
+
+11.chui ống cống
+
+12. map ống cống
+
+
+
