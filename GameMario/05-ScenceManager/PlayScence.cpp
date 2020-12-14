@@ -19,7 +19,6 @@
 #include "IntroGoomba.h"
 #include "WorldMapAni.h"
 
-
 using namespace std;
 
 CBackground *background;
@@ -36,7 +35,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath, LPCWSTR pathBackground) : CScen
 
 void CPlayScene::_ParseSection_TILEMAP(string line)
 {
-	// DebugOut(L"tileMapID %d \n", line);
 	vector<string> tokens = split(line);
 	if (tokens.size() < 1) return;
 	int tileMapID = atoi(tokens[0].c_str());
@@ -87,8 +85,6 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	if (tokens.size() < 3)
 		return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
@@ -125,15 +121,12 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
-
 /*
 	Parse a line in section [OBJECTS] 
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
 	if (tokens.size() < 3)
 		return; // skip invalid lines - an object set must have at least id, x, y
@@ -156,7 +149,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		DebugOut(L"create Instance Mario");
 		obj = new CMario(x, y);
 		player = (CMario *)obj;
 		break;
@@ -185,11 +177,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = brick;
 		break;
 	}
-	case OBJECT_TYPE_KOOPAS:
-	{
-		obj = new CKoopas();
-		break;
-	}
+
 	case OBJECT_TYPE_TURTLE:
 	{
 		float typeRender = atof(tokens[4].c_str());
@@ -205,8 +193,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int width = atof(tokens[4].c_str());
 		int height = atof(tokens[5].c_str());
-		/*int width = 16;
-		int height = 16;*/
 		obj = new CBrickFloor(width,height);
 		break;
 	}
@@ -215,11 +201,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrickColliBroken();
 		break;
 	}
-	case OBJECT_TYPE_MORNINGSTAR:
-	{
-		obj = new CMorningStar();
-		break;
-	}
+	
 	case OBJECT_TYPE_MONEY:
 	{
 		obj = new CMoney(1.0, 1.0, false);
@@ -231,7 +213,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CFlower(x, y,type);
 		break;
 	}
-	// delete class CFlowerType2 hien tai chua xai
 	case OBJECT_TYPE_FLOWER_TYPE2:
 	{
 		obj = new CFlowerType2(x, y);	
@@ -317,7 +298,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_WORLD_MAP_MARIO_PLAYER:
 	{
-		DebugOut(L"create Instance MarioWorldMap");
 		if (playerWorldMap != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO WORLD MAP object was created before!\n");
@@ -326,18 +306,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMarioWorldMap();
 		playerWorldMap = (CMarioWorldMap*)obj;
 		break;
-		/*obj = new CMarioWorldMap();
-		break;*/
 	}
 	// end world map
 	// start HUD
 	case OBJECT_TYPE_HUD:
 	{
-		// if(hud != NULL) return;
-		//int type = atof(tokens[4].c_str());
-		
 		obj = CHud::GetInstance();
-	//	hud = (CHud*)(obj);
 		break;
 	}
 	// end HUD
@@ -370,7 +344,6 @@ void CPlayScene::Load()
 
 	ifstream f;
 	f.open(sceneFilePath);
-
 	// current resource section flag
 	int section = SCENE_SECTION_UNKNOWN;
 
@@ -384,7 +357,6 @@ void CPlayScene::Load()
 
 		if (line == "[TILEMAP]")
 		{
-			//DebugOut(L"[xxxxx] If line == tilemap : %s \n");
 			section = SCENE_SECTION_TILEMAP;
 			continue;
 		}
@@ -448,8 +420,6 @@ void CPlayScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\enemies.png", D3DCOLOR_XRGB(255, 255, 255));
-
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -476,11 +446,8 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> introTurtleBlackCoObjects;
 	vector<LPGAMEOBJECT> introLeafCoObjects;
 	vector<LPGAMEOBJECT> introGoombaCoObjects;
-
 	//
-
 	vector<LPGAMEOBJECT> coObjects;
-	DebugOut(L"[INFO] objects.size %d\n", objects.size());
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -538,7 +505,7 @@ void CPlayScene::Update(DWORD dt)
 			portalCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CEnemies*>(objects[i]) || dynamic_cast<CMushroom *>(objects[i]) || dynamic_cast<CTurtle *>(objects[i]) || dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
+		if ( dynamic_cast<CMushroom *>(objects[i]) || dynamic_cast<CTurtle *>(objects[i]) || dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
 		{
 			enemiesCoObjects.push_back(objects[i]);
 			continue;

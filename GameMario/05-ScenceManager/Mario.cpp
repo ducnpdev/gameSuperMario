@@ -11,8 +11,6 @@
 #include "Money.h"
 #include "PlayScence.h"
 #include "ItemLeaf.h"
-#include "Enemies.h"
-//CMorningStar* morningstar;
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -139,12 +137,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 	}
 	HandleAttack();
-	// turn off collision when die
 	if (state != MARIO_STATE_DIE)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
-	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -236,7 +232,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						else
 						{
 							goombafly->SetState(GOOMBA_FLY_STATE_DIE);
-							//vy = -MARIO_JUMP_DEFLECT_SPEED;
 						}
 					}
 				}
@@ -332,10 +327,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CMushroom *mushroom = dynamic_cast<CMushroom *>(e->obj);
 				y = y - PLUS_POSITION_Y;
 				StartUpDownLevel();
-				// renderItemCollisionBrick(BRICK_ITEM_RENDER_NUMBER, mushroom->x, mushroom->y);
 				mushroom->SetStateObjectDelete(NUMBER_1);
 				upLevel();
-				// CHud::GetInstance()->AddNumberMoney(NUMBER_1000);
 			}
 			else if (dynamic_cast<CItemLeaf *>(e->obj))
 			{
@@ -394,10 +387,6 @@ void CMario::Render()
 	}
 	else if (level == MARIO_LEVEL_1)
 	{
-		/*if (state == MARIO_STATE_SIT_DOWN) {
-			if (nx > 0) ani = MARIO_ANI_SIT_DOWN_RIGHT;
-			else ani = MARIO_ANI_SIT_DOWN_LEFT;
-		}*/
 		if (vy < 0)
 		{
 			if (nx > 0)
@@ -438,9 +427,6 @@ void CMario::Render()
 				{
 					ani = MARIO_BIG_ANI_IDLE_RIGHT;
 				}
-				/*else if(state == ) {
-
-				}*/
 			}
 			else
 			{
@@ -453,8 +439,7 @@ void CMario::Render()
 					ani = MARIO_BIG_ANI_IDLE_LEFT;
 				}
 			}
-			/* if (nx > 0) ani = MARIO_BIG_ANI_IDLE_RIGHT;
-			else ani = MARIO_BIG_ANI_IDLE_LEFT;*/
+		
 		}
 		else if (vx > 0)
 			ani = MARIO_BIG_ANI_WALKING_RIGHT;
@@ -584,7 +569,6 @@ void CMario::SetState(int state)
 		vx = 0;
 		break;
 	case MARIO_STATE_SWING_TAIL:
-		//vy = -MARIO_JUMP_SPEED_Y_SWING_TAIL;
 		vx = 0;
 		break;
 	}
@@ -683,7 +667,6 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
 		obj->SetAnimationSet(ani_set);
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
-		// CHud::GetInstance()->AddNumberMoney(NUMBER_100);
 	}
 	else if (type == BRICK_ITEM_RENDER_MUSHROOM)
 	{

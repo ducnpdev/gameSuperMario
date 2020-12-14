@@ -131,9 +131,6 @@
     <ClCompile Include="BrickColliBroken.cpp" />
     <ClCompile Include="BrickFloor.cpp" />
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Cloud.cpp" />
-    <ClCompile Include="Enemies.cpp" />
-    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Flower.cpp" />
     <ClCompile Include="FlowerType2.cpp" />
     <ClCompile Include="Goombafly.cpp" />
@@ -153,10 +150,8 @@
     <ClCompile Include="IntroTurtleAni.cpp" />
     <ClCompile Include="IntroTurtleBrack.cpp" />
     <ClCompile Include="MarioWorldMap.cpp" />
-    <ClCompile Include="ParentFlower.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="ItemLeaf.cpp" />
-    <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Money.cpp" />
     <ClCompile Include="MorningStar.cpp" />
     <ClCompile Include="Mushroom.cpp" />
@@ -184,10 +179,7 @@
     <ClInclude Include="BrickColliBroken.h" />
     <ClInclude Include="BrickFloor.h" />
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Cloud.h" />
     <ClInclude Include="Define.h" />
-    <ClInclude Include="Enemies.h" />
-    <ClInclude Include="Fire.h" />
     <ClInclude Include="Flower.h" />
     <ClInclude Include="FlowerType2.h" />
     <ClInclude Include="Goombafly.h" />
@@ -207,10 +199,8 @@
     <ClInclude Include="IntroTurtleAni.h" />
     <ClInclude Include="IntroTurtleBrack.h" />
     <ClInclude Include="MarioWorldMap.h" />
-    <ClInclude Include="ParentFlower.h" />
     <ClInclude Include="Tail.h" />
     <ClInclude Include="ItemLeaf.h" />
-    <ClInclude Include="Koopas.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="MorningStar.h" />
     <ClInclude Include="Mushroom.h" />

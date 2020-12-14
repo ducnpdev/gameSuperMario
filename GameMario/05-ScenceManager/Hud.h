@@ -16,7 +16,6 @@ class CHud : public CGameObject
 public:
     CHud();
     ~CHud();
-    // CHud(int type);
     virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

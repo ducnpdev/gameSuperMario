@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "Define.h"
 #include "Utils.h"
-#include "Enemies.h"
 class CTurtleJump : public CGameObject
 {
 	DWORD jump_at;

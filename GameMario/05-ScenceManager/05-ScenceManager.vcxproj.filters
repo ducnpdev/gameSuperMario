@@ -51,9 +51,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Koopas.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Portal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
     <ClCompile Include="MorningStar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Fire.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Money.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -73,9 +67,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Number.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cloud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mushroom.cpp">
@@ -99,16 +90,10 @@
     <ClCompile Include="Tail.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemies.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Flower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParentFlower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FlowerType2.cpp">
@@ -206,9 +191,6 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Koopas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Portal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -221,9 +203,6 @@
     <ClInclude Include="MorningStar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Fire.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Money.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -231,9 +210,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Number.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cloud.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mushroom.h">
@@ -257,16 +233,10 @@
     <ClInclude Include="Tail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemies.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Flower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParentFlower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlowerType2.h">

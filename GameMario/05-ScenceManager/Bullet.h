@@ -2,9 +2,8 @@
 #include "GameObject.h"
 #include "Define.h"
 #include "Utils.h"
-#include "Enemies.h"
 
-class CBullet : public CEnemies
+class CBullet : public CGameObject
 {
     int directionX;
     int directionY;

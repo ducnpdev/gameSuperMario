@@ -1,13 +1,13 @@
 #pragma once
-#include "Enemies.h"
 #include "Define.h"
 #include "Utils.h"
 #include "GameObject.h"
-#include "ParentFlower.h"
-class CFlower : public CEnemies
+class CFlower : public CGameObject
 {
     DWORD time;
     int type;
+    float originX;
+    float originY;
 public:
     CFlower(float x, float y, int type);
     virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

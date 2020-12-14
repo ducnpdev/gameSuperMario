@@ -7,19 +7,16 @@
 562	textures\tilemap\pipe_below_r.png	176	224	248
 563	textures\tilemap\pipe_above_l.png	176	224	248
 564	textures\tilemap\pipe_above_r.png	176	224	248
-# 570	textures\itemColision.png	60	188	252
 570	textures\hold.png	60	188	252
 
 1	textures\mario.png	255	255	255
 10	textures\simondeath.png	3	26	110
 20	textures\background\gach.png	0	0	0
-30	textures\morningstart.png	0	0	0
 50	textures\ground\fire.png	0	0	0
 60	textures\enemies.png	3	26	110
 150	textures\enemies-2.png	255	255	255
 70	textures\misc.png	176	224	248
 80	textures\die.png	255	255	255
-11	textures\clouds2.png	176	224	248
 99	textures\brickfloor.png	176	224	248
 100	textures\brickFloor\brickFloor39.png	176	224	248
 110	textures\wall.png	176	224	248
@@ -142,19 +139,6 @@
 #BRICK
 20001	0	0	1	1	99
 20002	0	0	624	16	100
-
-#20001	408	225	424	241	70 
-
-# --- MORNING STAR ---
-# Morning Star Right LV1
-30000	560	6	575	35	30
-30001	480	3	502	27	30
-30002	437	4	467	18	30
-
-# Morning Star Left LV1
-30003	63	5	78	36	30
-30004	135	3	158	28	30
-30005	172	4	207	19	30
 
 # fire
 40000	0	0	16	32	50
@@ -405,13 +389,6 @@
 #die
 199	10099	100
 
-# ======== MORNING STAR =========
-# morning star right lv1
-300	30000	100	30001	100	30002	100
-																		
-#walk left big
-301	30003	100	30004	100	30005	100
-
 # ======== BRICK =========
 201	20001	100
 202	20002	100
@@ -535,10 +512,6 @@
 63	5663
 64	5664
 
- 
-# morning start 
-3	300	301
-
 # fire 
 5	400
 
@@ -600,7 +573,6 @@
 [OBJECTS]
 #58	20.0	112	58
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick,  6= Goomba, 3 = MorningStar,8 = Money
 
 # flower 
 150	360	131	150	1

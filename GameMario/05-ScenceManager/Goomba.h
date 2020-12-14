@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include "Define.h"
-#include "Enemies.h"
 #include "Utils.h"
 #include "BrickFloor.h"
 #include "Money.h"
