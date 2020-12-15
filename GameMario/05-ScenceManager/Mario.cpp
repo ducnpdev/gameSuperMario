@@ -104,6 +104,8 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	//DebugOut(L"vx: %f %f\n",vx,vy);
+
 	if (GetTickCount() - second > NUMBER_1000) {
 		CHud::GetInstance()->SubTime(1);
 		second = GetTickCount();
@@ -160,6 +162,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		// Collision logic with other objects
 		//
 		float old_vy = vy;
+		float old_vx = vx;
+		DebugOut(L"continue 123: %f %f \n", old_vx, old_vy);
 		if (nx != 0)
 		{
 			vx = 0;
@@ -282,7 +286,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							}
 							renderItemCollisionBrick(2, turtle->x, turtle->y);
 						}
-						else if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
+						// else if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
+						else
 						{
 							downLevel();
 						}
@@ -352,6 +357,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
+			
+			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
+			{
+				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
+			
+				if (brickColliBroken->GetActiveGold()) {
+					brickColliBroken->SetStateObjectDelete(NUMBER_1);
+					CHud::GetInstance()->AddNumberGold(NUMBER_1);
+				}
+				if (e->ny > 0)
+				{
+					if (brickColliBroken->GetType() == NUMBER_3) {
+						float brickX, bricLY;
+						brickColliBroken->GetPosition(brickX, bricLY);
+						brickColliBroken->SetPosition(brickX, bricLY - 16);
+						brickColliBroken->SetActiveCollisiond();
+					}
+				}
+				else {
+					if (brickColliBroken->GetType() == NUMBER_3 && brickColliBroken->GetActiveCollisiond()) {
+						dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
+					}
+				}
+				
+			}
+			
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
 				downLevel();
@@ -416,9 +447,11 @@ void CMario::Render()
 				ani = MARIO_BIG_ANI_JUMP_LEFT;
 		}
 		else if (vx == 0)
-		{
+		{	
 			if (nx > 0)
 			{
+				// DebugOut(L"444444444 \n");
+
 				if (state == MARIO_STATE_SIT_DOWN)
 				{
 					ani = MARIO_BIG_ANI_SIT_DOWN_RIGHT;
@@ -430,6 +463,7 @@ void CMario::Render()
 			}
 			else
 			{
+				// DebugOut(L"33333333 \n");
 				if (state == MARIO_STATE_SIT_DOWN)
 				{
 					ani = MARIO_BIG_ANI_SIT_DOWN_LEFT;
@@ -441,15 +475,17 @@ void CMario::Render()
 			}
 		
 		}
-		else if (vx > 0)
+		else if (vx > 0){
+			//DebugOut(L"111111111111 \n");
 			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-		else
+		} else {
+		//	DebugOut(L"2222222222 \n");
 			ani = MARIO_BIG_ANI_WALKING_LEFT;
+		}
 	}
 	else if (level == MARIO_LEVEL_3)
 	{
 		if (state == MARIO_STATE_FLY) {
-
 			if (nx > 0)
 				ani = MARIO_ANI_FLY_RIGHT;
 			else

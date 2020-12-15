@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "MorningStar.h"
 #include "Brick.h"
+#include "BrickColliBroken.h"
 #include "Define.h"
 #include "Mushroom.h"
 #include "Turtle.h"

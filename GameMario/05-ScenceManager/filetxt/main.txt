@@ -1,5 +1,5 @@
 [SETTINGS]
-start	4
+start	1
 #scene list
 [SCENES]
 1	filetxt\scene1.txt	filetxt\tileMap\map1.txt

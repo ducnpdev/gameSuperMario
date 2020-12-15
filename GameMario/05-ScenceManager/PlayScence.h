@@ -39,7 +39,7 @@ protected:
 	CHud *hud;
 	DWORD pauseStartAt;
 	bool isPause = false;
-	
+	bool isChangeBrickCollisionGold = false;
 	vector<LPGAMEOBJECT> objects;
 	void _ParseSection_TILEMAP(string line);
 	void _ParseSection_TEXTURES(string line);
@@ -51,7 +51,8 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath, LPCWSTR pathBackground);
-				
+	void SetChangeBrickCollisionGold(int _type = true) { isChangeBrickCollisionGold = _type; };
+	bool GetChangeBrickCollisionGold() { return this->isChangeBrickCollisionGold; };
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

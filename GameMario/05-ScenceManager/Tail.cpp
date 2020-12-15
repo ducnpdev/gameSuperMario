@@ -44,7 +44,6 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < colidingObjects.size(); i++)
 		{
 			LPGAMEOBJECT c = colidingObjects[i];
-			
 			c->tailDeleteObj = true;
 		}
 	}

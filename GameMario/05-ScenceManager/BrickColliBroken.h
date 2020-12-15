@@ -5,13 +5,20 @@
 
 class CBrickColliBroken : public CGameObject
 {
-    //	int typeItemRender;
+    int type;
+	bool activeGold = false;
+	bool activeCollision = false;
+
 public:
-	CBrickColliBroken();
+	CBrickColliBroken(int t);
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 	virtual void SetState(int state);
-	// void SetTypeItemRender(int typeItemRender);
-	// int GetTypeItemRender();
+	void SetActiveGold(int _type = true) { activeGold = _type; };
+	bool GetActiveGold() { return this->activeGold; };
+	void SetActiveCollisiond(int _active = true) { activeCollision = _active; };
+	bool GetActiveCollisiond() { return this->activeCollision; };
+	int GetType() { return this->type; };
+
 };
 

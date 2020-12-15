@@ -5,6 +5,8 @@
 #include "BrickFloor.h"
 #include "Brick.h"
 #include "Mario.h"
+#include "BrickColliBroken.h"
+
 class CTurtle : public CGameObject
 {
 public: 

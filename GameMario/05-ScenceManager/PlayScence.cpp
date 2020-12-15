@@ -198,7 +198,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_FLOWER_COLLISION_BROKENT:
 	{
-		obj = new CBrickColliBroken();
+		int type = atof(tokens[4].c_str());
+		obj = new CBrickColliBroken(type);
 		break;
 	}
 	
@@ -482,6 +483,10 @@ void CPlayScene::Update(DWORD dt)
 		}
 		if (dynamic_cast<CBrickColliBroken*>(objects[i]))
 		{
+			if (isChangeBrickCollisionGold) {
+				CBrickColliBroken* abc = dynamic_cast<CBrickColliBroken*>(objects[i]);
+				abc->SetActiveGold();
+			}
 			brickColliBrokenCoObjects.push_back(objects[i]);
 			continue;
 		}
@@ -626,6 +631,7 @@ void CPlayScene::Update(DWORD dt)
 				turtleCoObjects.insert(turtleCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
 				turtleCoObjects.insert(turtleCoObjects.begin(), holdCoObjects.begin(), holdCoObjects.end());
 				turtleCoObjects.insert(turtleCoObjects.begin(), brickCoObjects.begin(), brickCoObjects.end());
+				turtleCoObjects.insert(turtleCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
 				objects[i]->Update(dt, &turtleCoObjects);
 				continue;
 			}
