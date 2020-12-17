@@ -854,6 +854,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->StartAttact();
 			mario->SetState(MARIO_STATE_ATTACT);
 			break;
+		case DIK_C:
+			mario->SetIsActiveFly(false);
+			break;
 		case DIK_A:
 			mario->Reset();
 			break;
@@ -896,6 +899,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			return;
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
+			// if (mario->GetState() == MARIO_STATE_FLY) return;
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
 				mario->SetFast(true);
@@ -913,6 +917,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
+			// 
+			// DebugOut(L"state Mario: %d \n", mario->GetState());
 			mario->SetState(MARIO_STATE_SIT_DOWN);
 		}
 		else if (game->IsKeyDown(DIK_Q))
@@ -929,7 +935,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		else if (game->IsKeyDown(DIK_SPACE)) {
 			
 			int tmpLevel = mario->GetLevel();
-			if (tmpLevel == MARIO_LEVEL_3) {
+			if (tmpLevel == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
 				mario->SetState(MARIO_STATE_FLY);
 			}
 
@@ -959,56 +965,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_WALKING_UP);
 		}
+		
 		else {
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_IDLE);
 		}
 	}
-
-	//  **** pure code before add mario world map
-	//mario->SetFast(false);
-	//if (mario->GetState() == MARIO_STATE_DIE)
-	//	return;
-	//if (game->IsKeyDown(DIK_RIGHT))
-	//{
-	//	if (game->IsKeyDown(DIK_LSHIFT))
-	//	{
-	//		mario->SetFast(true);
-	//	}
-	//	mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	//}
-	//else if (game->IsKeyDown(DIK_LEFT))
-	//{
-	//	if (game->IsKeyDown(DIK_LSHIFT))
-	//	{
-	//		mario->SetFast(true);
-	//	}
-	//	mario->SetState(MARIO_STATE_WALKING_LEFT);
-	//}
-	//else if (game->IsKeyDown(DIK_DOWN))
-	//{
-	//	mario->SetState(MARIO_STATE_SIT_DOWN);
-	//}
-	//else if (game->IsKeyDown(DIK_Q))
-	//{
-	//}
-	//else if (game->IsKeyDown(DIK_X))
-	//{
-	//	mario->SetState(MARIO_STATE_JUMP);
-	//	if (mario->GetLevel() == MARIO_LEVEL_3 && mario->vy > 0 && mario->isJump)
-	//	{
-	//		mario->SetState(MARIO_STATE_SWING_TAIL);
-	//	}
-	//}
-	//else if (game->IsKeyDown(DIK_SPACE)) {
-	//	DebugOut(L"level: %d \n", mario->GetLevel());
-	//	int tmpLevel = mario->GetLevel();
-	//	if (tmpLevel == MARIO_LEVEL_3) {
-	//		mario->SetState(MARIO_STATE_FLY);
-	//	}
-
-	//}
-	//else
-	//{
-	//	mario->SetState(MARIO_STATE_IDLE);
-	//}
 }

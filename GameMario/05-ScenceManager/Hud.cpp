@@ -1,4 +1,7 @@
 #include "Hud.h"
+#include "Mario.h"
+#include "PlayScence.h"
+
 
 CHud * CHud::__instance = NULL;
 
@@ -16,7 +19,7 @@ void CHud::CreateData()
 {
 	LPSCENE curentScene = CGame::GetInstance()->GetCurrentScene();
 	int sceneID = curentScene->getCurrentID();
-	DebugOut(L"[INFO] sceneID : %d\n", sceneID);
+	// DebugOut(L"[INFO] sceneID : %d\n", sceneID);
 
 	if (sceneID == NUMBER_4) {
 		SetTime(0);
@@ -57,14 +60,16 @@ int CHud::ConvertNumberToSprite(int number) {
 
 void CHud::Render()
 {
+	CMario* mario = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	
+	//DebugOut(L"countBack: %d \n", arrowBack);
+	//
 	CSprites* p = CSprites::GetInstance();
 	LPSPRITE sprite;
 	// renderRectangle
 	sprite = p->Get(8601);
 	sprite->DrawFixed(8, 192);
-	// render P
-	sprite = p->Get(8606);
-	sprite->DrawFixed(116, 198);
+	
 	// render M
 	sprite = p->Get(8605);
 	sprite->DrawFixed(12, 208);
@@ -82,12 +87,28 @@ void CHud::Render()
 		sprite->DrawFixed(172+ i*24, 192);
 	}
 
-	// render Muiten 
+	// render Muiten back
 	for (int i = 0; i < 6; i++) {
+		sprite = p->Get(8604);
+		sprite->DrawFixed(56 + i * 10, 198);
+	}
+	// render Muiten white
+	int arrowBack = mario->GetCountArrow();
+	if (mario->GetIsActiveFly()) arrowBack = NUMBER_6;
+	for (int i = 0; i < arrowBack; i++) {
 		sprite = p->Get(8603);
 		sprite->DrawFixed(56 + i * 10, 198);
 	}
-	
+	// render P 
+	sprite = p->Get(8607);
+	sprite->DrawFixed(116, 198);
+	if ((arrowBack == NUMBER_6) && (GetTickCount() - timeRenderPWhite > 500)) {
+		sprite = p->Get(8606);
+		sprite->DrawFixed(116, 198);
+		timeRenderPWhite = GetTickCount();
+		mario->SetIsActiveFly();
+	}
+
 	int tempTime = time;
 	for (int i = 0; i < 3; i++) {
 		int split = tempTime % 10;
@@ -124,77 +145,77 @@ void CHud::SetState(int state)
 
 
 int CHud::SwitchCase(int i) {
-	int ani =0;
+	int ani = NUMBER_0;
 	switch (i)
 	{
-	case 0:
-		ani = 0;
+	case NUMBER_0:
+		ani = NUMBER_0;
 		break;
-	case 1:
-		ani = 1;
+	case NUMBER_1:
+		ani = NUMBER_1;
 		break;
-	case 2:
-		ani = 2;
+	case NUMBER_2:
+		ani = NUMBER_2;
 		break;
-	case 3:
-		ani = 3;
+	case NUMBER_3:
+		ani = NUMBER_3;
 		break;
-	case 4:
-		ani = 4;
+	case NUMBER_4:
+		ani = NUMBER_4;
 		break;
-	case 5:
-		ani = 5;
+	case NUMBER_5:
+		ani = NUMBER_5;
 		break;
-	case 6:
-		ani = 6;
+	case NUMBER_6:
+		ani = NUMBER_6;
 		break;
-	case 7:
-		ani = 7;
+	case NUMBER_7:
+		ani = NUMBER_7;
 		break;
-	case 8:
-		ani = 8;
+	case NUMBER_8:
+		ani = NUMBER_8;
 		break;
-	case 9:
-		ani = 9;
+	case NUMBER_9:
+		ani = NUMBER_9;
 		break;
-	case 10:
-		ani = 10;
+	case NUMBER_10:
+		ani = NUMBER_10;
 		break;
-	case 11:
-		ani = 11;
+	case NUMBER_11:
+		ani = NUMBER_11;
 		break;
-	case 12:
-		ani = 12;
+	case NUMBER_12:
+		ani = NUMBER_12;
 		break;
-	case 13:
-		ani = 13;
+	case NUMBER_13:
+		ani = NUMBER_13;
 		break;
-	case 14:
-		ani = 14;
+	case NUMBER_14:
+		ani = NUMBER_14;
 		break;
-	case 15:
-		ani = 15;
+	case NUMBER_15:
+		ani = NUMBER_15;
 		break;
-	case 16:
-		ani = 16;
+	case NUMBER_16:
+		ani = NUMBER_16;
 		break;
-	case 17:
-		ani = 17;
+	case NUMBER_17:
+		ani = NUMBER_17;
 		break;
-	case 18:
-		ani = 18;
+	case NUMBER_18:
+		ani = NUMBER_18;
 		break;
-	case 19:
-		ani = 19;
+	case NUMBER_19:
+		ani = NUMBER_19;
 		break;
-	case 20:
-		ani = 20;
+	case NUMBER_20:
+		ani = NUMBER_20;
 		break;
-	case 21:
-		ani = 21;
+	case NUMBER_21:
+		ani = NUMBER_21;
 		break;
 	default:
-		ani = 0;
+		ani = NUMBER_0;
 		break;
 	}
 	return ani;

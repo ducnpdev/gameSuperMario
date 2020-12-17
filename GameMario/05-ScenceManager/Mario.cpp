@@ -104,15 +104,29 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	//DebugOut(L"vx: %f %f\n",vx,vy);
+	if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f) { 
+		if (GetTickCount() - timeAddCountArrow > NUMBER_600 ) {
+			timeAddCountArrow = GetTickCount();
+			SplusCountArrow();
+		}
+	}
+	else {
+		if (GetTickCount() - timeAddCountArrow > NUMBER_500 ) {
+			timeAddCountArrow = GetTickCount();
+			SubCountArrow();
+		}
+	}
+	//if(x <= 2360) SubCountArrow();
 
+	//DebugOut(L"vx: %f %f\n",vx,vy);
 	if (GetTickCount() - second > NUMBER_1000) {
 		CHud::GetInstance()->SubTime(1);
 		second = GetTickCount();
 	}
 	CGameObject::Update(dt);
+	
 	if (state == MARIO_STATE_FLY) {
-		vy = -0.005f * dt;
+		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
 		if (y < 10) {
 			y = 10;
 		}
@@ -163,7 +177,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		//
 		float old_vy = vy;
 		float old_vx = vx;
-		DebugOut(L"continue 123: %f %f \n", old_vx, old_vy);
+		// DebugOut(L"continue 123: %f %f \n", old_vx, old_vy);
 		if (nx != 0)
 		{
 			vx = 0;
@@ -357,11 +371,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			
+			else if(dynamic_cast<CBrickFloor *>(e->obj)) { SetIsActiveFly(false); }
 			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
 			{
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
-			
 				if (brickColliBroken->GetActiveGold()) {
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
@@ -382,7 +395,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				
 			}
-			
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
 				downLevel();
@@ -450,8 +462,6 @@ void CMario::Render()
 		{	
 			if (nx > 0)
 			{
-				// DebugOut(L"444444444 \n");
-
 				if (state == MARIO_STATE_SIT_DOWN)
 				{
 					ani = MARIO_BIG_ANI_SIT_DOWN_RIGHT;
@@ -463,7 +473,6 @@ void CMario::Render()
 			}
 			else
 			{
-				// DebugOut(L"33333333 \n");
 				if (state == MARIO_STATE_SIT_DOWN)
 				{
 					ani = MARIO_BIG_ANI_SIT_DOWN_LEFT;
@@ -476,10 +485,8 @@ void CMario::Render()
 		
 		}
 		else if (vx > 0){
-			//DebugOut(L"111111111111 \n");
 			ani = MARIO_BIG_ANI_WALKING_RIGHT;
 		} else {
-		//	DebugOut(L"2222222222 \n");
 			ani = MARIO_BIG_ANI_WALKING_LEFT;
 		}
 	}
@@ -556,20 +563,23 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
+		nx = DIRECTION_RIGHT_X;
 		vx = MARIO_WALKING_SPEED_NORMAL;
+		if (GetState() == MARIO_STATE_FLY) return;
 		if (fast)
 		{
 			vx = MARIO_WALKING_SPEED_PAST;
 		}
-		nx = DIRECTION_RIGHT_X;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
+
+		nx = DIRECTION_LEFT_X;
 		vx = -MARIO_WALKING_SPEED_NORMAL;
+		if (GetState() == MARIO_STATE_FLY) return;
 		if (fast)
 		{
 			vx = -MARIO_WALKING_SPEED_PAST;
 		}
-		nx = DIRECTION_LEFT_X;
 		break;
 	case MARIO_STATE_JUMP:
 		if (isJump)
@@ -594,7 +604,6 @@ void CMario::SetState(int state)
 	case MARIO_STATE_LEVEL_1_TO_2:
 		vx = 0;
 		break;
-		//
 	case MARIO_STATE_LEVEL_3_ATTACK_FRAME_1:
 		vx = 0;
 		break;
@@ -625,7 +634,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			top = y + Modify_BBOX;
 		}
-		right = x + MARIO_LEVEL3_BBOX_WIDTH;
+		// right = x + MARIO_LEVEL3_BBOX_WIDTH;
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
@@ -724,5 +733,17 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		obj->SetAnimationSet(ani_set);
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 	}
+}
+
+void CMario::SplusCountArrow()
+{
+	if (countArrow == NUMBER_6) return;
+	countArrow++;
+}
+
+void CMario::SubCountArrow()
+{
+	if (countArrow == NUMBER_0) return;
+	countArrow--;
 }
 

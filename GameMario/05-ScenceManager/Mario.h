@@ -31,13 +31,17 @@ class CMario : public CGameObject
 	int lastTailSwingDirection = 0;
 	LPANIMATION ani;
 	DWORD second;
+	DWORD timeAddCountArrow;
+	int countArrow;
+
+	bool isActiveFly = false;
 public: 
 	bool isJump = false;
 	CMario(float x = 0.5f, float y = 0.5f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	void SetState(int state);
-	void SetLevel(int l) { level = l; y += 20; }
+	void SetLevel(int l) { level = l; y += NUMBER_20; }
 	int GetLevel() { return this->level; }
 	void Reset();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
@@ -48,6 +52,8 @@ public:
 	void StartUpDownLevel();
 	void HandleUpDownLevel();
 	void SetFast(bool b) { this->fast = b; }
+	bool GetFast() { return this->isJump; }
+
 	// collision functions
 	void ClearCollisionEvent(vector<LPCOLLISIONEVENT> coEvents);
 	void HandleHoldCollision(float ny, float dx, float dy, float old_vy);
@@ -61,4 +67,11 @@ public:
 	void upLevel();
 	// render item when mario collision with brick
 	void renderItemCollisionBrick(int type, float x, float y);
+
+	void SplusCountArrow();
+	void SubCountArrow();
+	int GetCountArrow() { return this->countArrow; }
+
+	void SetIsActiveFly(bool _b = true) { this->isActiveFly = _b; }
+	bool GetIsActiveFly() { return this->isActiveFly; }
 };

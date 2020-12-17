@@ -27,12 +27,29 @@
 #define NUMBER_8 8
 #define NUMBER_9 9
 #define NUMBER_10 10
+#define NUMBER_11 11
+#define NUMBER_12 12
+#define NUMBER_13 13
+#define NUMBER_14 14
+#define NUMBER_15 15
 #define NUMBER_16 16
+#define NUMBER_17 17
+#define NUMBER_18 18
+#define NUMBER_19 19
+#define NUMBER_20 20
+#define NUMBER_21 21
+#define NUMBER_22 22
+
 #define NUMBER_70 70
 #define NUMBER_100 100
 #define NUMBER_150 150
 #define NUMBER_250 250
 #define NUMBER_300 300
+#define NUMBER_500 500
+#define NUMBER_600 600
+
+#define NUMBER_700 700
+
 #define NUMBER_1000 1000
 
 // time all item 
@@ -227,7 +244,7 @@
 #define TIME_MARIO_UNTOUCHABLE 2000
 
 #define MARIO_WALKING_SPEED_NORMAL		0.07f 
-#define MARIO_WALKING_SPEED_PAST		0.1f
+#define MARIO_WALKING_SPEED_PAST		0.15f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_SPEED_Y_LEVEL_2		0.47f
@@ -235,6 +252,8 @@
 
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY_HAVE_STATE_FLY			0.005f
+
 #define MARIO_GRAVITY_SWING_TAIL			0.00005f
 
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
@@ -470,8 +489,8 @@
 // define bullet
 #define BULLET_FLY_SPEED_Y 0.03f
 #define BULLET_FLY_SPEED_X 0.03f
-#define BULLET_BBOX_HEIGHT 10
-#define BULLET_BBOX_WIDTH 10
+#define BULLET_BBOX_HEIGHT 7
+#define BULLET_BBOX_WIDTH 7
 #define BULLET_FLY_ANI 0
 #define BULLET_STATE_FLY 100
 #define BULLET_POSITION_Y 3

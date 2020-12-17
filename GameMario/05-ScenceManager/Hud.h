@@ -13,6 +13,7 @@ class CHud : public CGameObject
     int numberGold;
     int numberMoney;
     static CHud * __instance;
+	DWORD timeRenderPWhite;
 public:
     CHud();
     ~CHud();
