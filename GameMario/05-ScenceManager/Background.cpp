@@ -45,3 +45,5 @@ void CBackground::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y + 1;
 
 }
+
+

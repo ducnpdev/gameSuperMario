@@ -907,6 +907,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
 				mario->SetFast(true);
+				
 			}
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
