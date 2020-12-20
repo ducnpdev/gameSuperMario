@@ -718,9 +718,9 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		LPDIRECT3DTEXTURE9 texturesBackgroundID = textures->Get(555);
 		vector<LPSPRITE> Stage1Sprite;
-		for (int i = 0; i < 77; i++)
+		for (int i = 0; i < NUMBER_77; i++)
 		{
-			sprites->Add(55500 + i, i * 16, 0, (i + 1) * 16, 16, texturesBackgroundID);
+			sprites->Add(55500 + i, i * NUMBER_16, 0, (i + 1) * NUMBER_16, NUMBER_16, texturesBackgroundID);
 			Stage1Sprite.push_back(sprites->Get(55500 + i));
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
@@ -734,7 +734,7 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		while (inFile >> value)
 		{
 			temp1.push_back(value);
-			if (temp1.size() == 32)
+			if (temp1.size() == NUMBER_32)
 			{
 				Stage1Pos.push_back(temp1);
 				temp1.clear();
@@ -744,7 +744,7 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		vector<LPSPRITE> Stage1Sprite;
 		for (int i = 0; i < 6; i++)
 		{
-			sprites->Add(55600 + i, i * 16, 0, (i + 1) * 16, 16, texturesBackgroundID);
+			sprites->Add(55600 + i, i * NUMBER_16, 0, (i + 1) * NUMBER_16, NUMBER_16, texturesBackgroundID);
 			Stage1Sprite.push_back(sprites->Get(55600 + i));
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
@@ -765,9 +765,9 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		LPDIRECT3DTEXTURE9 texturesBackgroundID = textures->Get(556);
 		vector<LPSPRITE> Stage1Sprite;
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < NUMBER_6; i++)
 		{
-			sprites->Add(55600 + i, i * 16, 0, (i + 1) * 16, 16, texturesBackgroundID);
+			sprites->Add(55600 + i, i * NUMBER_16, 0, (i + 1) * NUMBER_16, NUMBER_16, texturesBackgroundID);
 			Stage1Sprite.push_back(sprites->Get(55600 + i));
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
@@ -780,7 +780,7 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		while (inFile >> value)
 		{
 			temp1.push_back(value);
-			if (temp1.size() == 16)
+			if (temp1.size() == NUMBER_16)
 			{
 				Stage1Pos.push_back(temp1);
 				temp1.clear();
@@ -788,12 +788,11 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		LPDIRECT3DTEXTURE9 texturesBackgroundID = textures->Get(4);
 		vector<LPSPRITE> Stage1Sprite;
-		// int row = 0;
-		for (int row = 0; row < 4; row++ ) {
-			for (int i = 0; i < 8; i++)
+		for (int row = 0; row < NUMBER_4; row++ ) {
+			for (int i = 0; i < NUMBER_8; i++)
 			{
-				sprites->Add(4000 + i + row*8, i * 16, row * 16, (i + 1) * 16, row * 16 + 16, texturesBackgroundID);
-				Stage1Sprite.push_back(sprites->Get(4000 + i + row * 8));
+				sprites->Add(4000 + i + row*NUMBER_8, i * NUMBER_16, row * NUMBER_16, (i + NUMBER_1) * NUMBER_16, row * NUMBER_16 + NUMBER_16, texturesBackgroundID);
+				Stage1Sprite.push_back(sprites->Get(4000 + i + row * NUMBER_8));
 			}
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);

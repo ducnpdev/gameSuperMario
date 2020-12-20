@@ -39,6 +39,10 @@
 #define NUMBER_20 20
 #define NUMBER_21 21
 #define NUMBER_22 22
+#define NUMBER_32 32
+#define NUMBER_77 77
+
+
 
 #define NUMBER_70 70
 #define NUMBER_100 100
@@ -104,15 +108,15 @@
 #define MARIO_ANI_SIT_DOWN_LEFT             6
 #define MARIO_ANI_ATTACT_RIGHT              7
 #define MARIO_ANI_ATTACT_LEFT               8
-#define MARIO_ANI_JUMP_RIGHT                9
-#define MARIO_ANI_JUMP_LEFT                 10
+#define MARIO_ANI_LEVEL_1_JUMP_RIGHT                9
+#define MARIO_ANI_LEVEL_1_JUMP_LEFT                 10
 
 #define MARIO_BIG_ANI_IDLE_RIGHT		    11
 #define MARIO_BIG_ANI_IDLE_LEFT			    12
 #define MARIO_BIG_ANI_WALKING_RIGHT			13
 #define MARIO_BIG_ANI_WALKING_LEFT			14
-#define MARIO_BIG_ANI_JUMP_RIGHT            15
-#define MARIO_BIG_ANI_JUMP_LEFT             16
+#define MARIO_ANI_LEVEL_2_JUMP_RIGHT            15
+#define MARIO_ANI_LEVEL_2_JUMP_LEFT             16
 #define MARIO_ANI_LEVEL_1_TO_2_RIGHT             17
 
 #define MARIO_BIG_ATTACT_ANI_IDLE_RIGHT		    18
@@ -266,7 +270,7 @@
 #define MARIO_STATE_SIT_DOWN		400
 #define MARIO_STATE_ATTACT			500
 #define MARIO_STATE_DIE				600
-#define MARIO_STATE_LEVEL_1_TO_2			700
+#define MARIO_STATE_UP_LEVEL			700
 #define MARIO_STATE_LEVEL_2_TO_3			800
 
 #define MARIO_STATE_LEVEL_3_ATTACK_FRAME_1			900

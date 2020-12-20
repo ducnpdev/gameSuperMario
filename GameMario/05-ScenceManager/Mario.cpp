@@ -94,24 +94,31 @@ void CMario::upLevel()
 {
 	if (level == MARIO_LEVEL_1)
 	{
+		//		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_2;
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
+		// dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_3;
 	}
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f) { 
-		if (GetTickCount() - timeAddCountArrow > NUMBER_600 ) {
+
+	if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
+	{
+		if (GetTickCount() - timeAddCountArrow > NUMBER_600)
+		{
 			timeAddCountArrow = GetTickCount();
 			SplusCountArrow();
 		}
 	}
-	else {
-		if (GetTickCount() - timeAddCountArrow > NUMBER_500 ) {
+	else
+	{
+		if (GetTickCount() - timeAddCountArrow > NUMBER_500)
+		{
 			timeAddCountArrow = GetTickCount();
 			SubCountArrow();
 		}
@@ -119,19 +126,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	//if(x <= 2360) SubCountArrow();
 
 	//DebugOut(L"vx: %f %f\n",vx,vy);
-	if (GetTickCount() - second > NUMBER_1000) {
+	if (GetTickCount() - second > NUMBER_1000)
+	{
 		CHud::GetInstance()->SubTime(1);
 		second = GetTickCount();
 	}
 	CGameObject::Update(dt);
-	
-	if (state == MARIO_STATE_FLY) {
+
+	if (state == MARIO_STATE_FLY)
+	{
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
-		if (y < 10) {
+		if (y < 10)
+		{
 			y = 10;
 		}
 	}
-	else {
+	else
+	{
 		if (state == MARIO_STATE_SWING_TAIL)
 		{
 			vy += MARIO_GRAVITY_SWING_TAIL * dt;
@@ -146,7 +157,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	HandleUpDownLevel();
+	// HandleUpDownLevel();
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)
 	{
 		untouchable = 0;
@@ -164,7 +175,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		
+
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
@@ -194,39 +205,42 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			
-			if (dynamic_cast<CTurtleJump*>(e->obj)) {
-				CTurtleJump* turtleJump = dynamic_cast<CTurtleJump*>(e->obj);
+
+			if (dynamic_cast<CTurtleJump *>(e->obj))
+			{
+				CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
 				if (e->ny < 0)
 				{
 					if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY)
 					{
 						turtleJump->SetState(TURTLE_JUMP_STATE_WALKING);
 					}
-					if(turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
+					if (turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
 					{
 						turtleJump->SetState(TURTLE_JUMP_STATE_DIE);
 					}
-					
 				}
 				else if (e->nx != 0)
 				{
 					// == 0 la co va cham
-					if (untouchable == 0) {
-						if (turtleJump->GetState() == TURTLE_JUMP_STATE_DIE) {
-							if (e->nx < 0) {
+					if (untouchable == 0)
+					{
+						if (turtleJump->GetState() == TURTLE_JUMP_STATE_DIE)
+						{
+							if (e->nx < 0)
+							{
 								turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_RIGHT);
 							}
-							if (e->nx > 0) {
+							if (e->nx > 0)
+							{
 								turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_LEFT);
-							}	
+							}
 						}
 						else if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY || turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
 						{
 							downLevel();
 						}
 					}
-					
 				}
 			}
 			else if (dynamic_cast<CHold *>(e->obj))
@@ -354,7 +368,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CItemLeaf *leaf = dynamic_cast<CItemLeaf *>(e->obj);
 				y = y - PLUS_POSITION_Y;
 				StartUpDownLevel();
-				leaf->SetStateObjectDelete(NUMBER_1); // delete obj left 
+				leaf->SetStateObjectDelete(NUMBER_1); // delete obj left
 				upLevel();
 				CHud::GetInstance()->AddNumberMoney(NUMBER_1000);
 			}
@@ -371,191 +385,47 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			else if(dynamic_cast<CBrickFloor *>(e->obj)) { SetIsActiveFly(false); }
+			else if (dynamic_cast<CBrickFloor *>(e->obj))
+			{
+				SetIsActiveFly(false);
+			}
 			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
 			{
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
-				if (brickColliBroken->GetActiveGold()) {
+				if (brickColliBroken->GetActiveGold())
+				{
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
 				}
 				if (e->ny > 0)
 				{
-					if (brickColliBroken->GetType() == NUMBER_3) {
+					if (brickColliBroken->GetType() == NUMBER_3)
+					{
 						float brickX, bricLY;
 						brickColliBroken->GetPosition(brickX, bricLY);
 						brickColliBroken->SetPosition(brickX, bricLY - 16);
 						brickColliBroken->SetActiveCollisiond();
 					}
 				}
-				else {
-					if (brickColliBroken->GetType() == NUMBER_3 && brickColliBroken->GetActiveCollisiond()) {
-						dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
+				else
+				{
+					if (brickColliBroken->GetType() == NUMBER_3 && brickColliBroken->GetActiveCollisiond())
+					{
+						dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
 					}
 				}
-				
 			}
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
 				downLevel();
 			}
-			else if(dynamic_cast<CFlower*>(e->obj) || dynamic_cast<CFlowerType2 *>(e->obj)){
+			else if (dynamic_cast<CFlower *>(e->obj) || dynamic_cast<CFlowerType2 *>(e->obj))
+			{
 				downLevel();
 			}
 		}
 	}
 	ClearCollisionEvent(coEvents);
-}
-
-void CMario::Render()
-{
-	int ani = MARIO_BIG_ANI_IDLE_RIGHT;
-	if (state == MARIO_STATE_DIE)
-	{
-		ani = MARIO_ANI_DIE;
-	}
-	else if (state == MARIO_STATE_LEVEL_1_TO_2)
-	{
-		if (level == MARIO_LEVEL_2)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_1_TO_2_LEFT;
-		}
-		else if (level == MARIO_LEVEL_3)
-		{
-			ani = MARIO_ANI_LEVEL_2_TO_3_RIGHT;
-		}
-	}
-	else if (level == MARIO_LEVEL_1)
-	{
-		if (vy < 0)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_JUMP_RIGHT;
-			else
-				ani = MARIO_ANI_JUMP_LEFT;
-		}
-		else if (vx == 0)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_IDLE_RIGHT;
-			else
-				ani = MARIO_ANI_IDLE_LEFT;
-		}
-		else if (vx > 0)
-			ani = MARIO_ANI_WALKING_RIGHT;
-		else
-			ani = MARIO_ANI_WALKING_LEFT;
-	}
-	else if (level == MARIO_LEVEL_2)
-	{
-		if (vy < 0)
-		{
-			if (nx > 0)
-				ani = MARIO_BIG_ANI_JUMP_RIGHT;
-			else
-				ani = MARIO_BIG_ANI_JUMP_LEFT;
-		}
-		else if (vx == 0)
-		{	
-			if (nx > 0)
-			{
-				if (state == MARIO_STATE_SIT_DOWN)
-				{
-					ani = MARIO_BIG_ANI_SIT_DOWN_RIGHT;
-				}
-				else if (state == MARIO_STATE_IDLE)
-				{
-					ani = MARIO_BIG_ANI_IDLE_RIGHT;
-				}
-			}
-			else
-			{
-				if (state == MARIO_STATE_SIT_DOWN)
-				{
-					ani = MARIO_BIG_ANI_SIT_DOWN_LEFT;
-				}
-				else if (state == MARIO_STATE_IDLE)
-				{
-					ani = MARIO_BIG_ANI_IDLE_LEFT;
-				}
-			}
-		
-		}
-		else if (vx > 0){
-			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-		} else {
-			ani = MARIO_BIG_ANI_WALKING_LEFT;
-		}
-	}
-	else if (level == MARIO_LEVEL_3)
-	{
-		if (state == MARIO_STATE_FLY) {
-			if (nx > 0)
-				ani = MARIO_ANI_FLY_RIGHT;
-			else
-				ani = MARIO_ANI_FLY_LEFT;
-		}
-		else if (vy < 0)
-		{
-			if (nx > 0)
-				ani = MARIO_BIG_ATTACT_ANI_JUMP_RIGHT;
-			else
-				ani = MARIO_BIG_ATTACT_ANI_JUMP_LEFT;
-		}
-		else if (vx == 0)
-		{
-			if (nx > 0)
-			{
-				if (state == MARIO_STATE_SIT_DOWN)
-				{
-					ani = MARIO_BIG_ATTACT_ANI_SIT_DOWN_RIGHT;
-				}
-				else if (state == MARIO_STATE_IDLE)
-				{
-					ani = MARIO_BIG_ATTACT_ANI_IDLE_RIGHT;
-				}
-				else if (state == MARIO_STATE_SWING_TAIL)
-				{
-					ani = MARIO_ANI_SWING_TAIL_RIGHT;
-				}
-			}
-			else
-			{
-				if (state == MARIO_STATE_SIT_DOWN)
-				{
-					ani = MARIO_BIG_ATTACT_ANI_SIT_DOWN_LEFT;
-				}
-				else if (state == MARIO_STATE_IDLE)
-				{
-					ani = MARIO_BIG_ATTACT_ANI_IDLE_LEFT;
-				}
-				else if (state == MARIO_STATE_SWING_TAIL)
-				{
-					ani = MARIO_ANI_SWING_TAIL_LEFT;
-				}
-			}
-		}
-		else if (vx > 0)
-			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-		else
-			ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
-	}
-	if (checkAttact && level == MARIO_LEVEL_3)
-	{
-		if (nx > 0)
-			ani = MARIO_ANI_LEVEL_3_ATTAT_RIGHT;
-		else
-			ani = MARIO_ANI_LEVEL_3_ATTAT_LEFT;
-	}
-
-	int alpha = 255;
-	if (untouchable)
-		alpha = 128;
-	animation_set->at(ani)->Render(x, y, alpha);
-	// RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -565,7 +435,8 @@ void CMario::SetState(int state)
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
 		vx = MARIO_WALKING_SPEED_NORMAL;
-		if (GetState() == MARIO_STATE_FLY) return;
+		if (GetState() == MARIO_STATE_FLY)
+			return;
 		if (fast)
 		{
 			vx = MARIO_WALKING_SPEED_PAST;
@@ -575,7 +446,8 @@ void CMario::SetState(int state)
 
 		nx = DIRECTION_LEFT_X;
 		vx = -MARIO_WALKING_SPEED_NORMAL;
-		if (GetState() == MARIO_STATE_FLY) return;
+		if (GetState() == MARIO_STATE_FLY)
+			return;
 		if (fast)
 		{
 			vx = -MARIO_WALKING_SPEED_PAST;
@@ -601,7 +473,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
-	case MARIO_STATE_LEVEL_1_TO_2:
+	case MARIO_STATE_UP_LEVEL:
 		vx = 0;
 		break;
 	case MARIO_STATE_LEVEL_3_ATTACK_FRAME_1:
@@ -656,11 +528,11 @@ void CMario::StartUpDownLevel()
 
 void CMario::HandleUpDownLevel()
 {
-	if (GetTickCount() - startUpDownLevel < TIME_MARIO_UP_DOWN_LEVEL)
+	if (GetTickCount() - startUpDownLevel < 1500)
 	{
-		SetState(MARIO_STATE_LEVEL_1_TO_2);
+		SetState(MARIO_STATE_UP_LEVEL);
 	}
-	if (GetTickCount() - startUpDownLevel > TIME_MARIO_UP_DOWN_LEVEL)
+	if (GetTickCount() - startUpDownLevel > 1500)
 	{
 		startUpDownLevel = NumberZero;
 	}
@@ -702,7 +574,7 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 		// CHud::GetInstance()->AddNumberGold(NUMBER_1);
 	}
-	// render number: 100, 1000,... 
+	// render number: 100, 1000,...
 	else if (type == BRICK_ITEM_RENDER_NUMBER)
 	{
 		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
@@ -718,7 +590,7 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 		CGameObject *obj = NULL;
 		obj = new CMushroom();
-		obj->SetPosition(x, y-20);
+		obj->SetPosition(x, y - 20);
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_MUSHROOM);
 		obj->SetAnimationSet(ani_set);
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
@@ -737,13 +609,184 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 
 void CMario::SplusCountArrow()
 {
-	if (countArrow == NUMBER_6) return;
+	if (countArrow == NUMBER_6)
+		return;
 	countArrow++;
 }
 
 void CMario::SubCountArrow()
 {
-	if (countArrow == NUMBER_0) return;
+	if (countArrow == NUMBER_0)
+		return;
 	countArrow--;
 }
 
+void CMario::Render()
+{
+	int ani = 0;
+	if (state == MARIO_STATE_UP_LEVEL)
+	{
+		if (level == MARIO_LEVEL_2)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
+			else
+				ani = MARIO_ANI_LEVEL_1_TO_2_LEFT;
+		}
+		else if (level == MARIO_LEVEL_3)
+		{
+			ani = MARIO_ANI_LEVEL_2_TO_3_RIGHT;
+		}
+	}
+	else if (state == MARIO_STATE_JUMP)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_1_JUMP_RIGHT;
+			else
+				ani = MARIO_ANI_LEVEL_1_JUMP_LEFT;
+			break;
+		case MARIO_LEVEL_2:
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+			else
+				ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
+			break;
+		case MARIO_LEVEL_3:
+			if (nx > 0)
+				ani = MARIO_BIG_ATTACT_ANI_JUMP_RIGHT;
+			else
+				ani = MARIO_BIG_ATTACT_ANI_JUMP_LEFT;
+			break;
+		}
+	}
+	else if (state == MARIO_STATE_IDLE)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			if (nx > 0)
+				ani = MARIO_ANI_IDLE_RIGHT;
+			else
+				ani = MARIO_ANI_IDLE_LEFT;
+			break;
+		case MARIO_LEVEL_2:
+			if (vy < 0)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+				else
+					ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
+			}
+			else
+			{
+				if (nx > 0)
+					ani = MARIO_BIG_ANI_IDLE_RIGHT;
+				else
+					ani = MARIO_BIG_ANI_IDLE_LEFT;
+			}
+
+			break;
+		case MARIO_LEVEL_3:
+			if (vy < 0)
+			{
+				if (nx > 0)
+					ani = MARIO_BIG_ATTACT_ANI_JUMP_RIGHT;
+				else
+					ani = MARIO_BIG_ATTACT_ANI_JUMP_LEFT;
+			}
+			else
+			{
+				if (nx > 0)
+					ani = MARIO_BIG_ATTACT_ANI_IDLE_RIGHT;
+				else
+					ani = MARIO_BIG_ATTACT_ANI_IDLE_LEFT;
+			}
+			break;
+		}
+	}
+	else if (state == MARIO_STATE_WALKING_RIGHT)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			ani = MARIO_ANI_WALKING_RIGHT;
+			break;
+		case MARIO_LEVEL_2:
+			ani = MARIO_BIG_ANI_WALKING_RIGHT;
+			if(vy < 0) ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+
+			break;
+		case MARIO_LEVEL_3:
+			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
+			if(vy < 0) ani = MARIO_BIG_ATTACT_ANI_JUMP_RIGHT;
+			break;
+		}
+	}
+	else if (state == MARIO_STATE_WALKING_LEFT)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			ani = MARIO_ANI_WALKING_LEFT;
+			break;
+		case MARIO_LEVEL_2:
+			ani = MARIO_BIG_ANI_WALKING_LEFT;
+			if(vy < 0) ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
+			break;
+		case MARIO_LEVEL_3:
+			ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
+			if(vy < 0) ani = MARIO_BIG_ATTACT_ANI_JUMP_LEFT;
+			break;
+		}
+	}
+	else if (state == MARIO_STATE_SIT_DOWN)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			if (nx > 0)
+				ani = MARIO_ANI_IDLE_RIGHT;
+			else
+				ani = MARIO_ANI_IDLE_LEFT;
+			break;
+		case MARIO_LEVEL_2:
+			if (nx > 0)
+				ani = MARIO_BIG_ANI_SIT_DOWN_RIGHT;
+			else
+				ani = MARIO_BIG_ANI_SIT_DOWN_LEFT;
+			break;
+		case MARIO_LEVEL_3:
+			if (nx > 0)
+				ani = MARIO_BIG_ATTACT_ANI_SIT_DOWN_RIGHT;
+			else
+				ani = MARIO_BIG_ATTACT_ANI_SIT_DOWN_LEFT;
+			break;
+		}
+	}
+
+	else if (state == MARIO_STATE_FLY)
+	{
+		if (nx > 0)
+			ani = MARIO_ANI_FLY_RIGHT;
+		else
+			ani = MARIO_ANI_FLY_LEFT;
+	}
+
+	if (checkAttact && level == MARIO_LEVEL_3)
+	{
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_3_ATTAT_RIGHT;
+		else
+			ani = MARIO_ANI_LEVEL_3_ATTAT_LEFT;
+	}
+
+	int alpha = 255;
+	if (untouchable)
+		alpha = 128;
+
+	animation_set->at(ani)->Render(x, y, alpha);
+	// RenderBoundingBox();
+}
