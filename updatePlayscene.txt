@@ -43,7 +43,6 @@ void CPlayScene::Update(DWORD dt)
 		 if (objects[i]->type == OBJECT_TYPE_TAIL) {
 			 OtherCoObjects.push_back(objects[i]);
 		 }
-		
 	}
 	
 	// if pausing we only update player
