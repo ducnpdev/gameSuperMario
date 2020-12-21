@@ -35,6 +35,7 @@ class CMario : public CGameObject
 	int countArrow;
 
 	bool isActiveFly = false;
+	bool isJumpHeight = false;
 public: 
 	bool isJump = false;
 	CMario(float x = 0.5f, float y = 0.5f);
@@ -74,4 +75,7 @@ public:
 
 	void SetIsActiveFly(bool _b = true) { this->isActiveFly = _b; }
 	bool GetIsActiveFly() { return this->isActiveFly; }
+
+	void SetIsJumpHeight(bool _b = true) { this->isJumpHeight = _b; }
+	bool GetIsJumpHeight() { return this->isJumpHeight; }
 };

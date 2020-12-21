@@ -12,7 +12,7 @@ void CHold::Render()
 {
     int ani = 0;
     animation_set->at(ani)->Render(x, y);
-    RenderBoundingBox();
+   // RenderBoundingBox();
 }
 
 void CHold::GetBoundingBox(float &left, float &top, float &right, float &bottom)

@@ -62,7 +62,6 @@ void CHud::Render()
 {
 	CMario* mario = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	
-	//DebugOut(L"countBack: %d \n", arrowBack);
 	//
 	CSprites* p = CSprites::GetInstance();
 	LPSPRITE sprite;
@@ -93,20 +92,26 @@ void CHud::Render()
 		sprite->DrawFixed(56 + i * 10, 198);
 	}
 	// render Muiten white
-	int arrowBack = mario->GetCountArrow();
-	if (mario->GetIsActiveFly()) arrowBack = NUMBER_6;
-	for (int i = 0; i < arrowBack; i++) {
-		sprite = p->Get(8603);
-		sprite->DrawFixed(56 + i * 10, 198);
-	}
-	// render P 
-	sprite = p->Get(8607);
-	sprite->DrawFixed(116, 198);
-	if ((arrowBack == NUMBER_6) && (GetTickCount() - timeRenderPWhite > 500)) {
-		sprite = p->Get(8606);
+	if (mario != NULL) {
+		int arrowBack = mario->GetCountArrow();
+		if (mario->GetIsActiveFly()) arrowBack = NUMBER_6;
+		for (int i = 0; i < arrowBack; i++) {
+			sprite = p->Get(8603);
+			sprite->DrawFixed(56 + i * 10, 198);
+		}
+		// render P 
+		sprite = p->Get(8607);
 		sprite->DrawFixed(116, 198);
-		timeRenderPWhite = GetTickCount();
-		mario->SetIsActiveFly();
+		if ((arrowBack == NUMBER_6) && (GetTickCount() - timeRenderPWhite > 500)) {
+			sprite = p->Get(8606);
+			sprite->DrawFixed(116, 198);
+			timeRenderPWhite = GetTickCount();
+			mario->SetIsActiveFly();
+		}
+	}
+	else {
+		sprite = p->Get(8607);
+		sprite->DrawFixed(116, 198);
 	}
 
 	int tempTime = time;
