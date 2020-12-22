@@ -36,6 +36,9 @@ class CMario : public CGameObject
 
 	bool isActiveFly = false;
 	bool isJumpHeight = false;
+	DWORD timeSwitchScene;
+	bool isActiveSwitchScene = false;
+
 public: 
 	bool isJump = false;
 	CMario(float x = 0.5f, float y = 0.5f);

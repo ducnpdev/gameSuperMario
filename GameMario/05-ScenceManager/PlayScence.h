@@ -28,6 +28,7 @@
 #include "IntroBackground.h"
 #include "IntroBackgroundSuper.h"
 #include "MarioWorldMap.h"
+#include "FlowSwitchScene.h"
 #include "Hud.h"
 #include <cmath>
 #include "IntroPlayerSecond.h"

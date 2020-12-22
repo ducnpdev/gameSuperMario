@@ -272,6 +272,11 @@
 8618	179	24	187	32	6
 8619	197	24	205	32	6
 
+# icon end map switch scene 
+8701	300	189	316	205	70
+8702	336	189	352	205	70
+8703	354	189	370	205	70
+
 # *************** start HUD HUD
 
 # new flower red
@@ -497,6 +502,9 @@
 # rectangle 
 861	8601	100
 
+# icon end map switch scene 
+870	8701	300	8702	300	8703	300
+
 
 [ANIMATION_SETS]
 
@@ -572,6 +580,9 @@
 86	861
 #86	861	862	863	864	865	866	867	868	869	880	870	871	872	873	874	875	876	877	878	879
 
+# icon end map switch scene 
+87	870
+
 [OBJECTS]
 #58	20.0	112	58
 # type	x	y	ani_set_id	extra_settings per object type
@@ -624,14 +635,12 @@
 14	80	80	14
 
 # Goomba fly
-#15	150	126	15
+15	1000	126	15
 
 # bullet
 # 21	300	30	21
 
-# --- SCENE PORTAL ----
-# type	l	t	ani_set_id	r	b	scene_id
-#50	  300	98	 0	    316	   150	     2
+
 
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
@@ -643,13 +652,8 @@
 57	352	128	57	32	1
 
 57	400	128	57	80	1
-
 57	464	96	57	64	1
-
-
 57	512	64	57	64	1
-
-
 57	512	144	57	96	1
 
 
@@ -689,7 +693,10 @@
 9	1664	160	2	48	16
 
 9	2256	128	2	32	16
+9	2256	16	2	32	16
+9	2256	32	2	32	16
 9	2256	48	2	32	16
+9	2256	64	2	32	16
 
 # pipe 
 9	352	128	2	32	48
@@ -699,6 +706,7 @@
 9	1856	128	2	32	48
 
 9	2256	144	2	32	32
+
 
 9	2320	144	2	32	32
 
@@ -726,13 +734,18 @@
 153	2112	160	153	1 
 153	2096	144	153	1
 
+# icon end map switch scene 
+87	2700	112	87
+
 # MARIO
-0	20.0	0	1	
+0	2510.0	0	1	
 
 # HUD HUD
 # rectangle
 86	8	192	86
-
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	  2258	16	 0	    2286	   20	     2
 [TILEMAP]
 1
 

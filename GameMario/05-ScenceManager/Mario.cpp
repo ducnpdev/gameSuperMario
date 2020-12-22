@@ -106,6 +106,15 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (isActiveSwitchScene)
+	{
+		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	/*	if (GetTickCount() - timeSwitchScene > NUMBER_2500)
+		{
+			isActiveSwitchScene = false;
+			CGame::GetInstance()->SwitchScene(2);
+		}*/
+	}
 
 	if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
 	{
@@ -123,6 +132,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			SubCountArrow();
 		}
 	}
+	//if(x <= 2360) SubCountArrow();
+
 	if (GetTickCount() - second > NUMBER_1000)
 	{
 		CHud::GetInstance()->SubTime(1);
@@ -148,7 +159,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			// vy += MARIO_GRAVITY * dt;
 			vy += 0.0009f * dt;
-
 		}
 	}
 	// Simple fall down
@@ -247,6 +257,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				HandleHoldCollision(ny, dx, dy, old_vy);
 				continue;
 			}
+
+			else if (dynamic_cast<CFlowSwitchScene *>(e->obj))
+			{
+				CFlowSwitchScene *flowSwitchScene = dynamic_cast<CFlowSwitchScene *>(e->obj);
+				flowSwitchScene->SetState(FLOW_SWITCH_SCENE_STATE_FLY);
+				SetState(MARIO_STATE_SWITCH_SCENE);
+				isActiveSwitchScene = true;
+				timeSwitchScene = GetTickCount();
+				// flowSwitchScene->SetStateObjectDelete(NUMBER_1);
+			}
+
 			else if (dynamic_cast<CGoombafly *>(e->obj))
 			{
 				CGoombafly *goombafly = dynamic_cast<CGoombafly *>(e->obj);
@@ -424,12 +445,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
+	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
+	{
+		isActiveSwitchScene = false;
+		CGame::GetInstance()->SwitchScene(NUMBER_4);
+	}
 	ClearCollisionEvent(coEvents);
 }
 
 void CMario::SetState(int state)
 {
-	switch (state)
+	switch (state)	
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
@@ -453,14 +479,16 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_JUMP:
-		if (isJump) return;
+		if (isJump)
+			return;
 		isJump = true;
 		// vy = -MARIO_JUMP_SPEED_Y;
 		vy = -0.3f;
 
 		break;
 	case MARIO_STATE_JUMP_HEIGHT:
-		if (isJump) return;
+		if (isJump)
+			return;
 		isJump = true;
 		vy = -0.4f;
 		break;
@@ -490,6 +518,10 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_SWING_TAIL:
 		vx = 0;
+		break;
+
+	case MARIO_STATE_SWITCH_SCENE:
+		vx = 0.05f;
 		break;
 	}
 
@@ -627,6 +659,8 @@ void CMario::SubCountArrow()
 void CMario::Render()
 {
 	int ani = 0;
+
+
 	if (state == MARIO_STATE_UP_LEVEL)
 	{
 		if (level == MARIO_LEVEL_2)
@@ -719,12 +753,13 @@ void CMario::Render()
 			break;
 		case MARIO_LEVEL_2:
 			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-			if(vy < 0) ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
-
+			if (vy < 0)
+				ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
 			break;
 		case MARIO_LEVEL_3:
 			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-			if(vy < 0) ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
+			if (vy < 0)
+				ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
 			break;
 		}
 	}
@@ -737,11 +772,13 @@ void CMario::Render()
 			break;
 		case MARIO_LEVEL_2:
 			ani = MARIO_BIG_ANI_WALKING_LEFT;
-			if(vy < 0) ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
+			if (vy < 0)
+				ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
 			break;
 		case MARIO_LEVEL_3:
 			ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
-			if(vy < 0) ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
+			if (vy < 0)
+				ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
 			break;
 		}
 	}
@@ -784,6 +821,26 @@ void CMario::Render()
 			ani = MARIO_ANI_LEVEL_3_ATTAT_RIGHT;
 		else
 			ani = MARIO_ANI_LEVEL_3_ATTAT_LEFT;
+	}
+
+	if (isActiveSwitchScene)
+	{
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			ani = MARIO_ANI_WALKING_RIGHT;
+			break;
+		case MARIO_LEVEL_2:
+			ani = MARIO_BIG_ANI_WALKING_RIGHT;
+			// if (vy < 0)
+			// 	ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+			break;
+		case MARIO_LEVEL_3:
+			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
+			// if (vy < 0)
+			// 	ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
+			break;
+		}
 	}
 
 	int alpha = 255;

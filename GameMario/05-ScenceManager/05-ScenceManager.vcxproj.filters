@@ -153,6 +153,9 @@
     <ClCompile Include="Hud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlowSwitchScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -294,6 +297,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowSwitchScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

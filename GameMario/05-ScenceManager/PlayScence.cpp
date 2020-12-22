@@ -316,7 +316,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	// end HUD
-	
+	case OBJECT_TYPE_END_MAP_SWITCH_SCENE:
+	{
+		obj = new CFlowSwitchScene();
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -440,6 +444,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> goombaCoObjects;
 	vector<LPGAMEOBJECT> holdCoObjects;
 	vector<LPGAMEOBJECT> portalCoObjects;
+	vector<LPGAMEOBJECT> flowSwitchSceneCoObjects;
 	// intro
 	vector<LPGAMEOBJECT> playerCoObjects;
 	vector<LPGAMEOBJECT> playerSecondCoObjects;
@@ -473,6 +478,11 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CIntroLeaf*>(objects[i]))
 		{
 			introLeafCoObjects.push_back(objects[i]);
+			continue;
+		}
+		if (dynamic_cast<CFlowSwitchScene*>(objects[i]))
+		{
+			flowSwitchSceneCoObjects.push_back(objects[i]);
 			continue;
 		}
 		// end intro
@@ -663,6 +673,7 @@ void CPlayScene::Update(DWORD dt)
 				marioCoObjects.insert(marioCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
 				marioCoObjects.insert(marioCoObjects.begin(), turtleJumpCoObjects.begin(), turtleJumpCoObjects.end());
 				marioCoObjects.insert(marioCoObjects.begin(), portalCoObjects.begin(), portalCoObjects.end());
+				marioCoObjects.insert(marioCoObjects.begin(), flowSwitchSceneCoObjects.begin(), flowSwitchSceneCoObjects.end());
 
 				objects[i]->Update(dt, &marioCoObjects);
 				continue;
@@ -683,7 +694,8 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetScreenHeight() / 2;
 	LPSCENE curentScene = CGame::GetInstance()->GetCurrentScene();
 	int sceneID = curentScene->getCurrentID();
-	if (sceneID == WORLD1 && cx > 0.0f && cx < 2512.f)
+	
+	if (sceneID == WORLD1 && cx > 0.0f && cx < 2564.f)
 	{
 		CGame::GetInstance()->SetCamPos((int)cx, 0.0f /*cy*/);
 	}

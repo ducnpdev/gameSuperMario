@@ -133,6 +133,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Flower.cpp" />
     <ClCompile Include="FlowerType2.cpp" />
+    <ClCompile Include="FlowSwitchScene.cpp" />
     <ClCompile Include="Goombafly.cpp" />
     <ClCompile Include="Hold.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Flower.h" />
     <ClInclude Include="FlowerType2.h" />
+    <ClInclude Include="FlowSwitchScene.h" />
     <ClInclude Include="Goombafly.h" />
     <ClInclude Include="Hold.h" />
     <ClInclude Include="Hud.h" />

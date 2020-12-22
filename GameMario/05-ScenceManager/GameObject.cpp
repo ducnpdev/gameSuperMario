@@ -33,7 +33,6 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	// D la quãng đường di chuyển trong 1 frame
 	float ml, mt, mr, mb;		// moving object bbox
 	float t, nx, ny;
-
 	coO->GetBoundingBox(sl, st, sr, sb);
 
 	// deal with moving object: m speed = original m speed - collide object speed
