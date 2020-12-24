@@ -302,7 +302,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (playerWorldMap != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO WORLD MAP object was created before!\n");
-			return;
+			// return;
 		}
 		obj = new CMarioWorldMap();
 		playerWorldMap = (CMarioWorldMap*)obj;
@@ -842,6 +842,9 @@ void CPlayScene::Unload()
 			chub->~CHud();
 			continue;
 		}
+		// if (dynamic_cast<CMarioWorldMap*>(objects[i])) {
+		// 	continue;
+		// }
 		delete objects[i];
 	}
 
@@ -930,7 +933,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	CMario *mario = ((CPlayScene *)scence)->GetPlayer();
-
 	if (mario != NULL) {
 		mario->SetFast(false);
 		if (mario->GetState() == MARIO_STATE_DIE)
@@ -984,6 +986,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 
 	CMarioWorldMap* marioWorldMap = ((CPlayScene*)scence)->GetPlayerWorldMap();
+	
+
 	if (marioWorldMap != NULL) {
 		
 		if (game->IsKeyDown(DIK_RIGHT))
@@ -1002,7 +1006,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_WALKING_UP);
 		}
-		
 		else {
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_IDLE);
 		}

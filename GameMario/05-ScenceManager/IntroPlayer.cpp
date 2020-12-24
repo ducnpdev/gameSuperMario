@@ -89,9 +89,7 @@ void CIntroPlayer::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 	}
 	if (now - initTime > 13000) {
 		if (state == INTRO_PLAYER_BIG_STATE_OUT_MAP) {
-		//	DebugOut(L"11111111111111111111 \n");
 			SetState(INTRO_PLAYER_BIG_STATE_LEVEL2_WALKING_LEFT);
-
 			/*vy = 0.05f;
 			vx = -0.05f;*/
 			// SetState(INTRO_PLAYER_BIG_STATE_WALKING_RIGHT);

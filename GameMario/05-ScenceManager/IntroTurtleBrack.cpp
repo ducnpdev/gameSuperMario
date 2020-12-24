@@ -49,7 +49,6 @@ void CIntroTurtleBrack::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrickFloor*>(e->obj)) {
-			//	DebugOut(L"111111111111111111111111 \n");
 			}
 		}
 	}

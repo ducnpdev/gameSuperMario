@@ -15,7 +15,8 @@ void CMarioWorldMap::GetBoundingBox(float& left, float& top, float& right, float
 }
 
 void CMarioWorldMap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
+{	
+
     CGameObject::Update(dt);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;

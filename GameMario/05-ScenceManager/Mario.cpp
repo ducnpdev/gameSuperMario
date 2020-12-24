@@ -94,7 +94,7 @@ void CMario::upLevel()
 {
 	if (level == MARIO_LEVEL_1)
 	{
-		//		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
+		// dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_2;
 	}
 	else if (level == MARIO_LEVEL_2)
@@ -448,7 +448,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
 	{
 		isActiveSwitchScene = false;
-		CGame::GetInstance()->SwitchScene(NUMBER_4);
+		CGame::GetInstance()->SwitchScene(4);
+		CGame::GetInstance()->SetCamPos(0, 0);
 	}
 	ClearCollisionEvent(coEvents);
 }

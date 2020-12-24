@@ -151,7 +151,6 @@ void CIntroPlayerSecond::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CIntroTurtle*>(e->obj)) {
-				// DebugOut(L"1111111111111: %d \n", state);
 				CIntroTurtle* turtle = dynamic_cast<CIntroTurtle*>(e->obj);
 				if (state == INTRO_PLAYER_SECOND_STATE_LEVEL3_WALK_RIGHT) {
 					if (e->nx < 0) {

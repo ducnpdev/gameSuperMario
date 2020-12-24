@@ -36,7 +36,6 @@ void CIntroTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 	DWORD now = GetTickCount();
 	if (now - initTime > 12650) {
 		if (state == INTRO_TURTLE_STATE_WALK_RIGHT) {
-		//	DebugOut(L"11111111111111 \n");
 			SetState(INTRO_TURTLE_STATE_OUT_MAP);
 		}
 	}

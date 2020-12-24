@@ -311,11 +311,8 @@
 # rectangle
 86	8	192	86
 
-
 # MARIO
 85	30	49	85
-
-
 
 [TILEMAP]
 4
