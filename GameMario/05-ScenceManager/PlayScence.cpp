@@ -549,7 +549,7 @@ void CPlayScene::Update(DWORD dt)
 			{
 				objects[i]->deleteObject(objects, i);
 			}
-			if (objects[i]->objDelete == 1)
+			if (objects[i]->objDelete == NUMBER_1)
 			{
 				objects[i]->deleteObject(objects, i);
 				continue;

@@ -81,4 +81,6 @@ public:
 
 	void SetIsJumpHeight(bool _b = true) { this->isJumpHeight = _b; }
 	bool GetIsJumpHeight() { return this->isJumpHeight; }
+
+	void WalkThrough(float _vx, float _vy);
 };

@@ -7,7 +7,7 @@ CBrickFloor::CBrickFloor(int width,int height) {
 }
 void CBrickFloor::Render() {
 	animation_set->at(0)->Render(x,y);
-	// RenderBoundingBox();
+	 RenderBoundingBox();
 }
 
 void CBrickFloor::GetBoundingBox(float &left, float &top, float &right, float &bottom) {

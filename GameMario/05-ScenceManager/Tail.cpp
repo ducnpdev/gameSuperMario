@@ -57,6 +57,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(c);
 				float x, y;
 				brickColliBroken->GetPosition(x, y);
+				int type = brickColliBroken->GetType();
+				DebugOut(L"type: %d \n",type);
 				RenderItem(x, y);
 				brickColliBroken->tailDeleteObj = true;
 			}

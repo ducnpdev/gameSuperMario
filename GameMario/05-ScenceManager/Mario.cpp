@@ -21,7 +21,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
-	 second = GetTickCount();
+	second = GetTickCount();
 
 	tail = new CTail();
 	dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())
@@ -106,7 +106,8 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	if (isActiveSwitchScene)
+		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
 	//if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
 	if (fast)
 	{
@@ -124,9 +125,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			SubCountArrow();
 		}
 	}
-
-	
-
 
 	CGameObject::Update(dt);
 
@@ -178,19 +176,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
-		//
-		// Collision logic with other objects
-		//
+		
 		float old_vy = vy;
 		float old_vx = vx;
-		// DebugOut(L"continue 123: %f %f \n", old_vx, old_vy);
-		if (nx != 0)
-		{
-			vx = 0;
-		}
+		bool isCollisionGold = false;
+		bool isCollisionGround = false;
+		bool needPushBack = false;
+		if (nx != 0) vx = 0;
 		if (ny < 0)
 		{
 			vy = 0;
@@ -200,6 +192,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				SetState(MARIO_STATE_IDLE);
 			}
 		}
+
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -243,6 +236,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CHold *>(e->obj))
 			{
+				needPushBack = true;
 				HandleHoldCollision(ny, dx, dy, old_vy);
 				continue;
 			}
@@ -296,7 +290,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else if (dynamic_cast<CTurtle *>(e->obj))
 			{
 				CTurtle *turtle = dynamic_cast<CTurtle *>(e->obj);
-
 				if (e->ny < 0)
 				{
 					if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
@@ -313,6 +306,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (turtle->GetState() == TURTLE_STATE_DIE)
 						{
+						//	DebugOut(L"1111111111111111 \n");
 							if (e->nx < 0)
 							{
 								turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
@@ -326,6 +320,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						// else if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
 						else
 						{
+						//	DebugOut(L"222222222 \n");
 							downLevel();
 						}
 					}
@@ -360,7 +355,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CMoney *>(e->obj))
 			{
-				DebugOut(L"1111111111111 \n");
 				CMoney *money = dynamic_cast<CMoney *>(e->obj);
 				money->SetStateObjectDelete(NUMBER_1);
 				CHud::GetInstance()->AddNumberGold(NUMBER_1);
@@ -384,6 +378,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CBrick *>(e->obj))
 			{
+				needPushBack = true;
 				if (e->ny > 0)
 				{
 					CBrick *brick = dynamic_cast<CBrick *>(e->obj);
@@ -397,16 +392,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CBrickFloor *>(e->obj))
 			{
+				needPushBack = true;
+				isCollisionGround = true;
 				SetIsActiveFly(false);
 			}
 			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
 			{
+				needPushBack = true;
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
 				if (brickColliBroken->GetActiveGold())
 				{
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
-					DebugOut(L"Can + speed \n");
+					isCollisionGold = true;
 				}
 				if (e->ny > 0)
 				{
@@ -435,6 +433,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				downLevel();
 			}
 		}
+		if (isCollisionGold && !isCollisionGround) {
+			WalkThrough(old_vx, old_vy);
+		}
+
+		if (needPushBack) {
+			x += min_tx * dx + nx * 0.4f;
+			y += min_ty * dy + ny * 0.4f;
+		}
 	}
 	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
 	{
@@ -453,7 +459,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CMario::SetState(int state)
 {
-	switch (state)	
+	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
@@ -519,7 +525,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_SWITCH_SCENE:
-		vx = 0.05f;
+		vx = NORMAL_SPEED; // NORMAL_SPEED = 0.05f;
 		break;
 	}
 
@@ -537,21 +543,26 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	{
 		if (state == MARIO_STATE_SIT_DOWN)
 		{
-			top = y + Modify_BBOX;
+			top = y + NUMBER_12;
 		}
-		// right = x + MARIO_LEVEL3_BBOX_WIDTH;
+		if (nx > 0)
+		{
+			left = x + NUMBER_8;
+			right = x + MARIO_LEVEL3_BBOX_WIDTH;
+		}
+		//
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
 		if (state == MARIO_STATE_SIT_DOWN)
 		{
-			top = y + Modify_BBOX;
+			top = y + NUMBER_12;
 		}
 	}
 	else
 	{
-		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
-	}
+		bottom = y + NUMBER_14;
+	}	
 }
 
 void CMario::StartUpDownLevel()
@@ -561,11 +572,11 @@ void CMario::StartUpDownLevel()
 
 void CMario::HandleUpDownLevel()
 {
-	if (GetTickCount() - startUpDownLevel < 1500)
+	if (GetTickCount() - startUpDownLevel < NUMBER_1500)
 	{
 		SetState(MARIO_STATE_UP_LEVEL);
 	}
-	if (GetTickCount() - startUpDownLevel > 1500)
+	if (GetTickCount() - startUpDownLevel > NUMBER_1500)
 	{
 		startUpDownLevel = NumberZero;
 	}
@@ -654,11 +665,18 @@ void CMario::SubCountArrow()
 	countArrow--;
 }
 
+void CMario::WalkThrough(float _vx, float _vy)
+{
+
+	x += dx;
+	y += dy;
+	vx = _vx;
+	vy = _vy;
+}
+
 void CMario::Render()
 {
 	int ani = 0;
-
-
 	if (state == MARIO_STATE_UP_LEVEL)
 	{
 		if (level == MARIO_LEVEL_2)
@@ -830,13 +848,9 @@ void CMario::Render()
 			break;
 		case MARIO_LEVEL_2:
 			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-			// if (vy < 0)
-			// 	ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
 			break;
 		case MARIO_LEVEL_3:
 			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-			// if (vy < 0)
-			// 	ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
 			break;
 		}
 	}

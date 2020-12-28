@@ -13,28 +13,28 @@ void CItemFly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	switch (type)
 	{
 	case 1:
-		vy = 0.05f;
-		vx = 0.05f;
+		vy = NORMAL_SPEED;
+		vx = NORMAL_SPEED;
 		break;
 	case 2:
-		vy = -0.05f;
-		vx = 0.05f;
+		vy = -NORMAL_SPEED;
+		vx = NORMAL_SPEED;
 		break;
 	case 3:
-		vy = 0.05f;
-		vx = -0.05f;
+		vy = NORMAL_SPEED;
+		vx = -NORMAL_SPEED;
 		break;
 	case 4:
-		vy = -0.05f;
-		vx = -0.05f;
+		vy = -NORMAL_SPEED;
+		vx = -NORMAL_SPEED;
 		break;
 	default:
 		break;
 	}
 	y += dy;
 	x += dx;
-	if (GetTickCount() - time > NUMBER_1000) {
-
+	if (GetTickCount() - time > NUMBER_700) {
+		SetStateObjectDelete(NUMBER_1);
 	}
 }
 

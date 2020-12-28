@@ -7,7 +7,7 @@ CTurtle::CTurtle(int type) {
 }
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
-	vy = 0.007f * dt;	
+	vy = 0.009f * dt;	
 	if (state == TURTLE_STATE_DIE) vx = 0;
 	if (turtleTypeRender == 1) {
 		if (x < BORDER_LEFT && state == TURTLE_STATE_WALKING_LEFT) {
@@ -106,7 +106,7 @@ void CTurtle::Render() {
 		ani = TURTLE_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y);
-	// RenderBoundingBox();
+	 RenderBoundingBox();
 }
 
 void CTurtle::SetState(int state) {
@@ -135,8 +135,8 @@ void CTurtle::SetState(int state) {
 void CTurtle::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	left = x;
 	top = y;
-	right = x + NUMBER_14;
-	bottom = y + NUMBER_15;
+	right = x + NUMBER_16;
+	bottom = y + NUMBER_16;
 	if (state == TURTLE_STATE_WALKING_LEFT || state == TURTLE_STATE_WALKING_RIGHT) {
 		bottom = y + TURTLE_BBOX_HEIGHT_BIG;
 	}

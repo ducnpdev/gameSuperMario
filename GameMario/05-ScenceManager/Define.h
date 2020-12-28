@@ -51,10 +51,11 @@
 #define NUMBER_600 600
 #define NUMBER_700 700
 #define NUMBER_1000 1000
+#define NUMBER_1500 1500
 #define NUMBER_2000 2000
 #define NUMBER_2500 2500
 
-
+#define NORMAL_SPEED 0.05f
 
 // time all item 
 #define LEAF_TIME 5000
