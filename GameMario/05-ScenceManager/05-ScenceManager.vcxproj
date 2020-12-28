@@ -150,6 +150,7 @@
     <ClCompile Include="IntroTurtle.cpp" />
     <ClCompile Include="IntroTurtleAni.cpp" />
     <ClCompile Include="IntroTurtleBrack.cpp" />
+    <ClCompile Include="ItemFly.cpp" />
     <ClCompile Include="MarioWorldMap.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="ItemLeaf.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="IntroTurtle.h" />
     <ClInclude Include="IntroTurtleAni.h" />
     <ClInclude Include="IntroTurtleBrack.h" />
+    <ClInclude Include="ItemFly.h" />
     <ClInclude Include="MarioWorldMap.h" />
     <ClInclude Include="Tail.h" />
     <ClInclude Include="ItemLeaf.h" />

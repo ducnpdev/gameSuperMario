@@ -31,6 +31,7 @@ void CHud::CreateData()
 		SetMoney(NUMBER_0);
 		SetGold(NUMBER_0);
 	}
+	//second = GetTickCount();
 }
 
 void CHud::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -50,7 +51,7 @@ int CHud::ConvertNumberToSprite(int number) {
 	int ani = 1;
 	int money[6];
 	std::vector< int > arr;
-	for (int i = 1; i < 7; i++) {
+	for (int i = NUMBER_1; i < NUMBER_7; i++) {
 		int split = number % 10;
 		number = number / 10;
 		arr.push_back(split);
@@ -61,7 +62,6 @@ int CHud::ConvertNumberToSprite(int number) {
 void CHud::Render()
 {
 	CMario* mario = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	
 	//
 	CSprites* p = CSprites::GetInstance();
 	LPSPRITE sprite;
@@ -145,7 +145,13 @@ void CHud::Render()
 
 void CHud::SetState(int state)
 {
+	//DebugOut(L"update hub \n");
     CGameObject::SetState(state);
+	/*if (GetTickCount() - second > NUMBER_1000)
+		{
+			SubTime(1);
+			second = GetTickCount();
+		}*/
 }
 
 

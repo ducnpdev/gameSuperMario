@@ -14,6 +14,7 @@ class CHud : public CGameObject
     int numberMoney;
     static CHud * __instance;
 	DWORD timeRenderPWhite;
+    //DWORD second;
 public:
     CHud();
     ~CHud();
@@ -43,6 +44,8 @@ public:
     
     void AddNumberGold(int g) {numberGold += g;}
     void SubNumberGold(int g) {numberGold -= g;}
+
+    
     static CHud * GetInstance();
 };
 

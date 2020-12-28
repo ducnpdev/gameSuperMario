@@ -329,6 +329,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
+
+
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -494,8 +496,8 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CBrickColliBroken*>(objects[i]))
 		{
 			if (isChangeBrickCollisionGold) {
-				CBrickColliBroken* abc = dynamic_cast<CBrickColliBroken*>(objects[i]);
-				abc->SetActiveGold();
+				CBrickColliBroken* item = dynamic_cast<CBrickColliBroken*>(objects[i]);
+				item->SetActiveGold();
 			}
 			brickColliBrokenCoObjects.push_back(objects[i]);
 			continue;
@@ -624,7 +626,6 @@ void CPlayScene::Update(DWORD dt)
 				tailCoObjects.insert(tailCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
 				objects[i]->Update(dt, &tailCoObjects);
 				continue;
-
 			}
 			if (dynamic_cast<CMushroom *>(objects[i]))
 			{
@@ -644,6 +645,7 @@ void CPlayScene::Update(DWORD dt)
 				turtleCoObjects.insert(turtleCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
 				objects[i]->Update(dt, &turtleCoObjects);
 				continue;
+
 			}
 			if (dynamic_cast<CGoombafly *>(objects[i]))
 			{
@@ -906,9 +908,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (marioWorldMap != NULL) {
 		switch (KeyCode)
 		{
-		case DIK_RETURN:
+		case DIK_S:
 			marioWorldMap->SetState(WORLD_MAP_MARIO_SWITCH_SCENE);
 			break;
+		case DIK_X:
+			marioWorldMap->SetState(WORLD_MAP_MARIO_SWITCH_SCENE);
+			break;	
 		default:
 			break;
 		}
@@ -973,9 +978,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 	
 		else if (game->IsKeyDown(DIK_SPACE)) {
-			
-			int tmpLevel = mario->GetLevel();
-			if (tmpLevel == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
+			int level = mario->GetLevel();
+			if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
 				mario->SetState(MARIO_STATE_FLY);
 			}
 		}

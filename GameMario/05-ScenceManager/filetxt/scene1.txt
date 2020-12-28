@@ -234,7 +234,7 @@
 
 # brick collision broken
 153000	0	0	16	16	152
-153001	354	225	367	241	70
+153001	808	145	824	161	70
 
 # DIE DIE DIE all enimes
 220000	5	5	10	10	80
@@ -306,6 +306,13 @@
 150015	791	7	806	40	5
 150016	806	7	823	40	5
 150017	823	7	839	40	5
+
+# item render whenn collision brickBroken
+88001	806	352	818	365	70
+88002	819	352	831	365	70
+88003	832	352	844	365	70
+88004	845	352	857	365	70
+
 
 [ANIMATIONS]
 
@@ -505,6 +512,8 @@
 # icon end map switch scene 
 870	8701	300	8702	300	8703	300
 
+# item render whenn collision brickBroken
+880	88001	100	88002	100	88003	100	88004	100
 
 [ANIMATION_SETS]
 
@@ -582,6 +591,9 @@
 
 # icon end map switch scene 
 87	870
+
+# item render whenn collision brickBroken
+88	880
 
 [OBJECTS]
 #58	20.0	112	58
@@ -736,6 +748,9 @@
 
 # icon end map switch scene 
 87	2700	112	87
+
+# item render whenn collision brickBroken
+#88	2500	100	88
 
 # MARIO
 0	2510.0	0	1	

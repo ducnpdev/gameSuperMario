@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "Define.h"
 #include "Utils.h"
+#include "BrickColliBroken.h"
+#include "ItemFly.h"
+
 
 class CTail : public CGameObject
 {
@@ -16,5 +19,7 @@ public:
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     virtual void SetState(int state);
     void isCollidingObject(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>& colidingObjects);
+    void RenderItem(float x, float y);
+
 };
 

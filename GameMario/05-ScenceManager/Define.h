@@ -190,6 +190,9 @@
 
 #define OBJECT_TYPE_HUD 86
 #define OBJECT_TYPE_END_MAP_SWITCH_SCENE 87
+// item render whenn collision brickBroken
+#define OBJECT_TYPE_ITEM_FLY 88
+
 
 
 // type = 151 la bong hoa di chuyen ma ko ban dan

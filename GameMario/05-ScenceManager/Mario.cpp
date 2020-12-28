@@ -21,7 +21,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
-	second = GetTickCount();
+	 second = GetTickCount();
 
 	tail = new CTail();
 	dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())
@@ -106,19 +106,11 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (isActiveSwitchScene)
+	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	//if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
+	if (fast)
 	{
-		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
-	/*	if (GetTickCount() - timeSwitchScene > NUMBER_2500)
-		{
-			isActiveSwitchScene = false;
-			CGame::GetInstance()->SwitchScene(2);
-		}*/
-	}
-
-	if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
-	{
-		if (GetTickCount() - timeAddCountArrow > NUMBER_600)
+		if (GetTickCount() - timeAddCountArrow > NUMBER_300)
 		{
 			timeAddCountArrow = GetTickCount();
 			SplusCountArrow();
@@ -126,19 +118,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		if (GetTickCount() - timeAddCountArrow > NUMBER_500)
+		if (GetTickCount() - timeAddCountArrow > NUMBER_300)
 		{
 			timeAddCountArrow = GetTickCount();
 			SubCountArrow();
 		}
 	}
-	//if(x <= 2360) SubCountArrow();
 
-	if (GetTickCount() - second > NUMBER_1000)
-	{
-		CHud::GetInstance()->SubTime(1);
-		second = GetTickCount();
-	}
+	
+
+
 	CGameObject::Update(dt);
 
 	if (state == MARIO_STATE_FLY)
@@ -158,7 +147,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		else
 		{
 			// vy += MARIO_GRAVITY * dt;
-			vy += 0.0009f * dt;
+			vy += 0.0018f * dt;
 		}
 	}
 	// Simple fall down
@@ -371,6 +360,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CMoney *>(e->obj))
 			{
+				DebugOut(L"1111111111111 \n");
 				CMoney *money = dynamic_cast<CMoney *>(e->obj);
 				money->SetStateObjectDelete(NUMBER_1);
 				CHud::GetInstance()->AddNumberGold(NUMBER_1);
@@ -416,6 +406,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				{
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
+					DebugOut(L"Can + speed \n");
 				}
 				if (e->ny > 0)
 				{
@@ -448,10 +439,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
 	{
 		isActiveSwitchScene = false;
-		CGame::GetInstance()->SwitchScene(4);
+		CGame::GetInstance()->SwitchScene(NUMBER_4);
 		CGame::GetInstance()->SetCamPos(0, 0);
 	}
 	ClearCollisionEvent(coEvents);
+
+	if (GetTickCount() - second > NUMBER_1000)
+	{
+		CHud::GetInstance()->SubTime(1);
+		second = GetTickCount();
+	}
 }
 
 void CMario::SetState(int state)

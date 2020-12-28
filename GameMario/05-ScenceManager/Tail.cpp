@@ -2,41 +2,48 @@
 #include "Goombafly.h"
 #include "Goomba.h"
 #include "Flower.h"
+
 CTail::CTail()
 {
 	damageLevel = ITEM_DAMAGE_LEVEL_1;
 	type = OBJECT_TYPE_TAIL;
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_TAIL);
 	SetAnimationSet(ani_set);
 	isActive = false;
 	activeAt = 0;
 }
 
-void CTail::SetActive(bool _isActive) {
-	if (isActive && _isActive) {
+void CTail::SetActive(bool _isActive)
+{
+	if (isActive && _isActive)
+	{
 		return;
 	}
 
 	isActive = _isActive;
-	if (_isActive) {
+	if (_isActive)
+	{
 		activeAt = GetTickCount();
 	}
 }
 
 void CTail::Render()
 {
-	if (isActive) {
+	if (isActive)
+	{
 		animation_set->at(0)->Render(x, y);
 		RenderBoundingBox();
 	}
 }
 
-void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (isActive) {
+	if (isActive)
+	{
 		CGameObject::Update(dt);
-		if (GetTickCount() - activeAt > MARIO_WITH_TAIL_ATTACK_TIME) {
+		if (GetTickCount() - activeAt > MARIO_WITH_TAIL_ATTACK_TIME)
+		{
 			SetActive(false);
 		}
 		vector<LPGAMEOBJECT> colidingObjects;
@@ -44,7 +51,15 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < colidingObjects.size(); i++)
 		{
 			LPGAMEOBJECT c = colidingObjects[i];
-			c->tailDeleteObj = true;
+			//c->tailDeleteObj = true;
+			if (dynamic_cast<CBrickColliBroken *>(c))
+			{
+				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(c);
+				float x, y;
+				brickColliBroken->GetPosition(x, y);
+				RenderItem(x, y);
+				brickColliBroken->tailDeleteObj = true;
+			}
 		}
 	}
 }
@@ -52,7 +67,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CTail::SetState(int state)
 {
 	CGameObject::SetState(state);
-	switch (state) {
+	switch (state)
+	{
 	case ITEMDAMAGE_STATE_DIE:
 		vy = 0;
 		vx = 0;
@@ -64,7 +80,7 @@ void CTail::SetState(int state)
 	}
 }
 
-void CTail::isCollidingObject(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>& colidingObjects)
+void CTail::isCollidingObject(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> &colidingObjects)
 {
 	float otherL;
 	float otherT;
@@ -76,26 +92,44 @@ void CTail::isCollidingObject(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJE
 	float objectB;
 	float objectR;
 	GetBoundingBox(objectL, objectT, objectR, objectB);
-	for (int i = 0; i < coObjects->size(); i++) {
+	for (int i = 0; i < coObjects->size(); i++)
+	{
 		coObjects->at(i)->GetBoundingBox(otherL, otherT, otherR, otherB);
 		if (otherL <= objectR &&
 			otherR >= objectL &&
 			otherT <= objectB &&
-			otherB >= objectT) {
+			otherB >= objectT)
+		{
 			colidingObjects.push_back(coObjects->at(i));
 		}
 	}
 }
 
-void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CTail::RenderItem(float x, float y)
 {
-	left = x; 
+	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+	CGameObject *obj = NULL;
+	for (int i = 1; i <= 4; i++) {
+		obj = new CItemFly(i);
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(88);
+		obj->SetAnimationSet(ani_set);
+		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+	}
+}
+
+void CTail::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+{
+	left = x;
 	top = y;
 	right = x + ITEM_DAMAGE_BOX_WIDTH_l1;
 	bottom = y + ITEM_DAMAGE_BOX_HEIGHT_l1;
-	if(damageLevel == ITEM_DAMAGE_LEVEL_2){
+	if (damageLevel == ITEM_DAMAGE_LEVEL_2)
+	{
 		right = x + ITEM_DAMAGE_BOX_WIDTH_l2;
-	}else if(damageLevel == ITEM_DAMAGE_LEVEL_3){
+	}
+	else if (damageLevel == ITEM_DAMAGE_LEVEL_3)
+	{
 		right = x + ITEM_DAMAGE_BOX_WIDTH_l3;
 	}
 }
