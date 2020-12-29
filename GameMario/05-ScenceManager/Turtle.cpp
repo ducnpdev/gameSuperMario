@@ -1,5 +1,6 @@
 #include "Turtle.h"
 #include "Game.h"
+
 CTurtle::CTurtle(int type) {
 	turtleTypeRender = type;
 	type = OBJECT_TYPE_TURTLE;
@@ -86,12 +87,15 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 				}
 			}
+			/* if(dynamic_cast<CGoomba*>(e->obj)){
+			 	DebugOut(L"turtle collision with Goomba \n");
+			 }*/
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 void CTurtle::Render() {
-	int ani = -1;
+	int ani = 0;
 	if (state == TURTLE_STATE_DIE) {
 		ani = TURTLE_ANI_DIE;
 	}

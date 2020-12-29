@@ -441,6 +441,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> brickFloorCoObjects;
 	vector<LPGAMEOBJECT> brickColliBrokenCoObjects;
 	vector<LPGAMEOBJECT> turtleJumpCoObjects;
+	vector<LPGAMEOBJECT> turtleCoObjects;
 	vector<LPGAMEOBJECT> enemiesCoObjects;
 	vector<LPGAMEOBJECT> otherCoObjects;
 	vector<LPGAMEOBJECT> goombaCoObjects;
@@ -493,6 +494,12 @@ void CPlayScene::Update(DWORD dt)
 			turtleJumpCoObjects.push_back(objects[i]);
 			continue;
 		}
+		
+		if(dynamic_cast<CTurtle*>(objects[i])){
+			turtleCoObjects.push_back(objects[i]);
+			continue;
+		}
+
 		if (dynamic_cast<CBrickColliBroken*>(objects[i]))
 		{
 			if (isChangeBrickCollisionGold) {
@@ -522,7 +529,7 @@ void CPlayScene::Update(DWORD dt)
 			portalCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if ( dynamic_cast<CMushroom *>(objects[i]) || dynamic_cast<CTurtle *>(objects[i]) || dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
+		if ( dynamic_cast<CMushroom *>(objects[i]) ||  dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
 		{
 			enemiesCoObjects.push_back(objects[i]);
 			continue;
@@ -654,7 +661,11 @@ void CPlayScene::Update(DWORD dt)
 			}
 			if (dynamic_cast<CGoomba*>(objects[i]))
 			{
-				objects[i]->Update(dt, &brickFloorCoObjects);
+				
+				vector<LPGAMEOBJECT> goombaCoObjects;
+				goombaCoObjects.insert(goombaCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
+				goombaCoObjects.insert(goombaCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
+				objects[i]->Update(dt, &goombaCoObjects);
 				continue;
 			}
 			if (dynamic_cast<CTurtleJump*>(objects[i]))
@@ -676,7 +687,7 @@ void CPlayScene::Update(DWORD dt)
 				marioCoObjects.insert(marioCoObjects.begin(), turtleJumpCoObjects.begin(), turtleJumpCoObjects.end());
 				marioCoObjects.insert(marioCoObjects.begin(), portalCoObjects.begin(), portalCoObjects.end());
 				marioCoObjects.insert(marioCoObjects.begin(), flowSwitchSceneCoObjects.begin(), flowSwitchSceneCoObjects.end());
-
+				marioCoObjects.insert(marioCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
 				objects[i]->Update(dt, &marioCoObjects);
 				continue;
 			}

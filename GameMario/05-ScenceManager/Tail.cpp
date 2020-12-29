@@ -5,7 +5,7 @@
 
 CTail::CTail()
 {
-	damageLevel = ITEM_DAMAGE_LEVEL_1;
+	// damageLevel = ITEM_DAMAGE_LEVEL_1;
 	type = OBJECT_TYPE_TAIL;
 	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_TAIL);
@@ -132,13 +132,13 @@ void CTail::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 	left = x;
 	top = y;
 	right = x + TAIL_WIDTH_BOUNDING_BOX;
-	bottom = y + ITEM_DAMAGE_BOX_HEIGHT_l1;
-	if (damageLevel == ITEM_DAMAGE_LEVEL_2)
+	bottom = y + TAIL_HEIGHT_BOUNDING_BOX;
+	/*if (damageLevel == ITEM_DAMAGE_LEVEL_2)
 	{
 		right = x + ITEM_DAMAGE_BOX_WIDTH_l2;
 	}
 	else if (damageLevel == ITEM_DAMAGE_LEVEL_3)
 	{
 		right = x + ITEM_DAMAGE_BOX_WIDTH_l3;
-	}
+	}*/
 }

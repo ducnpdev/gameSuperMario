@@ -26,13 +26,16 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetStateObjectDelete(NUMBER_1);
 		CHud::GetInstance()->AddNumberMoney(NUMBER_100);
 	}
+	if (now - timeChangeDirection > TIME_DIE && timeChangeDirection != NUMBER_0) {
+		vy = GOOMBA_DIE_SPEED;
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	float min_tx, min_ty, nx = 0, ny;
 	float rdx = 0;
 	float rdy = 0;
-	CalcPotentialCollisions(coObjects, coEvents);
+	if(state != GOOMBA_STATE_START_DIE_COLLISION_TURTLR) CalcPotentialCollisions(coObjects, coEvents);
 	FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 	if (coEventsResult.size() == 0)
 	{
@@ -45,6 +48,18 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		y += min_ty * dy + ny * 0.4f;
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if(dynamic_cast<CBrickFloor*>(e->obj)){
+				if(e->nx < 0) vx = -GOOMBA_WALKING_SPEED;
+				if(e->nx > 0) vx = GOOMBA_WALKING_SPEED;
+			} 
+			if(dynamic_cast<CTurtle*>(e->obj)){
+				SetState(GOOMBA_STATE_START_DIE_COLLISION_TURTLR);
+				timeChangeDirection = GetTickCount();
+			 }
+		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
@@ -52,9 +67,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CGoomba::Render()
 {
 	int ani = GOOMBA_ANI_WALKING;
-	if (state == GOOMBA_STATE_DIE) {
-		ani = GOOMBA_ANI_DIE;
-	}
+	if (state == GOOMBA_STATE_DIE) ani = GOOMBA_ANI_DIE;
+	if(state == GOOMBA_STATE_START_DIE_COLLISION_TURTLR) ani = GOOMBA_ANI_DIE_COLLISION_TURTLR;
 	animation_set->at(ani)->Render(x,y);
 	// RenderBoundingBox();
 }
@@ -71,6 +85,11 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_WALKING: 
 		vx = -GOOMBA_WALKING_SPEED;
 		vy = GOOMBA_WALKING_SPEED;
+		break;
+	case GOOMBA_STATE_START_DIE_COLLISION_TURTLR:
+		vx = GOOMBA_WALKING_SPEED;
+		vy = -GOOMBA_DIE_SPEED;
+		break;
 	}
 }
 

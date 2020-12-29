@@ -5,11 +5,11 @@ CBrick::CBrick() {
 void CBrick::Render()
 {
 	int ani = BRICK_ANI_ANIMATION;
-	if (state == BRICK_STATE_DIE || state == BRICK_STATE_DONE){
+	if (state == BRICK_STATE_DIE || state == BRICK_STATE_DONE) {
 		ani = BRICK_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y);
-	 RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)

@@ -65,7 +65,6 @@
 #define NumberZero 0
 #define Modify_BBOX 12
 #define GRAVITY 0.0005f
-#define TIME_DIE 500
 // setting start screen game and background -- Game.cpp
 #define MAX_GAME_LINE 1024
 #define GAME_FILE_SECTION_UNKNOWN -1
@@ -326,7 +325,6 @@
 #define TURTLE_HEIGHT_DIE_WALKING_BOUNDING_BOX 15
 #define TURTLE_HEIGHT_WALKING_BOUNDING_BOX 27
 
-
 #define BORDER_LEFT 512
 #define BORDER_RIGHT 592
 #define TURTLE_WALKING_SPEED 0.03f;
@@ -370,7 +368,6 @@
 #define SQUAREE_BOX_HEIGHT 2
 
 // define Goomba
-#define GOOMBA_WALKING_SPEED 0.05f;
 #define GOOMBA_ANI_WALKING 0
 #define GOOMBA_ANI_DIE 1
 #define GOOMBA_ANI_FLY 2
@@ -728,5 +725,13 @@
 
 // define class Ctail
 #define OBJECT_TYPE_TAIL	58
-#define ITEM_DAMAGE_BOX_WIDTH_l1 10
+// #define ITEM_DAMAGE_BOX_WIDTH_l1 10
 #define TAIL_WIDTH_BOUNDING_BOX 7
+#define TAIL_HEIGHT_BOUNDING_BOX 7
+
+// define class CGoomba
+#define GOOMBA_STATE_START_DIE_COLLISION_TURTLR 400
+#define GOOMBA_ANI_DIE_COLLISION_TURTLR 2
+#define TIME_DIE 150
+#define GOOMBA_WALKING_SPEED 0.05f;
+#define GOOMBA_DIE_SPEED 0.06f;

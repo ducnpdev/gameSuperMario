@@ -6,11 +6,14 @@
 #include "Money.h"
 #include "PlayScence.h"
 #include "Scence.h"
+#include "Turtle.h"
 
 class CGoomba : public CGameObject
 {
 	bool deleteGoombaObj = false;
 	DWORD timeDie;
+	DWORD timeChangeDirection;
+
 public: 	
 	CGoomba();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

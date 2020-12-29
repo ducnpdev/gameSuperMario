@@ -8,7 +8,7 @@
 
 class CTail : public CGameObject
 {
-    int damageLevel;
+   // int damageLevel;
     DWORD activeAt;
     bool isActive = false;
 public:
