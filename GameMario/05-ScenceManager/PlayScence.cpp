@@ -426,7 +426,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\enemies.png", D3DCOLOR_XRGB(255, 255, 255));
+	// CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\enemies.png", D3DCOLOR_XRGB(0, 0, 0));
 }
 
 void CPlayScene::Update(DWORD dt)

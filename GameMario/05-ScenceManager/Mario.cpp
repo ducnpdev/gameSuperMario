@@ -291,14 +291,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else if (dynamic_cast<CTurtle *>(e->obj))
 			{
 				CTurtle *turtle = dynamic_cast<CTurtle *>(e->obj);
+				needPushBack = true;
 				if (e->ny < 0)
 				{
 					if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
 					{
 						turtle->SetState(TURTLE_STATE_DIE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						int type = turtle->GetTypeItemRender();
-						renderItemCollisionBrick(type, turtle->x, turtle->y);
+						// vy = -MARIO_JUMP_DEFLECT_SPEED;
+						/*int type = turtle->GetTypeItemRender();
+						renderItemCollisionBrick(type, turtle->x, turtle->y);*/
 					}
 				}
 				else if (e->nx != 0)
@@ -307,7 +308,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (turtle->GetState() == TURTLE_STATE_DIE)
 						{
-							//	DebugOut(L"1111111111111111 \n");
 							if (e->nx < 0)
 							{
 								turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
@@ -318,10 +318,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							}
 							renderItemCollisionBrick(2, turtle->x, turtle->y);
 						}
-						// else if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
 						else
 						{
-							//	DebugOut(L"222222222 \n");
 							downLevel();
 						}
 					}
@@ -641,6 +639,8 @@ void CMario::HandleHoldCollision(float ny, float dx, float dy, float old_vy)
 
 void CMario::renderItemCollisionBrick(int type, float x, float y)
 {
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	CGameObject* obj = NULL;
 	// render gold is money
 	if (type == BRICK_ITEM_RENDER_MONEY)
 	{
@@ -687,8 +687,8 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	// type == 5 is item when collision with brickBroken
 	else if (type == NUMBER_5)
 	{
-		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
-		CGameObject *obj = NULL;
+		//CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+		//CGameObject *obj = NULL;
 		// 
 		obj = new CBrickColliBroken(2);
 		obj->SetPosition(x, y);
@@ -698,9 +698,9 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	}
 	// type == 6 is 4 item when collision with brickBroken
 	else if (type == NUMBER_6) {
-		for (int i = 1; i <= 4; i++) {
-			CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-			CGameObject* obj = NULL;
+		for (int i = NUMBER_1; i <= NUMBER_4; i++) {
+			//CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+			//CGameObject* obj = NULL;
 			obj = new CItemFly(i);
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(88);
@@ -919,5 +919,5 @@ void CMario::Render()
 		alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-	// RenderBoundingBox();
+	 RenderBoundingBox();
 }

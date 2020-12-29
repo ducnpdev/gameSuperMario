@@ -131,7 +131,7 @@ void CTail::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
 	top = y;
-	right = x + ITEM_DAMAGE_BOX_WIDTH_l1;
+	right = x + TAIL_WIDTH_BOUNDING_BOX;
 	bottom = y + ITEM_DAMAGE_BOX_HEIGHT_l1;
 	if (damageLevel == ITEM_DAMAGE_LEVEL_2)
 	{

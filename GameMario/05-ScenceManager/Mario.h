@@ -83,4 +83,6 @@ public:
 	bool GetIsJumpHeight() { return this->isJumpHeight; }
 
 	void WalkThrough(float _vx, float _vy);
+
+	void JumpWhenCollision();
 };

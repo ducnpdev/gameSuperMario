@@ -1,5 +1,6 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
+1000	textures\BoundingBoxRender.png	0	0	0
 0	textures\simon.png	176	224	248
 555	textures\tilemap\map1.png	176	224	248
 560	textures\tilemap\brick.png	176	224	248
@@ -23,6 +24,7 @@
 5	textures\allitem.png	176	224	248
 152	textures\tilemap\spriteMap1\brickColliBroken.png	176	224	248
 6	textures\HUD.png	176	224	248
+
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
