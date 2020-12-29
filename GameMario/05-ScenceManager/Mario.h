@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GameObject.h"
 #include "MorningStar.h"
 #include "Brick.h"
@@ -13,6 +14,7 @@
 #include "Bullet.h"
 #include "Flower.h"
 #include "FlowerType2.h"
+
 
 class CMario : public CGameObject
 {
@@ -85,4 +87,8 @@ public:
 	void WalkThrough(float _vx, float _vy);
 
 	void JumpWhenCollision();
+
+	// collision handles
+	void CollisionWithGoomba(LPCOLLISIONEVENT collisionEven);
+	void CollisionWithTurtle(LPCOLLISIONEVENT collisionEven);
 };

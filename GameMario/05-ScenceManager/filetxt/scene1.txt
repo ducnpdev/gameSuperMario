@@ -21,7 +21,7 @@
 99	textures\brickfloor.png	176	224	248
 100	textures\brickFloor\brickFloor39.png	176	224	248
 110	textures\wall.png	176	224	248
-5	textures\allitem.png	176	224	248
+5	textures\allitem.png	41	88	124
 152	textures\tilemap\spriteMap1\brickColliBroken.png	176	224	248
 6	textures\HUD.png	176	224	248
 
@@ -768,7 +768,7 @@
 #88	2500	100	88
 
 # MARIO
-0	500.0	0	1	
+0	10.0	0	1	
 
 # HUD HUD
 # rectangle

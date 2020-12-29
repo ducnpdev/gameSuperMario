@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "Utils.h"
 #include <assert.h>
 #include "Utils.h"
 #include "Mario.h"
@@ -11,7 +12,6 @@
 #include "Money.h"
 #include "PlayScence.h"
 #include "ItemLeaf.h"
-
 CMario::CMario(float x, float y) : CGameObject()
 {
 	level = MARIO_LEVEL_1;
@@ -105,7 +105,8 @@ void CMario::upLevel()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	if (isActiveSwitchScene)
+		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
 	//if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
 	if (fast)
 	{
@@ -157,7 +158,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 		untouchable_start = 0;
 	}
-	
+
 	if (state != MARIO_STATE_DIE)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
@@ -180,7 +181,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		bool isCollisionGold = false;
 		bool isCollisionGround = false;
 		bool needPushBack = false;
-		if (nx != 0) vx = 0;
+		if (nx != 0)
+			vx = 0;
 		if (ny < 0)
 		{
 			vy = 0;
@@ -195,6 +197,33 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			if (dynamic_cast<CGoomba *>(e->obj))
+			{
+				CollisionWithGoomba(e);
+				continue;
+			}
+
+			if (dynamic_cast<CTurtle *>(e->obj))
+			{
+				CollisionWithTurtle(e);
+				needPushBack = true;
+				continue;
+			}
+
+			if (dynamic_cast<CHold *>(e->obj))
+			{
+				needPushBack = true;
+				HandleHoldCollision(ny, dx, dy, old_vy);
+				continue;
+			}
+
+			if (dynamic_cast<CPortal*>(e->obj))
+			{
+				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+			}
+			
+			
 			if (dynamic_cast<CTurtleJump *>(e->obj))
 			{
 				CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
@@ -232,12 +261,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			else if (dynamic_cast<CHold *>(e->obj))
-			{
-				needPushBack = true;
-				HandleHoldCollision(ny, dx, dy, old_vy);
-				continue;
-			}
 
 			else if (dynamic_cast<CFlowSwitchScene *>(e->obj))
 			{
@@ -268,7 +291,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							goombafly->SetState(GOOMBA_FLY_STATE_DIE);
 						}
 					}
-					
 				}
 				else if (e->nx != 0)
 				{
@@ -287,74 +309,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			else if (dynamic_cast<CTurtle *>(e->obj))
-			{
-				CTurtle *turtle = dynamic_cast<CTurtle *>(e->obj);
-				needPushBack = true;
-				if (e->ny < 0)
-				{
-					if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
-					{
-						turtle->SetState(TURTLE_STATE_DIE);
-						// vy = -MARIO_JUMP_DEFLECT_SPEED;
-						/*int type = turtle->GetTypeItemRender();
-						renderItemCollisionBrick(type, turtle->x, turtle->y);*/
-						// vy = -0.2f;
-						JumpWhenCollision();
-					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable == 0)
-					{
-						if (turtle->GetState() == TURTLE_STATE_DIE)
-						{
-							if (e->nx < 0)
-							{
-								turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
-							}
-							if (e->nx > 0)
-							{
-								turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
-							}
-							renderItemCollisionBrick(2, turtle->x, turtle->y);
-						}
-						else
-						{
-							downLevel();
-						}
-					}
-				}
-			}
-
-			else if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba
-			{
-				CGoomba *goomba = dynamic_cast<CGoomba *>(e->obj);
-				if (e->ny < 0)
-				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
-					{
-						goomba->SetTimeStartDie(GetTickCount());
-						goomba->SetState(GOOMBA_STATE_DIE);
-						JumpWhenCollision();
-					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable == 0)
-					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-						{
-							downLevel();
-						}
-					}
-				}
-			} // if Goomba
-			else if (dynamic_cast<CPortal *>(e->obj))
-			{
-				CPortal *p = dynamic_cast<CPortal *>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
-			}
+			
 			else if (dynamic_cast<CMoney *>(e->obj))
 			{
 				CMoney *money = dynamic_cast<CMoney *>(e->obj);
@@ -403,8 +358,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				needPushBack = true;
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
 				int typeBrick = brickColliBroken->GetType();
-				if (typeBrick == 2) {
-					if (!brickColliBroken->GetActiveCollisiond()) {
+				if (typeBrick == 2)
+				{
+					if (!brickColliBroken->GetActiveCollisiond())
+					{
 						float x, y;
 						brickColliBroken->GetPosition(x, y);
 						brickColliBroken->SetPosition(x, y + 8);
@@ -417,7 +374,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				//	DebugOut(L"type == 4 \n");
 				//	//brickColliBroken->SetActiveCollisiond();
 				//}
-				if (brickColliBroken->GetActiveGold() && typeBrick != 3 && typeBrick != 2 )
+				if (brickColliBroken->GetActiveGold() && typeBrick != 3 && typeBrick != 2)
 				{
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
@@ -431,22 +388,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						brickColliBroken->GetPosition(brickX, bricLY);
 						// brickColliBroken->SetPosition(brickX, bricLY - 16);
 						// brickColliBroken->SetActiveCollisiond();
-						
-						if (brickColliBroken->GetAllowRenderItem()) {
+
+						if (brickColliBroken->GetAllowRenderItem())
+						{
 							// DebugOut(L"dc render item \n");
 							renderItemCollisionBrick(5, brickX, bricLY - NUMBER_16);
 							brickColliBroken->SetAllowRenderItem();
 							// brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
 							// brickColliBroken->SetActiveCollisiond();
 						}
-					/*	else {
+						/*	else {
 							DebugOut(L"KHONG dc render item \n");
 						}*/
 					}
 				}
 
-				if (brickColliBroken->GetActiveCollisiond()) {
-					dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
+				if (brickColliBroken->GetActiveCollisiond())
+				{
+					dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
 				}
 				/*else
 				{
@@ -455,8 +414,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
 					}
 				}*/
-
-
 			}
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
@@ -643,8 +600,8 @@ void CMario::HandleHoldCollision(float ny, float dx, float dy, float old_vy)
 
 void CMario::renderItemCollisionBrick(int type, float x, float y)
 {
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	CGameObject* obj = NULL;
+	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+	CGameObject *obj = NULL;
 	// render gold is money
 	if (type == BRICK_ITEM_RENDER_MONEY)
 	{
@@ -698,26 +655,30 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 	}
 	// type == 6 is 4 item when collision with brickBroken
-	else if (type == NUMBER_6) {
-		for (int i = NUMBER_1; i <= NUMBER_4; i++) {
+	else if (type == NUMBER_6)
+	{
+		for (int i = NUMBER_1; i <= NUMBER_4; i++)
+		{
 			obj = new CItemFly(i);
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(88);
 			obj->SetAnimationSet(ani_set);
-			dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+			dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 		}
 	}
 }
 
 void CMario::SplusCountArrow()
 {
-	if (countArrow == NUMBER_6) return;
+	if (countArrow == NUMBER_6)
+		return;
 	countArrow++;
 }
 
 void CMario::SubCountArrow()
 {
-	if (countArrow == NUMBER_0) return;
+	if (countArrow == NUMBER_0)
+		return;
 	countArrow--;
 }
 
@@ -733,6 +694,69 @@ void CMario::JumpWhenCollision()
 {
 	// DebugOut(L"vy: %f \n", vy);
 	vy = -0.2f;
+}
+
+void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
+{
+	CGoomba *goomba = dynamic_cast<CGoomba *>(collisionEvent->obj);
+	if (collisionEvent->ny < 0)
+	{
+		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		{
+			goomba->SetTimeStartDie(GetTickCount());
+			goomba->SetState(GOOMBA_STATE_DIE);
+			JumpWhenCollision();
+		}
+	}
+	else if (collisionEvent->nx != 0)
+	{
+		if (untouchable == 0)
+		{
+			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				downLevel();
+			}
+		}
+	}
+}
+
+void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
+{
+	CTurtle *turtle = dynamic_cast<CTurtle *>(collisionEven->obj);
+	if (collisionEven->ny < 0)
+	{
+		if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
+		{
+			turtle->SetState(TURTLE_STATE_DIE);
+			// vy = -MARIO_JUMP_DEFLECT_SPEED;
+			/*int type = turtle->GetTypeItemRender();
+			renderItemCollisionBrick(type, turtle->x, turtle->y);*/
+			// vy = -0.2f;
+			JumpWhenCollision();
+		}
+	}
+	else if (collisionEven->nx != 0)
+	{
+		if (untouchable == 0)
+		{
+			if (turtle->GetState() == TURTLE_STATE_DIE)
+			{
+				if (collisionEven->nx < 0)
+				{
+					turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
+				}
+				if (collisionEven->nx > 0)
+				{
+					turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
+				}
+				renderItemCollisionBrick(2, turtle->x, turtle->y);
+			}
+			else
+			{
+				downLevel();
+			}
+		}
+	}
 }
 
 void CMario::Render()
@@ -917,7 +941,8 @@ void CMario::Render()
 	}
 
 	int alpha = 255;
-	if (untouchable) alpha = 128;
+	if (untouchable)
+		alpha = 128;
 	animation_set->at(ani)->Render(x, y, alpha);
 	// RenderBoundingBox();
 }
