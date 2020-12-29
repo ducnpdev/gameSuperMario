@@ -176,13 +176,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		
+
 		float old_vy = vy;
 		float old_vx = vx;
 		bool isCollisionGold = false;
 		bool isCollisionGround = false;
 		bool needPushBack = false;
-		if (nx != 0) vx = 0;
+		if (nx != 0)
+			vx = 0;
 		if (ny < 0)
 		{
 			vy = 0;
@@ -306,7 +307,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (turtle->GetState() == TURTLE_STATE_DIE)
 						{
-						//	DebugOut(L"1111111111111111 \n");
+							//	DebugOut(L"1111111111111111 \n");
 							if (e->nx < 0)
 							{
 								turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
@@ -320,7 +321,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						// else if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
 						else
 						{
-						//	DebugOut(L"222222222 \n");
+							//	DebugOut(L"222222222 \n");
 							downLevel();
 						}
 					}
@@ -400,7 +401,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				needPushBack = true;
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
-				if (brickColliBroken->GetActiveGold())
+				int typeBrick = brickColliBroken->GetType();
+				if (typeBrick == 2) {
+					if (!brickColliBroken->GetActiveCollisiond()) {
+						float x, y;
+						brickColliBroken->GetPosition(x, y);
+						brickColliBroken->SetPosition(x, y + 8);
+					}
+					brickColliBroken->SetActiveCollisiond();
+					brickColliBroken->SetState(BRICK_COLLISION_BROKENT_ITEM_AFTER_COLLISON);
+				}
+				//if (brickColliBroken->GetType() == 4)
+				//{
+				//	DebugOut(L"type == 4 \n");
+				//	//brickColliBroken->SetActiveCollisiond();
+				//}
+				if (brickColliBroken->GetActiveGold() && typeBrick != 3 && typeBrick != 2 )
 				{
 					brickColliBroken->SetStateObjectDelete(NUMBER_1);
 					CHud::GetInstance()->AddNumberGold(NUMBER_1);
@@ -412,17 +428,34 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						float brickX, bricLY;
 						brickColliBroken->GetPosition(brickX, bricLY);
-						brickColliBroken->SetPosition(brickX, bricLY - 16);
-						brickColliBroken->SetActiveCollisiond();
+						// brickColliBroken->SetPosition(brickX, bricLY - 16);
+						// brickColliBroken->SetActiveCollisiond();
+						
+						if (brickColliBroken->GetAllowRenderItem()) {
+							// DebugOut(L"dc render item \n");
+							renderItemCollisionBrick(5, brickX, bricLY - NUMBER_16);
+							brickColliBroken->SetAllowRenderItem();
+							// brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
+							// brickColliBroken->SetActiveCollisiond();
+						}
+					/*	else {
+							DebugOut(L"KHONG dc render item \n");
+						}*/
 					}
 				}
-				else
+
+				if (brickColliBroken->GetActiveCollisiond()) {
+					dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
+				}
+				/*else
 				{
-					if (brickColliBroken->GetType() == NUMBER_3 && brickColliBroken->GetActiveCollisiond())
+					if (brickColliBroken->GetType() == 1 && brickColliBroken->GetActiveCollisiond())
 					{
 						dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
 					}
-				}
+				}*/
+
+
 			}
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
@@ -433,11 +466,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				downLevel();
 			}
 		}
-		if (isCollisionGold && !isCollisionGround) {
+		if (isCollisionGold && !isCollisionGround)
+		{
 			WalkThrough(old_vx, old_vy);
 		}
 
-		if (needPushBack) {
+		if (needPushBack)
+		{
 			x += min_tx * dx + nx * 0.4f;
 			y += min_ty * dy + ny * 0.4f;
 		}
@@ -562,7 +597,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	else
 	{
 		bottom = y + NUMBER_14;
-	}	
+	}
 }
 
 void CMario::StartUpDownLevel()
@@ -648,6 +683,30 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_LEAF);
 		obj->SetAnimationSet(ani_set);
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+	}
+	// type == 5 is item when collision with brickBroken
+	else if (type == NUMBER_5)
+	{
+		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+		CGameObject *obj = NULL;
+		// 
+		obj = new CBrickColliBroken(2);
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(153);
+		obj->SetAnimationSet(ani_set);
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+	}
+	// type == 6 is 4 item when collision with brickBroken
+	else if (type == NUMBER_6) {
+		for (int i = 1; i <= 4; i++) {
+			CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+			CGameObject* obj = NULL;
+			obj = new CItemFly(i);
+			obj->SetPosition(x, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(88);
+			obj->SetAnimationSet(ani_set);
+			dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+		}
 	}
 }
 

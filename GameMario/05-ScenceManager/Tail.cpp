@@ -51,16 +51,23 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < colidingObjects.size(); i++)
 		{
 			LPGAMEOBJECT c = colidingObjects[i];
-			//c->tailDeleteObj = true;
 			if (dynamic_cast<CBrickColliBroken *>(c))
 			{
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(c);
 				float x, y;
 				brickColliBroken->GetPosition(x, y);
 				int type = brickColliBroken->GetType();
-				DebugOut(L"type: %d \n",type);
-				RenderItem(x, y);
-				brickColliBroken->tailDeleteObj = true;
+				if (type == NUMBER_3) {	
+					brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
+					if (brickColliBroken->GetAllowRenderItem()) {
+						dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(5, x, y - 16);
+						brickColliBroken->SetAllowRenderItem();
+					}
+				}
+				if (type == 1 && !brickColliBroken->GetActiveGold()) {
+					dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(6, x, y );
+					brickColliBroken->tailDeleteObj = true;
+				}
 			}
 		}
 	}

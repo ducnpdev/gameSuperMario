@@ -825,9 +825,8 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++) {
 		// DebugOut(L"%d", i);
 		/*if (player != NULL) {
-		float a  = abs( objects[i]->x - player->x);
-		if (a > NUMBER_250) continue;
-
+			float a  = abs( objects[i]->x - player->x);
+			if (a > NUMBER_250) continue;
 		}*/
 		objects[i]->Render();
 	}
