@@ -7,6 +7,7 @@
 #include "PlayScence.h"
 #include "Scence.h"
 #include "Turtle.h"
+#include "Brick.h"
 
 class CGoomba : public CGameObject
 {
@@ -28,4 +29,8 @@ public:
 	void SetTimeStartDie(DWORD time) { this->timeDie = time; }
 	DWORD GetTimeStartDie() { return this->timeDie; }
 	void RenderMoney(int number, float x, float y);
+
+	void SetTimeChangeDirection(DWORD time) { this->timeChangeDirection = time; }
+	DWORD GetTimeChangeDirection() { return this->timeChangeDirection; }
+	
 };

@@ -12,9 +12,10 @@
 #include "Money.h"
 #include "PlayScence.h"
 #include "ItemLeaf.h"
+
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_1;
+	level = MARIO_LEVEL_3;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	start_x = x;
@@ -217,13 +218,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				continue;
 			}
 
-			if (dynamic_cast<CPortal*>(e->obj))
+			if (dynamic_cast<CPortal *>(e->obj))
 			{
-				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
-			
-			
+
 			if (dynamic_cast<CTurtleJump *>(e->obj))
 			{
 				CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
@@ -309,7 +309,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-			
+
 			else if (dynamic_cast<CMoney *>(e->obj))
 			{
 				CMoney *money = dynamic_cast<CMoney *>(e->obj);
@@ -699,22 +699,26 @@ void CMario::JumpWhenCollision()
 void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
 {
 	CGoomba *goomba = dynamic_cast<CGoomba *>(collisionEvent->obj);
-	if (collisionEvent->ny < 0)
+	if (goomba->GetState() != GOOMBA_STATE_START_DIE_COLLISION_TURTLR)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
-		{
-			goomba->SetTimeStartDie(GetTickCount());
-			goomba->SetState(GOOMBA_STATE_DIE);
-			JumpWhenCollision();
-		}
-	}
-	else if (collisionEvent->nx != 0)
-	{
-		if (untouchable == 0)
+
+		if (collisionEvent->ny < 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				downLevel();
+				goomba->SetTimeStartDie(GetTickCount());
+				goomba->SetState(GOOMBA_STATE_DIE);
+				JumpWhenCollision();
+			}
+		}
+		else if (collisionEvent->nx != 0)
+		{
+			if (untouchable == 0)
+			{
+				if (goomba->GetState() != GOOMBA_STATE_DIE)
+				{
+					downLevel();
+				}
 			}
 		}
 	}

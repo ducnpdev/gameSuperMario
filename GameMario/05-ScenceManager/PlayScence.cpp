@@ -661,10 +661,10 @@ void CPlayScene::Update(DWORD dt)
 			}
 			if (dynamic_cast<CGoomba*>(objects[i]))
 			{
-				
 				vector<LPGAMEOBJECT> goombaCoObjects;
 				goombaCoObjects.insert(goombaCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
 				goombaCoObjects.insert(goombaCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
+				goombaCoObjects.insert(goombaCoObjects.begin(), brickCoObjects.begin(), brickCoObjects.end());
 				objects[i]->Update(dt, &goombaCoObjects);
 				continue;
 			}

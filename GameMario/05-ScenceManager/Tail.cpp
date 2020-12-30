@@ -51,13 +51,15 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < colidingObjects.size(); i++)
 		{
 			LPGAMEOBJECT c = colidingObjects[i];
+			
+			
 			if (dynamic_cast<CBrickColliBroken *>(c))
 			{
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(c);
 				float x, y;
 				brickColliBroken->GetPosition(x, y);
 				int type = brickColliBroken->GetType();
-				if (type == NUMBER_3) {	
+				if (type == NUMBER_3) {
 					brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
 					if (brickColliBroken->GetAllowRenderItem()) {
 						dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(5, x, y - 16);
@@ -69,6 +71,14 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					brickColliBroken->tailDeleteObj = true;
 				}
 			}
+
+			if(dynamic_cast<CGoomba *>(c)) {
+				CGoomba *goomba = dynamic_cast<CGoomba *>(c);
+				DebugOut(L"collision goomba:%d \n",c->nx);
+				goomba->SetState(GOOMBA_STATE_START_DIE_COLLISION_TURTLR);
+				goomba->SetTimeChangeDirection(GetTickCount());
+			}
+
 		}
 	}
 }
