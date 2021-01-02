@@ -684,7 +684,7 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 	{
 		if (untouchable == 0)
 		{
-			if (turtle->GetState() == TURTLE_STATE_DIE)
+			if (turtle->GetState() == TURTLE_STATE_DIE || turtle->GetState() == TURTLE_STATE_DIE_COLLISION_TAIL)
 			{
 				if (collisionEven->nx < 0)
 				{

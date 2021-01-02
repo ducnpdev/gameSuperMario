@@ -66,8 +66,8 @@ void CHud::Render()
 	CSprites* p = CSprites::GetInstance();
 	LPSPRITE sprite;
 	// renderRectangle
-	sprite = p->Get(8601);
-	sprite->DrawFixed(8, 192);
+	sprite = p->Get(ID_SPRITE_RECTANGLE);
+	sprite->DrawFixed(ID_SPRITE_RECTANGLE_POSITION_X, ID_SPRITE_RECTANGLE_POSITION_Y);
 	
 	// render M
 	sprite = p->Get(8605);
@@ -81,20 +81,20 @@ void CHud::Render()
 	sprite->DrawFixed(45, 208);
 
 	// render square 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_RENDER_SQUARE; i++) {
 		sprite = p->Get(8602);
 		sprite->DrawFixed(172+ i*24, 192);
 	}
 
 	// render Muiten back
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < MAX_RENDER_ARROW; i++) {
 		sprite = p->Get(8604);
 		sprite->DrawFixed(56 + i * 10, 198);
 	}
 	// render Muiten white
 	if (mario != NULL) {
 		int arrowBack = mario->GetCountArrow();
-		if (mario->GetIsActiveFly()) arrowBack = NUMBER_6;
+		if (mario->GetIsActiveFly()) arrowBack = MAX_RENDER_ARROW;
 		for (int i = 0; i < arrowBack; i++) {
 			sprite = p->Get(8603);
 			sprite->DrawFixed(56 + i * 10, 198);
@@ -102,7 +102,7 @@ void CHud::Render()
 		// render P 
 		sprite = p->Get(8607);
 		sprite->DrawFixed(116, 198);
-		if ((arrowBack == NUMBER_6) && (GetTickCount() - timeRenderPWhite > 500)) {
+		if ((arrowBack == MAX_RENDER_ARROW) && (GetTickCount() - timeRenderPWhite > 500)) {
 			sprite = p->Get(8606);
 			sprite->DrawFixed(116, 198);
 			timeRenderPWhite = GetTickCount();
@@ -115,7 +115,7 @@ void CHud::Render()
 	}
 
 	int tempTime = time;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_RENDER_TIME; i++) {
 		int split = tempTime % 10;
 		tempTime = tempTime / 10;
 		int ani = SwitchCase(split);
@@ -124,7 +124,7 @@ void CHud::Render()
 	}
 
 	int tempGold = numberGold;
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAX_RENDER_GOLD; i++) {
 		int split = tempGold % 10;
 		tempGold = tempGold / 10;
 		int ani = SwitchCase(split);
@@ -133,7 +133,7 @@ void CHud::Render()
 	}
 
 	int tempMoney = numberMoney;
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < MAX_RENDER_MONEY; i++) {
 		int split = tempMoney % 10;
 		tempMoney = tempMoney / 10;
 		sprite = p->Get(8610 + split);
@@ -147,11 +147,7 @@ void CHud::SetState(int state)
 {
 	//DebugOut(L"update hub \n");
     CGameObject::SetState(state);
-	/*if (GetTickCount() - second > NUMBER_1000)
-		{
-			SubTime(1);
-			second = GetTickCount();
-		}*/
+	
 }
 
 

@@ -37,8 +37,6 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	// jump interval
 	if (GetTickCount() > jump_at + GOOMBA_FLY_JUMP_INTERVAL) {
 		if (GetState() == GOOMBA_FLY_STATE_FLY) {
-				DebugOut(L"jumpjump \n");
-
 			jump();
 		}
 	}

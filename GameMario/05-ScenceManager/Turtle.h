@@ -12,6 +12,8 @@ class CTurtle : public CGameObject
 public: 
 	int turtle_nx;
 	int turtleTypeRender;
+	DWORD timeChangeDirection;
+	bool directionCollition = true; // true collision right, false collision left
 
 public:
 	CTurtle(int type);
@@ -24,5 +26,12 @@ public:
 
 	void SetTypeItemRender(int type) { this->turtleTypeRender = type; };
 	int GetTypeItemRender() { return this->turtleTypeRender; }
+
+	void SetTimeChangeDirection(DWORD time) { this->timeChangeDirection = time; }
+	DWORD GetTimeChangeDirection() { return this->timeChangeDirection; }
+	
+	void SetDirectionCollition(bool _b = true) { this->directionCollition = _b; }
+	bool GetDirectionCollition() { return this->directionCollition; }
+
 };
 

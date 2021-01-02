@@ -36,7 +36,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath, LPCWSTR pathBackground) : CScen
 void CPlayScene::_ParseSection_TILEMAP(string line)
 {
 	vector<string> tokens = split(line);
-	if (tokens.size() < 1) return;
+	if (tokens.size() < 1)
+		return;
 	int tileMapID = atoi(tokens[0].c_str());
 	LoadResourcesTitledMap(tileMapID);
 }
@@ -161,7 +162,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int width = atof(tokens[4].c_str());
 		int height = atof(tokens[5].c_str());
-		obj = new CHold(width,height);
+		obj = new CHold(width, height);
 		break;
 	}
 	case OBJECT_TYPE_GOOMBA_FLY:
@@ -193,7 +194,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int width = atof(tokens[4].c_str());
 		int height = atof(tokens[5].c_str());
-		obj = new CBrickFloor(width,height);
+		obj = new CBrickFloor(width, height);
 		break;
 	}
 	case OBJECT_TYPE_FLOWER_COLLISION_BROKENT:
@@ -202,7 +203,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrickColliBroken(type);
 		break;
 	}
-	
+
 	case OBJECT_TYPE_MONEY:
 	{
 		obj = new CMoney(1.0, 1.0, false);
@@ -211,12 +212,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FLOWER:
 	{
 		int type = atof(tokens[4].c_str());
-		obj = new CFlower(x, y,type);
+		obj = new CFlower(x, y, type);
 		break;
 	}
 	case OBJECT_TYPE_FLOWER_TYPE2:
 	{
-		obj = new CFlowerType2(x, y);	
+		obj = new CFlowerType2(x, y);
 		break;
 	}
 	// start intro
@@ -305,7 +306,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			// return;
 		}
 		obj = new CMarioWorldMap();
-		playerWorldMap = (CMarioWorldMap*)obj;
+		playerWorldMap = (CMarioWorldMap *)obj;
 		break;
 	}
 	// end world map
@@ -329,7 +330,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
-
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -461,49 +461,54 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		// start intro
-		if (dynamic_cast<CIntroGoomba*>(objects[i])) {
+		if (dynamic_cast<CIntroGoomba *>(objects[i]))
+		{
 			introGoombaCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CIntroTurtle*>(objects[i])) {
+		if (dynamic_cast<CIntroTurtle *>(objects[i]))
+		{
 			introTurtleCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CIntroTurtleBrack*>(objects[i])) {
+		if (dynamic_cast<CIntroTurtleBrack *>(objects[i]))
+		{
 			introTurtleBlackCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CIntroPlayerSecond*>(objects[i]))
+		if (dynamic_cast<CIntroPlayerSecond *>(objects[i]))
 		{
 			playerSecondCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CIntroLeaf*>(objects[i]))
+		if (dynamic_cast<CIntroLeaf *>(objects[i]))
 		{
 			introLeafCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CFlowSwitchScene*>(objects[i]))
+		if (dynamic_cast<CFlowSwitchScene *>(objects[i]))
 		{
 			flowSwitchSceneCoObjects.push_back(objects[i]);
 			continue;
 		}
 		// end intro
-		if (dynamic_cast<CTurtleJump*>(objects[i]))
+		if (dynamic_cast<CTurtleJump *>(objects[i]))
 		{
 			turtleJumpCoObjects.push_back(objects[i]);
 			continue;
 		}
-		
-		if(dynamic_cast<CTurtle*>(objects[i])){
+
+		if (dynamic_cast<CTurtle *>(objects[i]))
+		{
 			turtleCoObjects.push_back(objects[i]);
 			continue;
 		}
 
-		if (dynamic_cast<CBrickColliBroken*>(objects[i]))
+		if (dynamic_cast<CBrickColliBroken *>(objects[i]))
 		{
-			if (isChangeBrickCollisionGold) {
-				CBrickColliBroken* item = dynamic_cast<CBrickColliBroken*>(objects[i]);
+			if (isChangeBrickCollisionGold)
+			{
+				CBrickColliBroken *item = dynamic_cast<CBrickColliBroken *>(objects[i]);
 				item->SetActiveGold();
 			}
 			brickColliBrokenCoObjects.push_back(objects[i]);
@@ -524,12 +529,12 @@ void CPlayScene::Update(DWORD dt)
 			brickFloorCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if (dynamic_cast<CPortal*>(objects[i]))
+		if (dynamic_cast<CPortal *>(objects[i]))
 		{
 			portalCoObjects.push_back(objects[i]);
 			continue;
 		}
-		if ( dynamic_cast<CMushroom *>(objects[i]) ||  dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
+		if (dynamic_cast<CMushroom *>(objects[i]) || dynamic_cast<CGoomba *>(objects[i]) || dynamic_cast<CGoombafly *>(objects[i]) || dynamic_cast<CBullet *>(objects[i]) || dynamic_cast<CItemLeaf *>(objects[i]) || dynamic_cast<CMoney *>(objects[i]) || dynamic_cast<CFlower *>(objects[i]))
 		{
 			enemiesCoObjects.push_back(objects[i]);
 			continue;
@@ -562,7 +567,7 @@ void CPlayScene::Update(DWORD dt)
 				continue;
 			}
 			// intro
-			if ( dynamic_cast<CIntroPlayer*>(objects[i]) )
+			if (dynamic_cast<CIntroPlayer *>(objects[i]))
 			{
 				vector<LPGAMEOBJECT> introPlayerCoObjects;
 				introPlayerCoObjects.insert(introPlayerCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
@@ -570,7 +575,8 @@ void CPlayScene::Update(DWORD dt)
 				objects[i]->Update(dt, &introPlayerCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroPlayerSecond*>(objects[i])) {
+			if (dynamic_cast<CIntroPlayerSecond *>(objects[i]))
+			{
 				vector<LPGAMEOBJECT> introPlayerSecondCoObjects;
 				introPlayerSecondCoObjects.insert(introPlayerSecondCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
 				introPlayerSecondCoObjects.insert(introPlayerSecondCoObjects.begin(), introTurtleCoObjects.begin(), introTurtleCoObjects.end());
@@ -580,7 +586,8 @@ void CPlayScene::Update(DWORD dt)
 				continue;
 			}
 
-			if (dynamic_cast<CIntroTurtle*>(objects[i])) {
+			if (dynamic_cast<CIntroTurtle *>(objects[i]))
+			{
 				vector<LPGAMEOBJECT> introIntroTurtleCoObjects;
 				introIntroTurtleCoObjects.insert(introIntroTurtleCoObjects.begin(), playerSecondCoObjects.begin(), playerSecondCoObjects.end());
 				introIntroTurtleCoObjects.insert(introIntroTurtleCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
@@ -588,33 +595,39 @@ void CPlayScene::Update(DWORD dt)
 				objects[i]->Update(dt, &introIntroTurtleCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroStar*>(objects[i])) {
+			if (dynamic_cast<CIntroStar *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroMushroom*>(objects[i])) {
+			if (dynamic_cast<CIntroMushroom *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroGoomba*>(objects[i])) {
+			if (dynamic_cast<CIntroGoomba *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroNumberThree*>(objects[i])) {
+			if (dynamic_cast<CIntroNumberThree *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroTurtleBrack*>(objects[i])) {
+			if (dynamic_cast<CIntroTurtleBrack *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CIntroTurtleAni*>(objects[i])) {
+			if (dynamic_cast<CIntroTurtleAni *>(objects[i]))
+			{
 				objects[i]->Update(dt, &brickFloorCoObjects);
 				continue;
 			}
 			// end intro
 			// start world map
-			if (dynamic_cast<CMarioWorldMap*>(objects[i]))
+			if (dynamic_cast<CMarioWorldMap *>(objects[i]))
 			{
 				vector<LPGAMEOBJECT> playerWorldMapCoObjects;
 				playerWorldMapCoObjects.insert(playerWorldMapCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
@@ -630,6 +643,9 @@ void CPlayScene::Update(DWORD dt)
 				tailCoObjects.insert(tailCoObjects.begin(), enemiesCoObjects.begin(), enemiesCoObjects.end());
 				tailCoObjects.insert(tailCoObjects.begin(), turtleJumpCoObjects.begin(), turtleJumpCoObjects.end());
 				tailCoObjects.insert(tailCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
+				tailCoObjects.insert(tailCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
+
+				
 				objects[i]->Update(dt, &tailCoObjects);
 				continue;
 			}
@@ -649,9 +665,10 @@ void CPlayScene::Update(DWORD dt)
 				turtleCoObjects.insert(turtleCoObjects.begin(), holdCoObjects.begin(), holdCoObjects.end());
 				turtleCoObjects.insert(turtleCoObjects.begin(), brickCoObjects.begin(), brickCoObjects.end());
 				turtleCoObjects.insert(turtleCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
+				
+				
 				objects[i]->Update(dt, &turtleCoObjects);
 				continue;
-
 			}
 			if (dynamic_cast<CGoombafly *>(objects[i]))
 			{
@@ -662,7 +679,7 @@ void CPlayScene::Update(DWORD dt)
 				objects[i]->Update(dt, &goombaFlyCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CGoomba*>(objects[i]))
+			if (dynamic_cast<CGoomba *>(objects[i]))
 			{
 				vector<LPGAMEOBJECT> goombaCoObjects;
 				goombaCoObjects.insert(goombaCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
@@ -671,7 +688,7 @@ void CPlayScene::Update(DWORD dt)
 				objects[i]->Update(dt, &goombaCoObjects);
 				continue;
 			}
-			if (dynamic_cast<CTurtleJump*>(objects[i]))
+			if (dynamic_cast<CTurtleJump *>(objects[i]))
 			{
 				vector<LPGAMEOBJECT> turtleJumpCoObjects;
 				turtleJumpCoObjects.insert(turtleJumpCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
@@ -694,7 +711,7 @@ void CPlayScene::Update(DWORD dt)
 				objects[i]->Update(dt, &marioCoObjects);
 				continue;
 			}
-			
+
 			objects[i]->Update(dt, &otherCoObjects);
 		}
 	}
@@ -710,7 +727,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetScreenHeight() / 2;
 	LPSCENE curentScene = CGame::GetInstance()->GetCurrentScene();
 	int sceneID = curentScene->getCurrentID();
-	
+
 	if (sceneID == WORLD1 && cx > 0.0f && cx < 2564.f)
 	{
 		CGame::GetInstance()->SetCamPos((int)cx, 0.0f /*cy*/);
@@ -730,7 +747,8 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 	CTextures *textures = CTextures::GetInstance();
 	CSprites *sprites = CSprites::GetInstance();
 	ifstream inFile;
-	if (tileMapID == WORLD1) {
+	if (tileMapID == WORLD1)
+	{
 		int value;
 		vector<int> temp1;
 		vector<vector<int>> Stage1Pos;
@@ -754,7 +772,8 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		background = new CBackground(Stage1Sprite, Stage1Pos);
 	}
 
-	else if(tileMapID == WORLD2) {
+	else if (tileMapID == WORLD2)
+	{
 		int value;
 		vector<int> temp1;
 		vector<vector<int>> Stage1Pos;
@@ -777,7 +796,8 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
 	}
-	else if (tileMapID == INTRO_BACKGROUND) {
+	else if (tileMapID == INTRO_BACKGROUND)
+	{
 		int value;
 		vector<int> temp1;
 		vector<vector<int>> Stage1Pos;
@@ -800,7 +820,8 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
 	}
-	else if (tileMapID == WORLD4) {
+	else if (tileMapID == WORLD4)
+	{
 		int value;
 		vector<int> temp1;
 		vector<vector<int>> Stage1Pos;
@@ -816,16 +837,16 @@ void CPlayScene::LoadResourcesTitledMap(int tileMapID)
 		}
 		LPDIRECT3DTEXTURE9 texturesBackgroundID = textures->Get(4);
 		vector<LPSPRITE> Stage1Sprite;
-		for (int row = 0; row < NUMBER_4; row++ ) {
+		for (int row = 0; row < NUMBER_4; row++)
+		{
 			for (int i = 0; i < NUMBER_8; i++)
 			{
-				sprites->Add(4000 + i + row*NUMBER_8, i * NUMBER_16, row * NUMBER_16, (i + NUMBER_1) * NUMBER_16, row * NUMBER_16 + NUMBER_16, texturesBackgroundID);
+				sprites->Add(4000 + i + row * NUMBER_8, i * NUMBER_16, row * NUMBER_16, (i + NUMBER_1) * NUMBER_16, row * NUMBER_16 + NUMBER_16, texturesBackgroundID);
 				Stage1Sprite.push_back(sprites->Get(4000 + i + row * NUMBER_8));
 			}
 		}
 		background = new CBackground(Stage1Sprite, Stage1Pos);
 	}
-	
 }
 
 void CPlayScene::AddObject(LPGAMEOBJECT gameObject)
@@ -836,7 +857,8 @@ void CPlayScene::AddObject(LPGAMEOBJECT gameObject)
 void CPlayScene::Render()
 {
 	background->Render();
-	for (int i = 0; i < objects.size(); i++) {
+	for (int i = 0; i < objects.size(); i++)
+	{
 		// DebugOut(L"%d", i);
 		/*if (player != NULL) {
 			float a  = abs( objects[i]->x - player->x);
@@ -851,9 +873,11 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++){
-		if (dynamic_cast<CHud*>(objects[i])) {
-			CHud* chub = dynamic_cast<CHud*>(objects[i]);
+	for (int i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<CHud *>(objects[i]))
+		{
+			CHud *chub = dynamic_cast<CHud *>(objects[i]);
 			chub->~CHud();
 			continue;
 		}
@@ -872,8 +896,9 @@ void CPlayScene::Unload()
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CMario *mario = ((CPlayScene *)scence)->GetPlayer();
-	CMarioWorldMap* marioWorldMap = ((CPlayScene*)scence)->GetPlayerWorldMap();
-	if (mario != NULL) {
+	CMarioWorldMap *marioWorldMap = ((CPlayScene *)scence)->GetPlayerWorldMap();
+	if (mario != NULL)
+	{
 		switch (KeyCode)
 		{
 		case DIK_X:
@@ -913,12 +938,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_5:
 			mario->SetPosition(NUMBER_2000, NUMBER_20);
 			break;
-		 case DIK_Q:
-		 	mario->Reset();
-		 	break;
+		case DIK_Q:
+			mario->Reset();
+			break;
 		}
 	}
-	if (marioWorldMap != NULL) {
+	if (marioWorldMap != NULL)
+	{
 		switch (KeyCode)
 		{
 		case DIK_S:
@@ -926,7 +952,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			break;
 		case DIK_X:
 			marioWorldMap->SetState(WORLD_MAP_MARIO_SWITCH_SCENE);
-			break;	
+			break;
 		default:
 			break;
 		}
@@ -951,7 +977,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	CMario *mario = ((CPlayScene *)scence)->GetPlayer();
-	if (mario != NULL) {
+	if (mario != NULL)
+	{
 		mario->SetFast(false);
 		if (mario->GetState() == MARIO_STATE_DIE)
 			return;
@@ -974,7 +1001,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
-			// 
+			//
 			// DebugOut(L"state Mario: %d \n", mario->GetState());
 			mario->SetState(MARIO_STATE_SIT_DOWN);
 		}
@@ -983,30 +1010,35 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		else if (game->IsKeyDown(DIK_X))
 		{
-			mario->SetState(MARIO_STATE_JUMP);
-		/*	if (mario->GetLevel() == MARIO_LEVEL_3 && mario->vy > 0 && mario->isJump)
-			{
-				mario->SetState(MARIO_STATE_SWING_TAIL);
-			}*/
-		}
-	
-		else if (game->IsKeyDown(DIK_SPACE)) {
 			int level = mario->GetLevel();
-			if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
+			if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly())
+			{
 				mario->SetState(MARIO_STATE_FLY);
 			}
+			else
+			{
+				mario->SetState(MARIO_STATE_JUMP);
+			}
 		}
+
+		// else if (game->IsKeyDown(DIK_SPACE)) {
+		// 	int level = mario->GetLevel();
+		// 	if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
+		// 		mario->SetState(MARIO_STATE_FLY);
+		// 	}
+		// }
+
 		else
 		{
 			mario->SetState(MARIO_STATE_IDLE);
 		}
 	}
 
-	CMarioWorldMap* marioWorldMap = ((CPlayScene*)scence)->GetPlayerWorldMap();
-	
+	CMarioWorldMap *marioWorldMap = ((CPlayScene *)scence)->GetPlayerWorldMap();
 
-	if (marioWorldMap != NULL) {
-		
+	if (marioWorldMap != NULL)
+	{
+
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_WALKING_RIGHT);
@@ -1023,7 +1055,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_WALKING_UP);
 		}
-		else {
+		else
+		{
 			marioWorldMap->SetState(WORLD_MAP_MARIO_LEVEL1_STATE_IDLE);
 		}
 	}
