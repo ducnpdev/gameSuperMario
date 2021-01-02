@@ -21,7 +21,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vy = 0.009f * dt;
-
 	DWORD now = GetTickCount();
 	if (now - timeDie > TIME_DIE && timeDie != NUMBER_0)
 	{
@@ -32,7 +31,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (now - timeChangeDirection < 300 && timeChangeDirection != NUMBER_0)
 	{
-		vy = -0.08f;
+		vy = -0.1f;
 	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -84,8 +83,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
-	for (UINT i = 0; i < coEvents.size(); i++)
-		delete coEvents[i];
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void CGoomba::Render()
@@ -114,7 +112,8 @@ void CGoomba::SetState(int state)
 		break;
 	case GOOMBA_STATE_START_DIE_COLLISION_TURTLR:
 		vx = GOOMBA_WALKING_SPEED;
-		vy = GOOMBA_DIE_SPEED;
+		if(!directionCollition) vx = -GOOMBA_WALKING_SPEED;
+		vy = -GOOMBA_DIE_SPEED;
 		break;
 	}
 }

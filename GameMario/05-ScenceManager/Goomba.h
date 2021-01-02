@@ -14,6 +14,7 @@ class CGoomba : public CGameObject
 	bool deleteGoombaObj = false;
 	DWORD timeDie;
 	DWORD timeChangeDirection;
+	bool directionCollition = true; // true collision right, false collision left
 
 public: 	
 	CGoomba();
@@ -33,4 +34,6 @@ public:
 	void SetTimeChangeDirection(DWORD time) { this->timeChangeDirection = time; }
 	DWORD GetTimeChangeDirection() { return this->timeChangeDirection; }
 	
+	void SetDirectionCollition(bool _b = true) { this->directionCollition = _b; }
+	bool GetDirectionCollition() { return this->directionCollition; }
 };

@@ -629,7 +629,6 @@ void CPlayScene::Update(DWORD dt)
 				vector<LPGAMEOBJECT> tailCoObjects;
 				tailCoObjects.insert(tailCoObjects.begin(), enemiesCoObjects.begin(), enemiesCoObjects.end());
 				tailCoObjects.insert(tailCoObjects.begin(), turtleJumpCoObjects.begin(), turtleJumpCoObjects.end());
-
 				tailCoObjects.insert(tailCoObjects.begin(), brickColliBrokenCoObjects.begin(), brickColliBrokenCoObjects.end());
 				objects[i]->Update(dt, &tailCoObjects);
 				continue;
@@ -656,7 +655,11 @@ void CPlayScene::Update(DWORD dt)
 			}
 			if (dynamic_cast<CGoombafly *>(objects[i]))
 			{
-				objects[i]->Update(dt, &brickFloorCoObjects);
+				vector<LPGAMEOBJECT> goombaFlyCoObjects;
+				goombaFlyCoObjects.insert(goombaFlyCoObjects.begin(), turtleCoObjects.begin(), turtleCoObjects.end());
+				goombaFlyCoObjects.insert(goombaFlyCoObjects.begin(), brickFloorCoObjects.begin(), brickFloorCoObjects.end());
+				goombaFlyCoObjects.insert(goombaFlyCoObjects.begin(), brickCoObjects.begin(), brickCoObjects.end());
+				objects[i]->Update(dt, &goombaFlyCoObjects);
 				continue;
 			}
 			if (dynamic_cast<CGoomba*>(objects[i]))

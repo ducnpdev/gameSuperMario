@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Utils.h"
 #include "Define.h"
+#include "Turtle.h"
 
 class CGoombafly : public CGameObject
 {
@@ -11,6 +12,9 @@ class CGoombafly : public CGameObject
 	int direction = 1;
 	int untouchableGoombaFly;
 	DWORD untouchableGoombaFly_start;
+	DWORD timeChangeDirection;
+	bool directionCollition = true; // true collision right, false collision left
+
 public:
 	CGoombafly(float x, float y);
 	virtual void Render();
@@ -22,5 +26,11 @@ public:
 	void SetUntouchableGoombaFly(int untouchableGoombaFly);
 	int GetUntouchableGoombaFly();
 	void StartUntouchableGoombaFly();
+
+	void SetTimeChangeDirection(DWORD time) { this->timeChangeDirection = time; }
+	DWORD GetTimeChangeDirection() { return this->timeChangeDirection; }
+	void SetDirectionCollition(bool _b = true) { this->directionCollition = _b; }
+	bool GetDirectionCollition() { return this->directionCollition; }
+
 };
 

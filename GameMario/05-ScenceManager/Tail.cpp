@@ -51,34 +51,59 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < colidingObjects.size(); i++)
 		{
 			LPGAMEOBJECT c = colidingObjects[i];
-			
-			
+
 			if (dynamic_cast<CBrickColliBroken *>(c))
 			{
 				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(c);
 				float x, y;
 				brickColliBroken->GetPosition(x, y);
 				int type = brickColliBroken->GetType();
-				if (type == NUMBER_3) {
+				if (type == NUMBER_3)
+				{
 					brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
-					if (brickColliBroken->GetAllowRenderItem()) {
-						dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(5, x, y - 16);
+					if (brickColliBroken->GetAllowRenderItem())
+					{
+						dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(5, x, y - 16);
 						brickColliBroken->SetAllowRenderItem();
 					}
 				}
-				if (type == 1 && !brickColliBroken->GetActiveGold()) {
-					dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(6, x, y );
+				if (type == 1 && !brickColliBroken->GetActiveGold())
+				{
+					dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->GetPlayer()->renderItemCollisionBrick(6, x, y);
 					brickColliBroken->tailDeleteObj = true;
 				}
 			}
 
-			if(dynamic_cast<CGoomba *>(c)) {
+			if (dynamic_cast<CGoomba *>(c))
+			{
 				CGoomba *goomba = dynamic_cast<CGoomba *>(c);
-				DebugOut(L"collision goomba:%d \n",c->nx);
+				// DebugOut(L"collision goomba:%d \n",c->nx);
 				goomba->SetState(GOOMBA_STATE_START_DIE_COLLISION_TURTLR);
 				goomba->SetTimeChangeDirection(GetTickCount());
+				float xGomba, yGomba;
+				goomba->GetPosition(xGomba, yGomba);
+				if (x > xGomba)
+					goomba->SetDirectionCollition(false);
+				if (x < xGomba)
+					goomba->SetDirectionCollition(); // default true
 			}
 
+			if (dynamic_cast<CGoombafly *>(c))
+			{
+				CGoombafly *goombaFly = dynamic_cast<CGoombafly *>(c);
+				goombaFly->SetState(GOOMBA_FLY_STATE_START_DIE_COLLISION_TURTLR);
+				goombaFly->SetTimeChangeDirection(GetTickCount());
+				float xGombaFly, yGombaFly;
+				goombaFly->GetPosition(xGombaFly, yGombaFly);
+				if (x > xGombaFly)
+				{
+					goombaFly->SetDirectionCollition(false);
+				}
+				if (x < xGombaFly) {
+					goombaFly->SetDirectionCollition(); // default true
+				}
+					
+			}
 		}
 	}
 }
@@ -128,12 +153,13 @@ void CTail::RenderItem(float x, float y)
 {
 	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 	CGameObject *obj = NULL;
-	for (int i = 1; i <= 4; i++) {
+	for (int i = 1; i <= 4; i++)
+	{
 		obj = new CItemFly(i);
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(88);
 		obj->SetAnimationSet(ani_set);
-		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 	}
 }
 

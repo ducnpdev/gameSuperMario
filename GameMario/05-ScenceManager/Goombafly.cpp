@@ -19,12 +19,16 @@ void CGoombafly::Render() {
 	if (state == GOOMBA_FLY_STATE_WALKING) {
 		ani = GOOMBA_FLY_ANI_WALKING;
 	}
+	if (state == GOOMBA_FLY_STATE_START_DIE_COLLISION_TURTLR) {
+		ani = GOOMBA_FLY_ANI_DIE_COLLISION;
+	}
 	animation_set->at(ani)->Render(x, y);
 	// RenderBoundingBox();
 }
 
 void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
+	DWORD now = GetTickCount();
 	// touchable 
 	if (GetTickCount() - untouchableGoombaFly_start > TIME_GOOMBA_FLY_UNTOUCHABLE) {
 		untouchableGoombaFly = Touchable;
@@ -33,14 +37,19 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	// jump interval
 	if (GetTickCount() > jump_at + GOOMBA_FLY_JUMP_INTERVAL) {
 		if (GetState() == GOOMBA_FLY_STATE_FLY) {
+				DebugOut(L"jumpjump \n");
+
 			jump();
 		}
 	}
-	/*else {
-		SetState(GOOMBA_FLY_STATE_WALKING);
-	}*/
+
 	// Simple fall down
 	vy += GOOMBA_FLY_GRAVITY * dt;
+
+	if (now - timeChangeDirection < GOOMBA_TIME_CHANGE_DIRECTION && timeChangeDirection != NUMBER_0)
+	{
+		vy = -GOOMBA_SPEED_CHANGE_DIRECTION;
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -50,7 +59,7 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	float min_tx, min_ty, nx = 0, ny;
 	float rdx = 0;
 	float rdy = 0;
-	if (state != GOOMBA_FLY_STATE_DIE) {
+	if (state == GOOMBA_FLY_STATE_FLY || state == GOOMBA_FLY_STATE_WALKING) {
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
 	FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -59,7 +68,7 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	{
 		x += dx;
 		y += dy;
-		calculateVx();
+		//if(state != GOOMBA_FLY_STATE_WALKING) calculateVx();
 	}
 	else
 	{
@@ -69,13 +78,23 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-		//
-		// Collision logic with other objects
-		//
-		/*for (UINT i = 0; i < coEventsResult.size(); i++)
+		
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-		}*/
+			if (dynamic_cast<CTurtle *>(e->obj))
+			{
+				SetState(GOOMBA_FLY_STATE_START_DIE_COLLISION_TURTLR);
+				timeChangeDirection = GetTickCount();
+			}
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (e->nx < 0)
+					vx = -GOOMBA_FLY_WALKING_SPEED;
+				if (e->nx > 0)
+					vx = GOOMBA_FLY_WALKING_SPEED;
+			}
+		}
 	}
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -90,10 +109,18 @@ void CGoombafly::SetState(int state) {
 			break;
 		case GOOMBA_FLY_STATE_WALKING: 
 			vx = -GOOMBA_FLY_WALKING_SPEED
-			
+			break;
 		case GOOMBA_FLY_STATE_FLY: 
 			vx = -GOOMBA_FLY_WALKING_SPEED;
-		
+			break;
+		case GOOMBA_FLY_STATE_START_DIE_COLLISION_TURTLR:
+			if(!directionCollition) {
+				vx = -GOOMBA_FLY_DIE_SPEED_VX;
+			}else {
+				vx = GOOMBA_FLY_DIE_SPEED_VX;
+			}
+			vy = -GOOMBA_FLY_DIE_SPEED;
+			break;	
 	}
 }
 

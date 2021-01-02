@@ -86,9 +86,13 @@ public:
 
 	void WalkThrough(float _vx, float _vy);
 
+	// timeOut jump collision with item
 	void JumpWhenCollision();
 
 	// collision handles
 	void CollisionWithGoomba(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithTurtle(LPCOLLISIONEVENT collisionEven);
+	void CollisionWithMushroom(LPCOLLISIONEVENT collisionEven);
+	void CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool &isCollision);
+
 };

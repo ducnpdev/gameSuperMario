@@ -318,11 +318,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CMushroom *>(e->obj))
 			{
-				CMushroom *mushroom = dynamic_cast<CMushroom *>(e->obj);
-				y = y - PLUS_POSITION_Y;
-				StartUpDownLevel();
-				mushroom->SetStateObjectDelete(NUMBER_1);
-				upLevel();
+				CollisionWithMushroom(e);
 			}
 			else if (dynamic_cast<CItemLeaf *>(e->obj))
 			{
@@ -356,64 +352,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
 			{
 				needPushBack = true;
-				CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(e->obj);
-				int typeBrick = brickColliBroken->GetType();
-				if (typeBrick == 2)
-				{
-					if (!brickColliBroken->GetActiveCollisiond())
-					{
-						float x, y;
-						brickColliBroken->GetPosition(x, y);
-						brickColliBroken->SetPosition(x, y + 8);
-					}
-					brickColliBroken->SetActiveCollisiond();
-					brickColliBroken->SetState(BRICK_COLLISION_BROKENT_ITEM_AFTER_COLLISON);
-				}
-				//if (brickColliBroken->GetType() == 4)
-				//{
-				//	DebugOut(L"type == 4 \n");
-				//	//brickColliBroken->SetActiveCollisiond();
-				//}
-				if (brickColliBroken->GetActiveGold() && typeBrick != 3 && typeBrick != 2)
-				{
-					brickColliBroken->SetStateObjectDelete(NUMBER_1);
-					CHud::GetInstance()->AddNumberGold(NUMBER_1);
-					isCollisionGold = true;
-				}
-				if (e->ny > 0)
-				{
-					if (brickColliBroken->GetType() == NUMBER_3)
-					{
-						float brickX, bricLY;
-						brickColliBroken->GetPosition(brickX, bricLY);
-						// brickColliBroken->SetPosition(brickX, bricLY - 16);
-						// brickColliBroken->SetActiveCollisiond();
-
-						if (brickColliBroken->GetAllowRenderItem())
-						{
-							// DebugOut(L"dc render item \n");
-							renderItemCollisionBrick(5, brickX, bricLY - NUMBER_16);
-							brickColliBroken->SetAllowRenderItem();
-							// brickColliBroken->SetState(BRICK_COLLISION_BROKENT_NOT_COLLISION);
-							// brickColliBroken->SetActiveCollisiond();
-						}
-						/*	else {
-							DebugOut(L"KHONG dc render item \n");
-						}*/
-					}
-				}
-
-				if (brickColliBroken->GetActiveCollisiond())
-				{
-					dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
-				}
-				/*else
-				{
-					if (brickColliBroken->GetType() == 1 && brickColliBroken->GetActiveCollisiond())
-					{
-						dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
-					}
-				}*/
+				bool tempIsCollisionGold = false;
+				CollisionWithBrickColliBroken(e,tempIsCollisionGold);
+				isCollisionGold = tempIsCollisionGold;
 			}
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
@@ -438,7 +379,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
 	{
 		isActiveSwitchScene = false;
-		CGame::GetInstance()->SwitchScene(NUMBER_4);
+		CGame::GetInstance()->SwitchScene(ID_SCENE_4);
 		CGame::GetInstance()->SetCamPos(0, 0);
 	}
 	ClearCollisionEvent(coEvents);
@@ -760,6 +701,57 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 				downLevel();
 			}
 		}
+	}
+}
+
+void CMario::CollisionWithMushroom(LPCOLLISIONEVENT collisionEven)
+{
+	CMushroom *mushroom = dynamic_cast<CMushroom *>(collisionEven->obj);
+	y = y - PLUS_POSITION_Y;
+	StartUpDownLevel();
+	mushroom->SetStateObjectDelete(NUMBER_1);
+	upLevel();
+}
+
+void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool &tempIsCollisionGold)
+{
+	CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(collisionEven->obj);
+	int typeBrick = brickColliBroken->GetType();
+	if (typeBrick == 2)
+	{
+		if (!brickColliBroken->GetActiveCollisiond())
+		{
+			float x, y;
+			brickColliBroken->GetPosition(x, y);
+			brickColliBroken->SetPosition(x, y + 8);
+		}
+		brickColliBroken->SetActiveCollisiond();
+		brickColliBroken->SetState(BRICK_COLLISION_BROKENT_ITEM_AFTER_COLLISON);
+	}
+	if (brickColliBroken->GetActiveGold() && typeBrick != 3 && typeBrick != 2)
+	{
+		brickColliBroken->SetStateObjectDelete(NUMBER_1);
+		CHud::GetInstance()->AddNumberGold(NUMBER_1);
+		// isCollisionGold = true;
+		tempIsCollisionGold = true;
+	}
+	if (collisionEven->ny > 0)
+	{
+		if (brickColliBroken->GetType() == NUMBER_3)
+		{
+			float brickX, bricLY;
+			brickColliBroken->GetPosition(brickX, bricLY);
+			if (brickColliBroken->GetAllowRenderItem())
+			{
+				renderItemCollisionBrick(5, brickX, bricLY - NUMBER_16);
+				brickColliBroken->SetAllowRenderItem();
+			}
+		}
+	}
+
+	if (brickColliBroken->GetActiveCollisiond())
+	{
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold();
 	}
 }
 
