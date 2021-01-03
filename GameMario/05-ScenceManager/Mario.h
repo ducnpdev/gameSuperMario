@@ -40,6 +40,8 @@ class CMario : public CGameObject
 	bool isJumpHeight = false;
 	DWORD timeSwitchScene;
 	bool isActiveSwitchScene = false;
+	DWORD timeKick;
+	// variable test
 
 public: 
 	bool isJump = false;
@@ -88,6 +90,8 @@ public:
 
 	// timeOut jump collision with item
 	void JumpWhenCollision();
+	void HandleArrowHud();
+	void HandleMarioFly();
 
 	// collision handles
 	void CollisionWithGoomba(LPCOLLISIONEVENT collisionEven);

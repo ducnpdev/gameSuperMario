@@ -104,11 +104,8 @@ void CMario::upLevel()
 	}
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMario::HandleArrowHud()
 {
-	if (isActiveSwitchScene)
-		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
-	//if (level == MARIO_LEVEL_3 && x > 2353 && vx > 0.000f)
 	if (fast)
 	{
 		if (GetTickCount() - timeAddCountArrow > NUMBER_300)
@@ -125,9 +122,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			SubCountArrow();
 		}
 	}
+}
 
-	CGameObject::Update(dt);
-
+void CMario::HandleMarioFly()
+{
 	if (state == MARIO_STATE_FLY)
 	{
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
@@ -147,6 +145,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			// vy += MARIO_GRAVITY * dt;
 			vy += 0.0018f * dt;
 		}
+	}
+}
+
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+{
+	CGameObject::Update(dt);
+	DWORD now = GetTickCount();
+	HandleArrowHud();
+	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	HandleMarioFly();
+	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {
+		SetState(MARIO_STATE_KICK);
 	}
 	// Simple fall down
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -353,7 +363,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				needPushBack = true;
 				bool tempIsCollisionGold = false;
-				CollisionWithBrickColliBroken(e,tempIsCollisionGold);
+				CollisionWithBrickColliBroken(e, tempIsCollisionGold);
 				isCollisionGold = tempIsCollisionGold;
 			}
 			else if (dynamic_cast<CBullet *>(e->obj))
@@ -418,7 +428,8 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_JUMP:
-		if (isJump) return;
+		if (isJump)
+			return;
 		isJump = true;
 		// vy = -MARIO_JUMP_SPEED_Y;
 		vy = -0.4f;
@@ -460,6 +471,9 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_SWITCH_SCENE:
 		vx = NORMAL_SPEED; // NORMAL_SPEED = 0.05f;
+		break;
+	case MARIO_STATE_KICK:
+		vx = 0;
 		break;
 	}
 
@@ -597,14 +611,14 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	// type == 6 is 4 item when collision with brickBroken
 	else if (type == NUMBER_6)
 	{
-	for (int i = NUMBER_1; i <= NUMBER_4; i++)
-	{
-		obj = new CItemFly(i);
-		obj->SetPosition(x, y);
-		LPANIMATION_SET ani_set = animation_sets->Get(88);
-		obj->SetAnimationSet(ani_set);
-		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
-	}
+		for (int i = NUMBER_1; i <= NUMBER_4; i++)
+		{
+			obj = new CItemFly(i);
+			obj->SetPosition(x, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(88);
+			obj->SetAnimationSet(ani_set);
+			dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+		}
 	}
 }
 
@@ -632,13 +646,13 @@ void CMario::WalkThrough(float _vx, float _vy)
 
 void CMario::JumpWhenCollision()
 {
-	DebugOut(L"JumpWhenCollision: \n");
+	// DebugOut(L"JumpWhenCollision: \n");
 	vy = -0.4f;
 }
 
 void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(collisionEvent->obj);
+	CGoomba *goomba = dynamic_cast<CGoomba *>(collisionEvent->obj);
 	if (goomba->GetState() != GOOMBA_STATE_START_DIE_COLLISION_TURTLR)
 	{
 
@@ -666,22 +680,26 @@ void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
 
 void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 {
-	CTurtle* turtle = dynamic_cast<CTurtle*>(collisionEven->obj);
-	DebugOut(L"Mario collision turlte\n");
+	CTurtle *turtle = dynamic_cast<CTurtle *>(collisionEven->obj);
 	turtle->SetTimeRelive(GetTickCount());
 	if (collisionEven->ny < 0)
 	{
-		if (turtle->GetState() == TURTLE_STATE_DIE_MOVING_RIGHT || turtle->GetState() == TURTLE_STATE_DIE_MOVING_LEFT) {
+		if (turtle->GetState() == TURTLE_STATE_DIE_MOVING_RIGHT || turtle->GetState() == TURTLE_STATE_DIE_MOVING_LEFT)
+		{
 			turtle->SetState(TURTLE_STATE_DIE);
-			JumpWhenCollision(); return;
+			JumpWhenCollision();
+			return;
 		}
-		if (turtle->GetState() == TURTLE_STATE_DIE ) {
+		if (turtle->GetState() == TURTLE_STATE_DIE)
+		{
 			float xTurtle, yTurtle;
 			turtle->GetPosition(xTurtle, yTurtle);
-			if (x < xTurtle) {
+			if (x < xTurtle)
+			{
 				turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
 			}
-			else {
+			else
+			{
 				turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
 			}
 		}
@@ -691,7 +709,6 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 			turtle->SetState(TURTLE_STATE_DIE);
 			JumpWhenCollision();
 		}
-
 	}
 	else if (collisionEven->nx != 0)
 	{
@@ -699,7 +716,6 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 		{
 			if (turtle->GetState() == TURTLE_STATE_DIE || turtle->GetState() == TURTLE_STATE_DIE_COLLISION_TAIL)
 			{
-				DebugOut(L"123123 \n");
 				if (collisionEven->nx < 0)
 				{
 					turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
@@ -709,6 +725,8 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 					turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
 				}
 				renderItemCollisionBrick(2, turtle->x, turtle->y);
+				
+				timeKick = GetTickCount();
 			}
 			else
 			{
@@ -772,6 +790,7 @@ void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool 
 void CMario::Render()
 {
 	int ani = 0;
+
 	if (state == MARIO_STATE_UP_LEVEL)
 	{
 		if (level == MARIO_LEVEL_2)
@@ -924,6 +943,28 @@ void CMario::Render()
 			ani = MARIO_ANI_FLY_RIGHT;
 		else
 			ani = MARIO_ANI_FLY_LEFT;
+	}
+	else if (state == MARIO_STATE_KICK)
+	{
+		DebugOut(L"mario state kick \n");
+		switch (level)
+		{
+		case MARIO_LEVEL_1:
+			ani = MARIO_ANI_LEVEL_1_KICK_LEFT;
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_1_KICK_RIGHT;
+			break;
+		case MARIO_LEVEL_2:
+			ani = MARIO_ANI_LEVEL_2_KICK_LEFT;
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_2_KICK_RIGHT;
+			break;
+		case MARIO_LEVEL_3:
+			ani = MARIO_ANI_LEVEL_3_KICK_LEFT;
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_3_KICK_RIGHT;
+			break;
+		}
 	}
 
 	if (checkAttact && level == MARIO_LEVEL_3)

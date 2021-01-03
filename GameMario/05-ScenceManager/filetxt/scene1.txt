@@ -1,7 +1,7 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 1000	textures\BoundingBoxRender.png	0	0	0
-0	textures\simon.png	176	224	248
+#0	textures\simon.png	176	224	248
 555	textures\tilemap\map1.png	176	224	248
 560	textures\tilemap\brick.png	176	224	248
 561	textures\tilemap\pipe_below_l.png	176	224	248
@@ -32,6 +32,7 @@
 
 # brick chan
 56000	25	0	27	200	1
+
 # ---------Small MARIO 
 # idle right
 10000	247	0	260	15	1
@@ -67,6 +68,11 @@
 
 # Simon die 
 10099	0	0	32	32	1
+
+# kick right mario level 1
+10061	425	80	441	96	1
+# kick left mario level 1
+10062	5	80	21	96	1
 
 # ----------- BIGGGG Mario
 # Idle Left
@@ -137,6 +143,16 @@
 10056	360	753	385	781	1
 10059	330	716	356	742	1
 10060	360	716	386	742	1
+
+# mario level 2 kick right
+10063	422	273	445	301	1
+# mario level 2 kick left
+10064	1	273	23	301	1
+
+# mario level 3 kick right
+10065	421	753	444	782	1
+# mario level 3 kick left
+10066	1	753	24	782	1
 
 #BRICK
 20001	0	0	1	1	99
@@ -427,8 +443,24 @@
 # mario fly right
 135	10056	100	10059	100	10060	100
 
+# mario level 1 kick right
+136	10061	100
+# mario level 1 kick left
+137	10062	100
+
+# mario level 2 kick right
+138	10063	100
+# mario level 2 kick left
+139	10064	100
+
+# mario level 3 kick right
+140	10065	100
+# mario level 3 kick left
+141	10066	100
+
 #die
 199	10099	100
+
 
 # ======== BRICK =========
 201	20001	100
@@ -564,7 +596,7 @@
 
 # MARIO
 
-1	199	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	117	118	119	120	121	122	123	124	125	126	127	128	129	130	131	132	133	134	135
+1	199	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	117	118	119	120	121	122	123	124	125	126	127	128	129	130	131	132	133	134	135	136	137	138	139	140	141
 
 # BRICK 
 2	201
@@ -684,7 +716,7 @@
 
 # turtle
 13	550	110	13	1
-#13	2096	110	13	2
+13	2096	110	13	2
 
 
 # turtle jump

@@ -1021,6 +1021,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				mario->SetState(MARIO_STATE_JUMP);
 			}
+
+			if (mario->GetState() == MARIO_STATE_JUMP) {
+				DebugOut(L"1111111111 \n");
+			}
+			
 		}
 
 		// else if (game->IsKeyDown(DIK_SPACE)) {

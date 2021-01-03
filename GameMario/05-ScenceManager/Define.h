@@ -137,6 +137,13 @@
 #define MARIO_ANI_SWING_TAIL_LEFT             33
 #define MARIO_ANI_FLY_LEFT             34
 #define MARIO_ANI_FLY_RIGHT             35
+#define MARIO_ANI_LEVEL_1_KICK_RIGHT             36
+#define MARIO_ANI_LEVEL_1_KICK_LEFT             37
+#define MARIO_ANI_LEVEL_2_KICK_RIGHT             38
+#define MARIO_ANI_LEVEL_2_KICK_LEFT             39
+#define MARIO_ANI_LEVEL_3_KICK_RIGHT             40
+#define MARIO_ANI_LEVEL_3_KICK_LEFT             41
+
 
 #define MARIO_WITH_TAIL_ATTACK_TIME		300
 
@@ -240,7 +247,7 @@
 #define BRICK_FLOOR_BOX_HEIGHT 16
 
 
-// define Mario
+// define class CMario
 #define DIRECTION_RIGHT_X 1
 #define DIRECTION_LEFT_X -1
 #define PLUS_POSITION_Y 20
@@ -286,8 +293,7 @@
 #define MARIO_STATE_FLY			1300
 #define MARIO_STATE_JUMP_HEIGHT			1400
 #define MARIO_STATE_SWITCH_SCENE			1500
-
-
+#define MARIO_STATE_KICK			1600
 
 #define	MARIO_LEVEL_1	1
 #define	MARIO_LEVEL_2		2
@@ -306,6 +312,8 @@
 #define MARIO_SMALL_BBOX_HEIGHT 15
 
 #define MARIO_UNTOUCHABLE_TIME 5000
+
+#define MARIO_TIME_KICK 200
 
 // define Cloud
 #define CLOUD_BBOX_WIDTH 30

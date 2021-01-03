@@ -11,7 +11,6 @@ CTurtle::CTurtle(int type, float x, float y)
 }
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	DebugOut(L"y: %f", y);
 	DWORD now = GetTickCount();
 	if (state == TURTLE_STATE_DIE && now - timeoutRelive > 5000 && timeoutRelive != 0) {
 		SetState(TURTLE_STATE_TIME_OUT_RELIVE);
