@@ -10,13 +10,17 @@
 class CTurtle : public CGameObject
 {
 public: 
+	float originX;
+	float originY;
 	int turtle_nx;
-	int turtleTypeRender;
+	int turtleTypeRender; // 1 is turtle on hold, 2 is turle on birckbroken
 	DWORD timeChangeDirection;
 	bool directionCollition = true; // true collision right, false collision left
+	DWORD timeoutRelive;
+	DWORD timeRelive;
 
 public:
-	CTurtle(int type);
+	CTurtle(int type, float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void SetState(int state);
@@ -33,5 +37,7 @@ public:
 	void SetDirectionCollition(bool _b = true) { this->directionCollition = _b; }
 	bool GetDirectionCollition() { return this->directionCollition; }
 
+	void SetTimeRelive(DWORD time) { this->timeoutRelive = time; }
+	DWORD GetTimeRelive() { return this->timeoutRelive; }
 };
 

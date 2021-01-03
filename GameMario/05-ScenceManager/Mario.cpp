@@ -418,12 +418,11 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_JUMP:
-		if (isJump)
-			return;
+		if (isJump) return;
 		isJump = true;
 		// vy = -MARIO_JUMP_SPEED_Y;
 		vy = -0.4f;
-
+		// vx = 0.4f;
 		break;
 	case MARIO_STATE_JUMP_HEIGHT:
 		if (isJump)
@@ -598,14 +597,14 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	// type == 6 is 4 item when collision with brickBroken
 	else if (type == NUMBER_6)
 	{
-		for (int i = NUMBER_1; i <= NUMBER_4; i++)
-		{
-			obj = new CItemFly(i);
-			obj->SetPosition(x, y);
-			LPANIMATION_SET ani_set = animation_sets->Get(88);
-			obj->SetAnimationSet(ani_set);
-			dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
-		}
+	for (int i = NUMBER_1; i <= NUMBER_4; i++)
+	{
+		obj = new CItemFly(i);
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(88);
+		obj->SetAnimationSet(ani_set);
+		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+	}
 	}
 }
 
@@ -633,13 +632,13 @@ void CMario::WalkThrough(float _vx, float _vy)
 
 void CMario::JumpWhenCollision()
 {
-	// DebugOut(L"vy: %f \n", vy);
-	vy = -0.2f;
+	DebugOut(L"JumpWhenCollision: \n");
+	vy = -0.4f;
 }
 
 void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
 {
-	CGoomba *goomba = dynamic_cast<CGoomba *>(collisionEvent->obj);
+	CGoomba* goomba = dynamic_cast<CGoomba*>(collisionEvent->obj);
 	if (goomba->GetState() != GOOMBA_STATE_START_DIE_COLLISION_TURTLR)
 	{
 
@@ -667,18 +666,32 @@ void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
 
 void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 {
-	CTurtle *turtle = dynamic_cast<CTurtle *>(collisionEven->obj);
+	CTurtle* turtle = dynamic_cast<CTurtle*>(collisionEven->obj);
+	DebugOut(L"Mario collision turlte\n");
+	turtle->SetTimeRelive(GetTickCount());
 	if (collisionEven->ny < 0)
 	{
+		if (turtle->GetState() == TURTLE_STATE_DIE_MOVING_RIGHT || turtle->GetState() == TURTLE_STATE_DIE_MOVING_LEFT) {
+			turtle->SetState(TURTLE_STATE_DIE);
+			JumpWhenCollision(); return;
+		}
+		if (turtle->GetState() == TURTLE_STATE_DIE ) {
+			float xTurtle, yTurtle;
+			turtle->GetPosition(xTurtle, yTurtle);
+			if (x < xTurtle) {
+				turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
+			}
+			else {
+				turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
+			}
+		}
+
 		if (turtle->GetState() == TURTLE_STATE_WALKING_LEFT || turtle->GetState() == TURTLE_STATE_WALKING_RIGHT)
 		{
 			turtle->SetState(TURTLE_STATE_DIE);
-			// vy = -MARIO_JUMP_DEFLECT_SPEED;
-			/*int type = turtle->GetTypeItemRender();
-			renderItemCollisionBrick(type, turtle->x, turtle->y);*/
-			// vy = -0.2f;
 			JumpWhenCollision();
 		}
+
 	}
 	else if (collisionEven->nx != 0)
 	{
@@ -686,6 +699,7 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 		{
 			if (turtle->GetState() == TURTLE_STATE_DIE || turtle->GetState() == TURTLE_STATE_DIE_COLLISION_TAIL)
 			{
+				DebugOut(L"123123 \n");
 				if (collisionEven->nx < 0)
 				{
 					turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);

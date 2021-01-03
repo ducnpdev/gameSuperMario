@@ -182,7 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_TURTLE:
 	{
 		float typeRender = atof(tokens[4].c_str());
-		obj = new CTurtle(typeRender);
+		obj = new CTurtle(typeRender,x,y);
 		break;
 	}
 	case OBJECT_TYPE_TURTLE_JUMP:
@@ -460,6 +460,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		otherCoObjects.push_back(objects[i]);
 		// start intro
 		if (dynamic_cast<CIntroGoomba *>(objects[i]))
 		{
@@ -539,7 +540,7 @@ void CPlayScene::Update(DWORD dt)
 			enemiesCoObjects.push_back(objects[i]);
 			continue;
 		}
-		otherCoObjects.push_back(objects[i]);
+		// otherCoObjects.push_back(objects[i]);
 	}
 
 	// if pausing we only update player
@@ -551,6 +552,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		for (size_t i = 0; i < objects.size(); i++)
 		{
+			// objects[i]->Update(dt, &otherCoObjects);
 			/*if (player != NULL) {
 
 			float a  = abs( objects[i]->x - player->x);
@@ -712,7 +714,7 @@ void CPlayScene::Update(DWORD dt)
 				continue;
 			}
 
-			objects[i]->Update(dt, &otherCoObjects);
+			// objects[i]->Update(dt, &otherCoObjects);
 		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

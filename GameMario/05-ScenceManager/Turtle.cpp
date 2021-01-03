@@ -1,44 +1,64 @@
 #include "Turtle.h"
 #include "Game.h"
 
-CTurtle::CTurtle(int type)
+CTurtle::CTurtle(int type, float x, float y)
 {
 	turtleTypeRender = type;
-	type = OBJECT_TYPE_TURTLE;
+	// type = OBJECT_TYPE_TURTLE;
 	SetState(TURTLE_STATE_WALKING_LEFT);
+	originX = x; originY = y;
+
 }
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	DebugOut(L"y: %f", y);
 	DWORD now = GetTickCount();
+	if (state == TURTLE_STATE_DIE && now - timeoutRelive > 5000 && timeoutRelive != 0) {
+		SetState(TURTLE_STATE_TIME_OUT_RELIVE);
+		timeRelive = now;
+	}
+	if (now - timeRelive > 500 && timeRelive != 0 && state == TURTLE_STATE_TIME_OUT_RELIVE) {
+		float a, b; GetPosition(a, b);
+		
+		SetPosition(a, b - 20);
+		SetState(TURTLE_STATE_WALKING_LEFT);
+	}
+	// DebugOut(L"state: %d \n", state);
+	CGameObject::Update(dt, coObjects);
 
 	vy = 0.009f * dt;
-	if (state == TURTLE_STATE_DIE)
-		vx = 0;
+	if (state == TURTLE_STATE_DIE) vx = 0;
 	if (turtleTypeRender == 1)
 	{
-		if (x < BORDER_LEFT && state == TURTLE_STATE_WALKING_LEFT)
+		if (x < BORDER_LEFT && state == TURTLE_STATE_WALKING_LEFT && y < 120)
 		{
 			SetState(TURTLE_STATE_WALKING_RIGHT);
+			//vx = 0.03f;
 		}
-		if (x > BORDER_RIGHT && state == TURTLE_STATE_WALKING_RIGHT)
+		if (x > BORDER_RIGHT && state == TURTLE_STATE_WALKING_RIGHT && y < 120)
 		{
+
 			SetState(TURTLE_STATE_WALKING_LEFT);
+			//vx = -0.03f;
 		}
 	}
+
+	// turtle 2 tren bricjbroken
 	if (turtleTypeRender == NUMBER_2)
 	{
 		if (x < 2085 && state == TURTLE_STATE_WALKING_LEFT)
 		{
 			SetState(TURTLE_STATE_WALKING_RIGHT);
+			//vx = 0.03f;
 		}
 		if (x > 2105 && state == TURTLE_STATE_WALKING_RIGHT)
 		{
 			SetState(TURTLE_STATE_WALKING_LEFT);
+			//vx = -0.03f;
 		}
 	}
 
-	if (now - timeChangeDirection < 300 && timeChangeDirection != NUMBER_0)
+	if (now - timeChangeDirection < 300 && timeChangeDirection != NUMBER_0) // timeChangeDirection when collision with tail
 	{
 		vy = -0.1f;
 	}
@@ -63,8 +83,7 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 1.0f;
-		if (ny != 0)
-			vy = 0;
+		if (ny != 0) vy = 0;
 
 		// loop collision
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -74,11 +93,13 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (e->nx < 0)
 				{
-					vx = -TURTLE_WALKING_SPEED_DIE;
+					if(state == TURTLE_STATE_WALKING_RIGHT) SetState(TURTLE_STATE_WALKING_LEFT);
+					else { vx = -TURTLE_WALKING_SPEED_DIE; }
 				}
 				else if (e->nx > 0)
 				{
-					vx = TURTLE_WALKING_SPEED_DIE;
+					if (state == TURTLE_STATE_WALKING_LEFT) SetState( TURTLE_STATE_WALKING_RIGHT);
+					else { vx = TURTLE_WALKING_SPEED_DIE; }
 				}
 			}
 			if (dynamic_cast<CBrick *>(e->obj))
@@ -120,7 +141,7 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CTurtle::Render()
 {
 	int ani = 0;
-	if (state == TURTLE_STATE_DIE)
+	if (state == TURTLE_STATE_DIE || state == TURTLE_STATE_DIE_IDLE)
 	{
 		ani = TURTLE_ANI_DIE;
 	}
@@ -135,11 +156,14 @@ void CTurtle::Render()
 
 	if (state == TURTLE_STATE_DIE_MOVING_RIGHT || state == TURTLE_STATE_DIE_MOVING_LEFT)
 	{
-		ani = TURTLE_ANI_DIE;
+		ani = TURTLE_ANI_DIE_MOVING; // fix ani
 	}
 	if (state == TURTLE_STATE_DIE_COLLISION_TAIL)
 	{
 		ani = TURTLE_ANI_DIE_COLLISION_TAIL;
+	}
+	if (state == TURTLE_STATE_TIME_OUT_RELIVE) {
+		ani = TURTLE_ANI_TIME_OUT_RELIVE;
 	}
 	animation_set->at(ani)->Render(x, y);
 	// RenderBoundingBox();
@@ -150,6 +174,12 @@ void CTurtle::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
+	case TURTLE_STATE_DIE_IDLE:
+		vx = 0;
+		break;
+	case TURTLE_STATE_TIME_OUT_RELIVE:
+		vx = 0;
+		break;
 	case TURTLE_STATE_DIE:
 		vx = NUMBER_0;
 		vy = NUMBER_0;
