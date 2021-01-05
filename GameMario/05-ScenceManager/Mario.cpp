@@ -134,6 +134,16 @@ void CMario::HandleMarioFly()
 			y = 10;
 		}
 	}
+	else if(state == MARIO_STATE_JUMP) {
+		// vy += MARIO_GRAVITY_SWING_TAIL * dt;
+		vy += 0.002f * dt;
+	}
+	else if (state == MARIO_STATE_JUMP_HEIGHT) {
+		DebugOut(L"11111111111 \n");
+		vy += 0.001f * dt;
+		//vx = 5.0f;
+		// if(nx < 0) vx = -5.0f;
+	}
 	else
 	{
 		if (state == MARIO_STATE_SWING_TAIL)
@@ -408,38 +418,30 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
-		vx = MARIO_WALKING_SPEED_NORMAL;
-		if (GetState() == MARIO_STATE_FLY)
-			return;
-		if (fast)
-		{
-			vx = MARIO_WALKING_SPEED_PAST;
-		}
+		// vx = MARIO_WALKING_SPEED_NORMAL;
+		vx = 0.12f;
+		if (GetState() == MARIO_STATE_FLY) return;
+		if (fast) vx = 0.2f; // MARIO_WALKING_SPEED_PAST;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-
 		nx = DIRECTION_LEFT_X;
-		vx = -MARIO_WALKING_SPEED_NORMAL;
-		if (GetState() == MARIO_STATE_FLY)
-			return;
-		if (fast)
-		{
-			vx = -MARIO_WALKING_SPEED_PAST;
-		}
+		vx = -0.12f;
+		if (GetState() == MARIO_STATE_FLY) return;
+		if (fast) vx = -0.2f;
 		break;
 	case MARIO_STATE_JUMP:
-		if (isJump)
-			return;
+		if (isJump) return;
+		// vx = 0.7f;
+		// if (nx < 0) vx = -0.7f;
 		isJump = true;
-		// vy = -MARIO_JUMP_SPEED_Y;
 		vy = -0.4f;
-		// vx = 0.4f;
 		break;
 	case MARIO_STATE_JUMP_HEIGHT:
-		if (isJump)
-			return;
+		if (isJump) return;
 		isJump = true;
 		vy = -0.5f;
+		// vx = 0.6f;
+		// if(nx < 0) vx = -0.6f;
 		break;
 	case MARIO_STATE_IDLE:
 		vx = 0;

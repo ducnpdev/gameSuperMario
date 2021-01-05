@@ -460,7 +460,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		otherCoObjects.push_back(objects[i]);
+		// otherCoObjects.push_back(objects[i]);
 		// start intro
 		if (dynamic_cast<CIntroGoomba *>(objects[i]))
 		{
@@ -540,7 +540,7 @@ void CPlayScene::Update(DWORD dt)
 			enemiesCoObjects.push_back(objects[i]);
 			continue;
 		}
-		// otherCoObjects.push_back(objects[i]);
+		otherCoObjects.push_back(objects[i]);
 	}
 
 	// if pausing we only update player
@@ -714,7 +714,7 @@ void CPlayScene::Update(DWORD dt)
 				continue;
 			}
 
-			// objects[i]->Update(dt, &otherCoObjects);
+			objects[i]->Update(dt, &otherCoObjects);
 		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -1000,6 +1000,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->SetFast(true);
 			}
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
+			float marioX, marioY;
+			mario->GetSpeed(marioX, marioY);
+
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
@@ -1023,7 +1026,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			}
 
 			if (mario->GetState() == MARIO_STATE_JUMP) {
-				DebugOut(L"1111111111 \n");
+				
 			}
 			
 		}
