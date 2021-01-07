@@ -126,8 +126,10 @@ void CMario::HandleArrowHud()
 
 void CMario::HandleMarioFly()
 {
-	 if (state == MARIO_STATE_FLY)
+	
+	if (state == MARIO_STATE_FLY)
 	{
+		DebugOut(L"111 \n");
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
 		if (y < 10)
 		{
@@ -135,19 +137,26 @@ void CMario::HandleMarioFly()
 		}
 	}
 	else if(state == MARIO_STATE_JUMP) {
+		DebugOut(L"222 \n");
 		vy += 0.002f * dt;
 	}
 	else if (state == MARIO_STATE_JUMP_HEIGHT) {
+		DebugOut(L"333 \n");
 		vy += 0.001f * dt;
+	}
+	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY && vy > 0){
+		vy += 0.00005f * dt;
 	}
 	else
 	{
 		if (state == MARIO_STATE_SWING_TAIL)
 		{
+			DebugOut(L"444 \n");
 			vy += MARIO_GRAVITY_SWING_TAIL * dt;
 		}
 		else
 		{
+			DebugOut(L"555 \n");
 			vy += 0.0018f * dt;
 		}
 	}
@@ -155,6 +164,7 @@ void CMario::HandleMarioFly()
 
 void CMario::HandleMarioSwingTail(){
 	if(isJump && isActiveWaiSwingTail){
+		DebugOut(L" HandleMarioSwingTail \n");
 		vy += 0.0000018f * dt;
 	}
 }
@@ -173,16 +183,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	/*if(isJump) {
-		isActiveWaiSwingTail = true;
-		DebugOut(L"isJump \n");
-	}
-	if(!isJump) {
-		DebugOut(L"not isJump \n");
-		isActiveWaiSwingTail = false;
-	}
-	*/
-
+//	HandleMarioSwingTail();
+	DebugOut(L"mario->vy:%f \n",vy);
 	coEvents.clear();
 	// HandleUpDownLevel();
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)
@@ -955,6 +957,13 @@ void CMario::Render()
 			ani = MARIO_ANI_FLY_RIGHT;
 		else
 			ani = MARIO_ANI_FLY_LEFT;
+	}
+	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY){
+		DebugOut(L"render ani slowdown fly");
+		if (nx > 0)
+			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_RIGHT;
+		else
+			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_LEFT;
 	}
 	else if (state == MARIO_STATE_KICK)
 	{

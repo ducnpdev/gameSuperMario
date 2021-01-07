@@ -994,12 +994,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			float marioX, marioY;
 			mario->GetSpeed(marioX, marioY);
-
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
 			//
-			// DebugOut(L"state Mario: %d \n", mario->GetState());
 			mario->SetState(MARIO_STATE_SIT_DOWN);
 		}
 		else if (game->IsKeyDown(DIK_Q))
@@ -1011,17 +1009,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly())
 			{
 				mario->SetState(MARIO_STATE_FLY);
-			}
-			else
-			{
-				mario->SetState(MARIO_STATE_JUMP);
+			}else if( level == MARIO_LEVEL_3 && mario->GetStateJump()){
+				mario->SetState(MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY);
 			}
 
-		//	if (mario->GetState() == MARIO_STATE_JUMP) {
-				// 
-			//	if(mario->GetStateJump()) mario->SetIsActiveSwingTail();
-		//	}
+			// else
+			// {
 			
+			// }
 		}
 
 		// else if (game->IsKeyDown(DIK_SPACE)) {
