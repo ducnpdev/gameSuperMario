@@ -180,9 +180,9 @@ void CTail::RenderItem(float x, float y)
 
 void CTail::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	left = x;
+	left = x ;
 	top = y;
-	right = x + TAIL_WIDTH_BOUNDING_BOX;
+	right = left + TAIL_WIDTH_BOUNDING_BOX;
 	bottom = y + TAIL_HEIGHT_BOUNDING_BOX;
 	/*if (damageLevel == ITEM_DAMAGE_LEVEL_2)
 	{

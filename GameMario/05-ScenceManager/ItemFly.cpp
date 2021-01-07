@@ -56,18 +56,4 @@ void CItemFly::GetBoundingBox(float& left, float& top, float& right, float& bott
 void CItemFly::SetState(int state)
 {
 	CGameObject::SetState(state);
-	//switch (state) {
-	//case INTRO_LEAF_STATE_INIT:
-	//	vy = 0.05f;
-	//	vx = 0.05f;
-	//	break;
-	//case INTRO_LEAF_STATE_DIRECTION_NAGETIVE:
-	//	vy = 0.05f;
-	//	vx = -0.05f;
-	//	break;
-	//	//vx = -0.05f;
-	//	break;
-	//default:
-	//	break;
-	//}
 }

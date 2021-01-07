@@ -41,6 +41,7 @@ class CMario : public CGameObject
 	DWORD timeSwitchScene;
 	bool isActiveSwitchScene = false;
 	DWORD timeKick;
+	bool isActiveWaiSwingTail = false;
 	// variable test
 
 public: 
@@ -92,7 +93,11 @@ public:
 	void JumpWhenCollision();
 	void HandleArrowHud();
 	void HandleMarioFly();
-
+	void HandleMarioSwingTail();
+	
+	void SetIsActiveSwingTail(bool _b = true) { this->isActiveWaiSwingTail = _b; }
+	bool GetIsActiveSwingTail() { return this->isActiveWaiSwingTail; }
+	
 	// collision handles
 	void CollisionWithGoomba(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithTurtle(LPCOLLISIONEVENT collisionEven);

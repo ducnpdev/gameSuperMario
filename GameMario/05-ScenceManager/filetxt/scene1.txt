@@ -11,12 +11,14 @@
 570	textures\hold.png	60	188	252
 
 1	textures\mario.png	255	255	255
+2	textures\mario2.png	160	208	248
 10	textures\simondeath.png	3	26	110
 20	textures\background\gach.png	0	0	0
 50	textures\ground\fire.png	0	0	0
 60	textures\enemies.png	3	26	110
 150	textures\enemies-2.png	255	255	255
 70	textures\misc.png	176	224	248
+71	textures\misc2.png	255	255	255
 80	textures\die.png	255	255	255
 99	textures\brickfloor.png	176	224	248
 100	textures\brickFloor\brickFloor39.png	176	224	248
@@ -153,6 +155,23 @@
 10065	421	753	444	782	1
 # mario level 3 kick left
 10066	1	753	24	782	1
+
+# mario add sprice jump left
+10067	60	792	85	823	1 
+# mario add sprice jump right
+10068	361	792	386	823	1
+
+# mario swing tail in fly left
+
+10069	74	73	98	101	2
+10070	107	73	132	101	2
+10071	140	73	163	101	2
+
+# mario swing tail in fly right
+
+10072	67	106	91	134	2
+10073	100	106	124	134	2
+10074	133	106	157	134	2
 
 #BRICK
 20001	0	0	1	1	99
@@ -352,10 +371,10 @@
 150017	823	7	839	40	5
 
 # item render whenn collision brickBroken
-88001	806	352	818	365	70
-88002	819	352	831	365	70
-88003	832	352	844	365	70
-88004	845	352	857	365	70
+88001	806	352	818	365	71
+88002	819	352	831	365	71
+88003	832	352	844	365	71
+88004	845	352	857	365	71
 
 
 [ANIMATIONS]
@@ -410,9 +429,9 @@
 #walk left BIG
 121	10032	100	10035	100	10036	100
 # jump BIG attact right
-122	10037	100
+122	10037	100	10068	100
 # jump BIG attact left
-123	10038	100
+123	10038	100	10067	100
 # Sitdow BIG right
 124	10039	100
 # Sitdown BIG left
@@ -457,6 +476,12 @@
 140	10065	100
 # mario level 3 kick left
 141	10066	100
+
+# mario swing tail in fly left
+142	10069	100	10070	100	10071	100
+
+# mario swing tail in fly right
+143	10072	100	10073	100	10074	100
 
 #die
 199	10099	100
@@ -596,7 +621,7 @@
 
 # MARIO
 
-1	199	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	117	118	119	120	121	122	123	124	125	126	127	128	129	130	131	132	133	134	135	136	137	138	139	140	141
+1	199	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	117	118	119	120	121	122	123	124	125	126	127	128	129	130	131	132	133	134	135	136	137	138	139	140	141	142	143
 
 # BRICK 
 2	201
@@ -763,8 +788,9 @@
 57	1328	80	57	112	1
 
 # brick floor
-
 # start floort chi co va cham ma ko xu li
+9	0	0	2	8	160
+9	2816	0	2	8	160
 9	0	176	2	624	16
 9	624	160	2	464	16
 9	1152	176	2	352	16
@@ -832,7 +858,7 @@
 #88	2500	100	88
 
 # MARIO
-0	500.0	0	1	
+0	2670.0	0	1	
 
 # HUD HUD
 # rectangle

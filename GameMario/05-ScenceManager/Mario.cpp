@@ -94,12 +94,12 @@ void CMario::upLevel()
 {
 	if (level == MARIO_LEVEL_1)
 	{
-		// dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
+		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_2;
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
-		// dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
+		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_3;
 	}
 }
@@ -126,7 +126,7 @@ void CMario::HandleArrowHud()
 
 void CMario::HandleMarioFly()
 {
-	if (state == MARIO_STATE_FLY)
+	 if (state == MARIO_STATE_FLY)
 	{
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
 		if (y < 10)
@@ -135,14 +135,10 @@ void CMario::HandleMarioFly()
 		}
 	}
 	else if(state == MARIO_STATE_JUMP) {
-		// vy += MARIO_GRAVITY_SWING_TAIL * dt;
 		vy += 0.002f * dt;
 	}
 	else if (state == MARIO_STATE_JUMP_HEIGHT) {
-		DebugOut(L"11111111111 \n");
 		vy += 0.001f * dt;
-		//vx = 5.0f;
-		// if(nx < 0) vx = -5.0f;
 	}
 	else
 	{
@@ -152,9 +148,14 @@ void CMario::HandleMarioFly()
 		}
 		else
 		{
-			// vy += MARIO_GRAVITY * dt;
 			vy += 0.0018f * dt;
 		}
+	}
+}
+
+void CMario::HandleMarioSwingTail(){
+	if(isJump && isActiveWaiSwingTail){
+		vy += 0.0000018f * dt;
 	}
 }
 
@@ -168,9 +169,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {
 		SetState(MARIO_STATE_KICK);
 	}
-	// Simple fall down
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	/*if(isJump) {
+		isActiveWaiSwingTail = true;
+		DebugOut(L"isJump \n");
+	}
+	if(!isJump) {
+		DebugOut(L"not isJump \n");
+		isActiveWaiSwingTail = false;
+	}
+	*/
 
 	coEvents.clear();
 	// HandleUpDownLevel();
@@ -191,7 +202,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
@@ -208,10 +218,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			vy = 0;
 			isJump = false;
-			// if (state == MARIO_STATE_SWING_TAIL)
-			// {
-			// 	SetState(MARIO_STATE_IDLE);
-			// }
 		}
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -233,6 +239,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 			if (dynamic_cast<CHold *>(e->obj))
 			{
+				isJump = false;
 				needPushBack = true;
 				HandleHoldCollision(ny, dx, dy, old_vy);
 				continue;
@@ -273,6 +280,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							{
 								turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_LEFT);
 							}
+							timeKick = GetTickCount();
 						}
 						else if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY || turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
 						{
@@ -308,6 +316,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						else
 						{
+							JumpWhenCollision();
 							goombafly->SetState(GOOMBA_FLY_STATE_DIE);
 						}
 					}
@@ -365,6 +374,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CBrickFloor *>(e->obj))
 			{
+				isJump = false;
 				needPushBack = true;
 				isCollisionGround = true;
 				SetIsActiveFly(false);
@@ -501,13 +511,15 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = x + MARIO_LEVEL3_BBOX_WIDTH;
 		}
 		//
+		// right = x + 20;
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
 		if (state == MARIO_STATE_SIT_DOWN)
 		{
-			top = y + NUMBER_12;
+			top = y + NUMBER_14;
 		}
+			bottom = y + 25;
 	}
 	else
 	{
@@ -648,8 +660,7 @@ void CMario::WalkThrough(float _vx, float _vy)
 
 void CMario::JumpWhenCollision()
 {
-	// DebugOut(L"JumpWhenCollision: \n");
-	vy = -0.4f;
+	vy = -0.3f;
 }
 
 void CMario::CollisionWithGoomba(LPCOLLISIONEVENT collisionEvent)
@@ -792,7 +803,6 @@ void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool 
 void CMario::Render()
 {
 	int ani = 0;
-
 	if (state == MARIO_STATE_UP_LEVEL)
 	{
 		if (level == MARIO_LEVEL_2)
@@ -948,7 +958,6 @@ void CMario::Render()
 	}
 	else if (state == MARIO_STATE_KICK)
 	{
-		DebugOut(L"mario state kick \n");
 		switch (level)
 		{
 		case MARIO_LEVEL_1:
@@ -994,8 +1003,7 @@ void CMario::Render()
 	}
 
 	int alpha = 255;
-	if (untouchable)
-		alpha = 128;
+	if (untouchable) alpha = 128;
 	animation_set->at(ani)->Render(x, y, alpha);
 	// RenderBoundingBox();
 }

@@ -143,6 +143,8 @@
 #define MARIO_ANI_LEVEL_2_KICK_LEFT             39
 #define MARIO_ANI_LEVEL_3_KICK_RIGHT             40
 #define MARIO_ANI_LEVEL_3_KICK_LEFT             41
+#define MARIO_ANI_SWING_TAIL_FLY_LEFT            42
+#define MARIO_ANI_SWING_TAIL_FLY_RIGHT            43
 
 
 #define MARIO_WITH_TAIL_ATTACK_TIME		300
@@ -248,6 +250,8 @@
 
 
 // define class CMario
+#define MARIO_SPEED_ZERO 0.0f
+
 #define DIRECTION_RIGHT_X 1
 #define DIRECTION_LEFT_X -1
 #define PLUS_POSITION_Y 20

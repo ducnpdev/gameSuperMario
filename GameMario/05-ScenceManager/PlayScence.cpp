@@ -431,11 +431,7 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way
-
-	// check if game if game is pausing
-	// and if it need to be unpause
+	
 	UnPause();
 	vector<LPGAMEOBJECT> brickCoObjects;
 	vector<LPGAMEOBJECT> brickFloorCoObjects;
@@ -460,7 +456,6 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		// otherCoObjects.push_back(objects[i]);
 		// start intro
 		if (dynamic_cast<CIntroGoomba *>(objects[i]))
 		{
@@ -546,19 +541,17 @@ void CPlayScene::Update(DWORD dt)
 	// if pausing we only update player
 	if (isPause)
 	{
+		// DebugOut(L"isPause isPause\n");
+		//float PosX,PosY;
+		//player->GetPosition(PosX,PosY);
+		//player->SetPosition(PosX,PosY);
+		player->SetSpeed(MARIO_SPEED_ZERO, MARIO_SPEED_ZERO);
 		player->Update(dt, &coObjects);
 	}
 	else
 	{
 		for (size_t i = 0; i < objects.size(); i++)
 		{
-			// objects[i]->Update(dt, &otherCoObjects);
-			/*if (player != NULL) {
-
-			float a  = abs( objects[i]->x - player->x);
-			if (a > NUMBER_250) continue;
-
-			}*/
 			if (objects[i]->tailDeleteObj)
 			{
 				objects[i]->deleteObject(objects, i);
@@ -718,8 +711,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL)
-		return;
+	if (player == NULL) return;
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -1025,9 +1017,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->SetState(MARIO_STATE_JUMP);
 			}
 
-			if (mario->GetState() == MARIO_STATE_JUMP) {
-				
-			}
+		//	if (mario->GetState() == MARIO_STATE_JUMP) {
+				// 
+			//	if(mario->GetStateJump()) mario->SetIsActiveSwingTail();
+		//	}
 			
 		}
 
