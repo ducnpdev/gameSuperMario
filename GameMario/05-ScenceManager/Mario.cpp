@@ -24,8 +24,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->y = y;
 	second = GetTickCount();
 	tail = new CTail();
-	dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())
-		->AddObject(tail);
+	dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(tail);
 }
 
 void CMario::HandleAttack()
@@ -129,7 +128,6 @@ void CMario::HandleMarioFly()
 	
 	if (state == MARIO_STATE_FLY)
 	{
-		DebugOut(L"111 \n");
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
 		if (y < 10)
 		{
@@ -137,11 +135,9 @@ void CMario::HandleMarioFly()
 		}
 	}
 	else if(state == MARIO_STATE_JUMP) {
-		DebugOut(L"222 \n");
 		vy += 0.002f * dt;
 	}
 	else if (state == MARIO_STATE_JUMP_HEIGHT) {
-		DebugOut(L"333 \n");
 		vy += 0.001f * dt;
 	}
 	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY && vy > 0){
@@ -151,12 +147,10 @@ void CMario::HandleMarioFly()
 	{
 		if (state == MARIO_STATE_SWING_TAIL)
 		{
-			DebugOut(L"444 \n");
 			vy += MARIO_GRAVITY_SWING_TAIL * dt;
 		}
 		else
 		{
-			DebugOut(L"555 \n");
 			vy += 0.0018f * dt;
 		}
 	}
@@ -164,7 +158,6 @@ void CMario::HandleMarioFly()
 
 void CMario::HandleMarioSwingTail(){
 	if(isJump && isActiveWaiSwingTail){
-		DebugOut(L" HandleMarioSwingTail \n");
 		vy += 0.0000018f * dt;
 	}
 }
@@ -184,7 +177,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 //	HandleMarioSwingTail();
-	DebugOut(L"mario->vy:%f \n",vy);
+	DebugOut(L"mario->vy:%f \n",x);
 	coEvents.clear();
 	// HandleUpDownLevel();
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)

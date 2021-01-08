@@ -1,7 +1,6 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 1000	textures\BoundingBoxRender.png	0	0	0
-#0	textures\simon.png	176	224	248
 555	textures\tilemap\map1.png	176	224	248
 560	textures\tilemap\brick.png	176	224	248
 561	textures\tilemap\pipe_below_l.png	176	224	248
@@ -742,12 +741,12 @@
 # turtle
 13	550	110	13	1
 13	2096	110	13	2
+13	1440	140	13	1
 
 
 # turtle jump
 17	1400	50	17
-#17	1350	50	17
-#17	1400	10	17
+
 
 # square
 14	80	80	14
@@ -858,7 +857,7 @@
 #88	2500	100	88
 
 # MARIO
-0	2670.0	0	1	
+0	1300.0	0	1	
 
 # HUD HUD
 # rectangle
