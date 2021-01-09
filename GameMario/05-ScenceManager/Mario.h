@@ -44,6 +44,8 @@ class CMario : public CGameObject
 	bool isActiveWaiSwingTail = false;
 	// variable test
 
+	bool isPower = false;
+
 public: 
 	bool isJump = false;
 	CMario(float x = 0.5f, float y = 0.5f);
@@ -103,5 +105,10 @@ public:
 	void CollisionWithTurtle(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithMushroom(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool &isCollision);
+
+	void SetIsPower(bool _b = true) { this->isPower = _b; }
+	bool GetIsPower() { return this->isPower; }
+
+	void HandlIsPower();
 
 };

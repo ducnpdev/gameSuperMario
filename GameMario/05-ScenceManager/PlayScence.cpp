@@ -502,10 +502,12 @@ void CPlayScene::Update(DWORD dt)
 
 		if (dynamic_cast<CBrickColliBroken *>(objects[i]))
 		{
+			CBrickColliBroken *item = dynamic_cast<CBrickColliBroken *>(objects[i]);
 			if (isChangeBrickCollisionGold)
 			{
-				CBrickColliBroken *item = dynamic_cast<CBrickColliBroken *>(objects[i]);
 				item->SetActiveGold();
+			}else {
+				item->SetActiveGold(false);
 			}
 			brickColliBrokenCoObjects.push_back(objects[i]);
 			continue;

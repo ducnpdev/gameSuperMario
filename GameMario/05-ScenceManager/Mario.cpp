@@ -50,7 +50,7 @@ void CMario::swingTailAttack()
 	{
 		if (nx > 0)
 		{
-			tail->SetPosition(x - DEVIATION_ATTACK_BEHIND_X, y + DEVIATION_ACTTACK_Y);
+			tail->SetPosition(x - DEVIATION_ATTACK_BEHIND_X - 8, y + DEVIATION_ACTTACK_Y);
 		}
 		else
 		{
@@ -61,7 +61,7 @@ void CMario::swingTailAttack()
 	{
 		if (nx > 0)
 		{
-			tail->SetPosition(x + DEVIATION_ATTACK_FRONT_X, y + DEVIATION_ACTTACK_Y);
+			tail->SetPosition(x + DEVIATION_ATTACK_FRONT_X -8, y + DEVIATION_ACTTACK_Y);
 		}
 		else
 		{
@@ -162,6 +162,12 @@ void CMario::HandleMarioSwingTail(){
 	}
 }
 
+void CMario::HandlIsPower(){
+	if(isPower){
+		DebugOut(L"mario isPower \n");
+	}
+}
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
@@ -172,12 +178,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {
 		SetState(MARIO_STATE_KICK);
 	}
-
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
+	HandlIsPower();
+
 //	HandleMarioSwingTail();
-	DebugOut(L"mario->vy:%f \n",x);
 	coEvents.clear();
 	// HandleUpDownLevel();
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)
@@ -244,10 +250,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				break;
 			}
 
 			if (dynamic_cast<CTurtleJump *>(e->obj))
 			{
+				needPushBack = true;
+
 				CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
 				if (e->ny < 0)
 				{
@@ -496,15 +505,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 	if (level == MARIO_LEVEL_3)
 	{
-		if (state == MARIO_STATE_SIT_DOWN)
-		{
-			top = y + NUMBER_12;
-		}
-		if (nx > 0)
-		{
-			left = x + NUMBER_8;
-			right = x + MARIO_LEVEL3_BBOX_WIDTH;
-		}
+		// if (state == MARIO_STATE_SIT_DOWN)
+		// {
+		// 	top = y + NUMBER_12;
+		// }
+		// if (nx > 0)
+		// {
+		// 	left = x + NUMBER_8;
+		// 	right = x + MARIO_LEVEL3_BBOX_WIDTH;
+		// 	// x -=5;
+		// }
+		// if(nx < 0) x+=5;
 		//
 		// right = x + 20;
 	}
@@ -757,6 +768,7 @@ void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool 
 {
 	CBrickColliBroken *brickColliBroken = dynamic_cast<CBrickColliBroken *>(collisionEven->obj);
 	int typeBrick = brickColliBroken->GetType();
+	// typeBrick = 2 la chu P
 	if (typeBrick == 2)
 	{
 		if (!brickColliBroken->GetActiveCollisiond())
@@ -764,6 +776,7 @@ void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool 
 			float x, y;
 			brickColliBroken->GetPosition(x, y);
 			brickColliBroken->SetPosition(x, y + 8);
+			brickColliBroken->SetTimeBrickBrokenRelive(GetTickCount());
 		}
 		brickColliBroken->SetActiveCollisiond();
 		brickColliBroken->SetState(BRICK_COLLISION_BROKENT_ITEM_AFTER_COLLISON);
@@ -952,7 +965,6 @@ void CMario::Render()
 			ani = MARIO_ANI_FLY_LEFT;
 	}
 	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY){
-		DebugOut(L"render ani slowdown fly");
 		if (nx > 0)
 			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_RIGHT;
 		else
@@ -1006,6 +1018,12 @@ void CMario::Render()
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	animation_set->at(ani)->Render(x, y, alpha);
-	// RenderBoundingBox();
+	
+	if (nx == DIRECTION_RIGHT_X && level == MARIO_LEVEL_3) {
+		animation_set->at(ani)->Render(x - 8, y, alpha);
+	} else {
+		animation_set->at(ani)->Render(x, y, alpha);
+	}
+	
+	//RenderBoundingBox();
 }

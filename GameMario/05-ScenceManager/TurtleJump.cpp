@@ -21,7 +21,7 @@ void CTurtleJump::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	
 	// Simple fall down
-	vy += GRAVITY * dt;
+	vy += TURTLE_JUMP_GRAVITY * dt;
 	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;

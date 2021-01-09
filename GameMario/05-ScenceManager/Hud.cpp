@@ -107,6 +107,9 @@ void CHud::Render()
 			sprite->DrawFixed(116, 198);
 			timeRenderPWhite = GetTickCount();
 			mario->SetIsActiveFly();
+			mario->SetIsPower(true);
+		}else {
+			mario->SetIsPower(false);
 		}
 	}
 	else {
