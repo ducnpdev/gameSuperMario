@@ -102,14 +102,13 @@ void CHud::Render()
 		// render P 
 		sprite = p->Get(8607);
 		sprite->DrawFixed(116, 198);
+		if (arrowBack < MAX_RENDER_ARROW) mario->SetIsPower(false);
 		if ((arrowBack == MAX_RENDER_ARROW) && (GetTickCount() - timeRenderPWhite > 500)) {
 			sprite = p->Get(8606);
 			sprite->DrawFixed(116, 198);
 			timeRenderPWhite = GetTickCount();
 			mario->SetIsActiveFly();
 			mario->SetIsPower(true);
-		}else {
-			mario->SetIsPower(false);
 		}
 	}
 	else {

@@ -114,4 +114,7 @@ public:
 	// mario renders 
 	virtual void Render();
 	void RenderMarioLevel4(int &ani); // mario fire
+	void RenderMarioLevel3(int &ani); // mario fire
+	void RenderMarioLevel2(int &ani); // mario fire
+	void RenderMarioLevel1(int &ani); // mario fire
 };

@@ -484,12 +484,15 @@ void CMario::SetState(int state)
 	case MARIO_STATE_SWING_TAIL:
 		vx = 0;
 		break;
-
 	case MARIO_STATE_SWITCH_SCENE:
 		vx = NORMAL_SPEED; // NORMAL_SPEED = 0.05f;
 		break;
 	case MARIO_STATE_KICK:
 		vx = 0;
+		break;
+	case MARIO_STATE_RUN_FAST:
+		vx = -MARIO_SPEED_VX_RUN_FAST;
+		if( nx == DIRECTION_RIGHT_X ) vx = MARIO_SPEED_VX_RUN_FAST;
 		break;
 	}
 
@@ -819,215 +822,19 @@ void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool 
 void CMario::Render()
 {
 	int ani = 0;
-	if (state == MARIO_STATE_UP_LEVEL)
-	{
-		if (level == MARIO_LEVEL_2)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_1_TO_2_LEFT;
-		}
-		else if (level == MARIO_LEVEL_3)
-		{
-			ani = MARIO_ANI_LEVEL_2_TO_3_RIGHT;
-		}
-	}
-	else if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_HEIGHT)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_1_JUMP_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_1_JUMP_LEFT;
-			break;
-		case MARIO_LEVEL_2:
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
-			break;
-		case MARIO_LEVEL_3:
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
-			break;
-		}
-	}
-	else if (state == MARIO_STATE_IDLE)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			// fixed animaion
-			if (nx > 0)
-				ani = MARIO_ANI_IDLE_RIGHT;
-			else
-				ani = MARIO_ANI_IDLE_LEFT;
-			break;
-		case MARIO_LEVEL_2:
-			if (vy < 0)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
-				else
-					ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
-			}
-			else
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_LEVEL_2_IDLE_RIGHT;
-				else
-					ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
-			}
-			break;
-		case MARIO_LEVEL_3:
-			if (vy < 0)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-				else
-					ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
-			}
-			else
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
-				else
-					ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
-			}
-			break;
-		}
-	}
-	else if (state == MARIO_STATE_WALKING_RIGHT)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			ani = MARIO_ANI_WALKING_RIGHT;
-			break;
-		case MARIO_LEVEL_2:
-			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-			if (vy < 0)
-				ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
-			break;
-		case MARIO_LEVEL_3:
-			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-			if (vy < 0)
-				ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-			break;
-		}
-	}
-	else if (state == MARIO_STATE_WALKING_LEFT)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			ani = MARIO_ANI_WALKING_LEFT;
-			break;
-		case MARIO_LEVEL_2:
-			ani = MARIO_BIG_ANI_WALKING_LEFT;
-			if (vy < 0)
-				ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
-			break;
-		case MARIO_LEVEL_3:
-			ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
-			if (vy < 0)
-				ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
-			break;
-		}
-	}
-	else if (state == MARIO_STATE_SIT_DOWN)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			if (nx > 0)
-				ani = MARIO_ANI_IDLE_RIGHT;
-			else
-				ani = MARIO_ANI_IDLE_LEFT;
-			break;
-		case MARIO_LEVEL_2:
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_2_SIT_DOWN_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_2_SIT_DOWN_LEFT;
-			break;
-		case MARIO_LEVEL_3:
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_3_SIT_DOWN_RIGHT;
-			else
-				ani = MARIO_ANI_LEVEL_3_SIT_DOWN_LEFT;
-			break;
-		}
-	}
-
-	else if (state == MARIO_STATE_FLY)
-	{
-		if (nx > 0)
-			ani = MARIO_ANI_FLY_RIGHT;
-		else
-			ani = MARIO_ANI_FLY_LEFT;
-	}
-	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY){
-		if (nx > 0)
-			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_RIGHT;
-		else
-			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_LEFT;
-	}
-	else if (state == MARIO_STATE_KICK)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			ani = MARIO_ANI_LEVEL_1_KICK_LEFT;
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_1_KICK_RIGHT;
-			break;
-		case MARIO_LEVEL_2:
-			ani = MARIO_ANI_LEVEL_2_KICK_LEFT;
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_2_KICK_RIGHT;
-			break;
-		case MARIO_LEVEL_3:
-			ani = MARIO_ANI_LEVEL_3_KICK_LEFT;
-			if (nx > 0)
-				ani = MARIO_ANI_LEVEL_3_KICK_RIGHT;
-			break;
-		}
-	}
-
-	if (checkAttact && level == MARIO_LEVEL_3)
-	{
-		if (nx > 0)
-			ani = MARIO_ANI_LEVEL_3_ATTAT_RIGHT;
-		else
-			ani = MARIO_ANI_LEVEL_3_ATTAT_LEFT;
-	}
-
-	if (isActiveSwitchScene)
-	{
-		switch (level)
-		{
-		case MARIO_LEVEL_1:
-			ani = MARIO_ANI_WALKING_RIGHT;
-			break;
-		case MARIO_LEVEL_2:
-			ani = MARIO_BIG_ANI_WALKING_RIGHT;
-			break;
-		case MARIO_LEVEL_3:
-			ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-			break;
-		}
-	}
 
 	if (level == MARIO_LEVEL_4) {
 		RenderMarioLevel4(ani);
 	}
-
+	if (level == MARIO_LEVEL_3) {
+		RenderMarioLevel4(ani);
+	}
+	if (level == MARIO_LEVEL_2) {
+		RenderMarioLevel4(ani);
+	}
+	if (level == MARIO_LEVEL_1) {
+		RenderMarioLevel4(ani);
+	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
@@ -1059,6 +866,145 @@ void CMario::RenderMarioLevel4(int &ani) {
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
+		break;	
+	case MARIO_STATE_JUMP:
+		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		break;
+	case MARIO_STATE_TURN_CHANGE_DIRECTION:
+		ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		break;
+	case MARIO_STATE_RUN_FAST:
+		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
+		break;
+	case MARIO_STATE_SHOOT_FIRE:
+		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;	
+	default:
+		break;
+	}
+}
+
+void CMario::RenderMarioLevel3(int &ani) {
+	switch(state){
+	case MARIO_STATE_IDLE:
+		ani = MARIO_ANI_LEVEL_4_IDLE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
+		break;
+	case MARIO_STATE_KICK:
+		ani = MARIO_ANI_LEVEL_4_KICK_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
+		break;
+	case MARIO_STATE_SIT_DOWN:
+		ani = MARIO_ANI_LEVEL_4_SIT_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
+		break;
+	case MARIO_STATE_WALKING_LEFT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_LEFT;
+		break;
+	case MARIO_STATE_WALKING_RIGHT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
+		break;	
+	case MARIO_STATE_JUMP:
+		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		break;
+	case MARIO_STATE_TURN_CHANGE_DIRECTION:
+		ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		break;
+	case MARIO_STATE_RUN_FAST:
+		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
+		break;
+	case MARIO_STATE_SHOOT_FIRE:
+		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;	
+	default:
+		break;
+	}
+}
+
+void CMario::RenderMarioLevel2(int &ani) {
+	switch(state){
+	case MARIO_STATE_IDLE:
+		ani = MARIO_ANI_LEVEL_4_IDLE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
+		break;
+	case MARIO_STATE_KICK:
+		ani = MARIO_ANI_LEVEL_4_KICK_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
+		break;
+	case MARIO_STATE_SIT_DOWN:
+		ani = MARIO_ANI_LEVEL_4_SIT_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
+		break;
+	case MARIO_STATE_WALKING_LEFT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_LEFT;
+		break;
+	case MARIO_STATE_WALKING_RIGHT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
+		break;	
+	case MARIO_STATE_JUMP:
+		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		break;
+	case MARIO_STATE_TURN_CHANGE_DIRECTION:
+		ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		break;
+	case MARIO_STATE_RUN_FAST:
+		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
+		break;
+	case MARIO_STATE_SHOOT_FIRE:
+		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;	
+	default:
+		break;
+	}
+}
+
+void CMario::RenderMarioLevel1(int &ani) {
+	switch(state){
+	case MARIO_STATE_IDLE:
+		ani = MARIO_ANI_LEVEL_4_IDLE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
+		break;
+	case MARIO_STATE_KICK:
+		ani = MARIO_ANI_LEVEL_4_KICK_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
+		break;
+	case MARIO_STATE_SIT_DOWN:
+		ani = MARIO_ANI_LEVEL_4_SIT_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
+		break;
+	case MARIO_STATE_WALKING_LEFT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_LEFT;
+		break;
+	case MARIO_STATE_WALKING_RIGHT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
+		break;	
+	case MARIO_STATE_JUMP:
+		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		break;
+	case MARIO_STATE_TURN_CHANGE_DIRECTION:
+		ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		break;
+	case MARIO_STATE_RUN_FAST:
+		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
+		break;
+	case MARIO_STATE_SHOOT_FIRE:
+		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
 		break;	
 	default:
 		break;

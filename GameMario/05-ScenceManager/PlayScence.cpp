@@ -980,24 +980,28 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			return;
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
-			// if (mario->GetState() == MARIO_STATE_FLY) return;
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 			if (game->IsKeyDown(DIK_A))
 			{
 				mario->SetFast(true);
 			}
-			// mario->SetState(MARIO_STATE_WALKING_RIGHT);
-			mario->SetState(MARIO_STATE_WALKING);
+			if(mario->GetIsPower()) {
+				mario->SetState(MARIO_STATE_RUN_FAST);
+			}
 		}
 		else if (game->IsKeyDown(DIK_LEFT))
 		{
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			if (game->IsKeyDown(DIK_A))
 			{
 				mario->SetFast(true);
 			}
-			// mario->SetState(MARIO_STATE_WALKING_LEFT);
-			float marioX, marioY;
-			mario->GetSpeed(marioX, marioY);
-			mario->SetState(MARIO_STATE_WALKING);
+			if(mario->GetIsPower()) {
+				mario->SetState(MARIO_STATE_RUN_FAST);
+			}
+
+			// float marioX, marioY;
+			// mario->GetSpeed(marioX, marioY);
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
