@@ -42,9 +42,9 @@ class CMario : public CGameObject
 	bool isActiveSwitchScene = false;
 	DWORD timeKick;
 	bool isActiveWaiSwingTail = false;
-	// variable test
 
 	bool isPower = false;
+	DWORD timeTurnChangeDirection; // change direction khi doi huong
 
 public: 
 	bool isJump = false;
@@ -117,4 +117,9 @@ public:
 	void RenderMarioLevel3(int &ani); // mario fire
 	void RenderMarioLevel2(int &ani); // mario fire
 	void RenderMarioLevel1(int &ani); // mario fire
+
+	void HandleTurnChangeDirection();
+
+	void SetTimeTurnChangeDirection(DWORD time) { this->timeTurnChangeDirection = time; }
+	DWORD GetTimeTurnChangeDirection() { return this->timeTurnChangeDirection; }
 };

@@ -976,10 +976,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (mario != NULL)
 	{
 		mario->SetFast(false);
-		if (mario->GetState() == MARIO_STATE_DIE)
-			return;
+		if (mario->GetState() == MARIO_STATE_DIE) return;
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
+			float tempVx, tempVy; 
+			mario->GetSpeed(tempVx,tempVy);
+		
+			if(tempVx != 0 && mario->GetState() == MARIO_STATE_WALKING_LEFT ) {
+				mario->SetTimeTurnChangeDirection(GetTickCount());
+			}
+			
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 			if (game->IsKeyDown(DIK_A))
 			{
@@ -988,9 +994,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			if(mario->GetIsPower()) {
 				mario->SetState(MARIO_STATE_RUN_FAST);
 			}
+
 		}
 		else if (game->IsKeyDown(DIK_LEFT))
 		{
+			float tempVx, tempVy; 
+			mario->GetSpeed(tempVx,tempVy);
+			if(tempVx != 0 && mario->GetState() == MARIO_STATE_WALKING_RIGHT ) {
+				mario->SetTimeTurnChangeDirection(GetTickCount());
+			} 
+		
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			if (game->IsKeyDown(DIK_A))
 			{
@@ -1000,8 +1013,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->SetState(MARIO_STATE_RUN_FAST);
 			}
 
-			// float marioX, marioY;
-			// mario->GetSpeed(marioX, marioY);
+		
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
 		{
@@ -1020,19 +1032,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			}else if( level == MARIO_LEVEL_3 && mario->GetStateJump()){
 				mario->SetState(MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY);
 			}
-
-			// else
-			// {
-			
-			// }
 		}
-
-		// else if (game->IsKeyDown(DIK_SPACE)) {
-		// 	int level = mario->GetLevel();
-		// 	if (level == MARIO_LEVEL_3 && mario->GetIsActiveFly()) {
-		// 		mario->SetState(MARIO_STATE_FLY);
-		// 	}
-		// }
 
 		else
 		{

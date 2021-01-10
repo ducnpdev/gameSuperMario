@@ -107,7 +107,8 @@ void CMario::HandleArrowHud()
 {
 	if (fast)
 	{
-		if (GetTickCount() - timeAddCountArrow > NUMBER_300)
+
+		if (GetTickCount() - timeAddCountArrow > TIME_SPLUS_ARROW)
 		{
 			timeAddCountArrow = GetTickCount();
 			SplusCountArrow();
@@ -115,7 +116,7 @@ void CMario::HandleArrowHud()
 	}
 	else
 	{
-		if (GetTickCount() - timeAddCountArrow > NUMBER_300)
+		if (GetTickCount() - timeAddCountArrow > TIME_SPLUS_ARROW)
 		{
 			timeAddCountArrow = GetTickCount();
 			SubCountArrow();
@@ -162,9 +163,11 @@ void CMario::HandleMarioSwingTail(){
 	}
 }
 
-void CMario::HandlIsPower(){
-	if(isPower){
-		DebugOut(L"mario isPower \n");
+
+void CMario::HandleTurnChangeDirection(){
+	DWORD now = GetTickCount();
+	if( now - timeTurnChangeDirection < 400 && timeTurnChangeDirection != 0){
+		SetState(MARIO_STATE_TURN_CHANGE_DIRECTION);
 	}
 }
 
@@ -173,29 +176,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CGameObject::Update(dt);
 	DWORD now = GetTickCount();
 	HandleArrowHud();
-	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	
 	HandleMarioFly();
-	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {
-		SetState(MARIO_STATE_KICK);
-	}
+	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {SetState(MARIO_STATE_KICK);}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	HandlIsPower();
+	HandleTurnChangeDirection();
 
-//	HandleMarioSwingTail();
+	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
 	coEvents.clear();
-	// HandleUpDownLevel();
+
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)
 	{
 		untouchable = 0;
 		untouchable_start = 0;
 	}
 
-	if (state != MARIO_STATE_DIE)
-	{
-		CalcPotentialCollisions(coObjects, coEvents);
-	}
+	if (state != MARIO_STATE_DIE) CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -213,6 +211,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		bool isCollisionGold = false;
 		bool isCollisionGround = false;
 		bool needPushBack = false;
+		
 		if (nx != 0)
 			vx = 0;
 		if (ny < 0)
@@ -399,6 +398,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				downLevel();
 			}
 		}
+	
 		if (isCollisionGold && !isCollisionGround)
 		{
 			WalkThrough(old_vx, old_vy);
@@ -423,6 +423,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		CHud::GetInstance()->SubTime(1);
 		second = GetTickCount();
 	}
+
 	HandleAttack();
 }
 
@@ -432,21 +433,31 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
-		// vx = MARIO_WALKING_SPEED_NORMAL;
 		vx = 0.12f;
+		if (fast){
+			DebugOut(L"11111111\n");
+		 	vx = 0.2f;
+		}else{
+			DebugOut(L"11111111 ''''''''\n");
+		}
 		if (GetState() == MARIO_STATE_FLY) return;
-		if (fast) vx = 0.2f; // MARIO_WALKING_SPEED_PAST;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = -0.05f;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		nx = DIRECTION_LEFT_X;
+		
 		vx = -0.12f;
+		if (fast) {
+			DebugOut(L"222222222\n");
+			vx = -0.2f;
+		}else {
+			DebugOut(L"222222222'''''''' \n");
+		}
 		if (GetState() == MARIO_STATE_FLY) return;
-		if (fast) vx = -0.2f;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = 0.05f;
 		break;
 	case MARIO_STATE_JUMP:
 		if (isJump) return;
-		// vx = 0.7f;
-		// if (nx < 0) vx = -0.7f;
 		isJump = true;
 		vy = -0.4f;
 		break;
@@ -494,7 +505,12 @@ void CMario::SetState(int state)
 		vx = -MARIO_SPEED_VX_RUN_FAST;
 		if( nx == DIRECTION_RIGHT_X ) vx = MARIO_SPEED_VX_RUN_FAST;
 		break;
+	case MARIO_STATE_TURN_CHANGE_DIRECTION:
+		vx = 5.0f;
+		// if( nx == DIRECTION_RIGHT_X ) vx = 0.0f;
+		break;	
 	}
+	
 
 	CGameObject::SetState(state);
 }
@@ -837,7 +853,6 @@ void CMario::Render()
 	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-
 	if (nx == DIRECTION_RIGHT_X && level == MARIO_LEVEL_3) {
 		animation_set->at(ani)->Render(x - 8, y, alpha);
 	} else {
@@ -872,8 +887,8 @@ void CMario::RenderMarioLevel4(int &ani) {
 		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
-		ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		ani =  MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
 		break;
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
