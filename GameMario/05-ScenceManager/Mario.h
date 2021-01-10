@@ -7,6 +7,7 @@
 #include "Define.h"
 #include "Mushroom.h"
 #include "Turtle.h"
+#include "BulletFireMario.h"
 #include "Square.h"
 #include "Goombafly.h"
 #include "Tail.h"
@@ -45,6 +46,7 @@ class CMario : public CGameObject
 
 	bool isPower = false;
 	DWORD timeTurnChangeDirection; // change direction khi doi huong
+	int countBullet = 0;
 
 public: 
 	bool isJump = false;
@@ -122,4 +124,11 @@ public:
 
 	void SetTimeTurnChangeDirection(DWORD time) { this->timeTurnChangeDirection = time; }
 	DWORD GetTimeTurnChangeDirection() { return this->timeTurnChangeDirection; }
+
+	void SplusCountBullet() { countBullet = countBullet + 1; }
+	void SubCountBullet() { 
+		// if (countBullet == 1) return;
+		countBullet = countBullet - 1; 
+	}
+	int GetCountBullter() { return this->countBullet; }
 };

@@ -456,6 +456,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		otherCoObjects.push_back(objects[i]);
 		// start intro
 		if (dynamic_cast<CIntroGoomba *>(objects[i]))
 		{
@@ -537,7 +538,7 @@ void CPlayScene::Update(DWORD dt)
 			enemiesCoObjects.push_back(objects[i]);
 			continue;
 		}
-		otherCoObjects.push_back(objects[i]);
+		// otherCoObjects.push_back(objects[i]);
 	}
 
 	// if pausing we only update player
@@ -937,6 +938,18 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_Q:
 			mario->Reset();
 			break;
+		case DIK_V:
+			int level = mario->GetLevel();
+			int count = mario->GetCountBullter();
+			if(level == MARIO_LEVEL_4 && count < MaxBulletMarioFire) {
+				float x,y;
+				mario->GetPosition(x, y);
+				mario->SetState(MARIO_STATE_SHOOT_FIRE);
+				mario->renderItemCollisionBrick(7, x, y);
+				mario->SplusCountBullet();
+			}
+
+			break;	
 		}
 	}
 	if (marioWorldMap != NULL)
@@ -986,15 +999,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->SetTimeTurnChangeDirection(GetTickCount());
 			}
 			
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 			if (game->IsKeyDown(DIK_A))
 			{
 				mario->SetFast(true);
 			}
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 			if(mario->GetIsPower()) {
 				mario->SetState(MARIO_STATE_RUN_FAST);
 			}
-
 		}
 		else if (game->IsKeyDown(DIK_LEFT))
 		{
@@ -1002,13 +1014,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			mario->GetSpeed(tempVx,tempVy);
 			if(tempVx != 0 && mario->GetState() == MARIO_STATE_WALKING_RIGHT ) {
 				mario->SetTimeTurnChangeDirection(GetTickCount());
-			} 
+			}
 		
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			if (game->IsKeyDown(DIK_A))
 			{
 				mario->SetFast(true);
 			}
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
+
 			if(mario->GetIsPower()) {
 				mario->SetState(MARIO_STATE_RUN_FAST);
 			}

@@ -221,6 +221,13 @@
 
 #define MARIO_WALKING_SPEED_NORMAL		0.07f 
 #define MARIO_WALKING_SPEED_PAST		0.15f
+#define MARIO_WALKING_SPEED_VX_NORMAL   0.12f
+#define MARIO_WALKING_SPEED_VX_FAST     0.22f
+#define MARIO_SPEED_VX_RUN_FAST	        0.3f
+#define MARIO_SPEED_VX_TURN_CHANGE_DIRECTION    0.05f
+#define MARIO_SPEED_VY_JUMP_NORMAL           0.4f
+#define MARIO_SPEED_VY_JUMP_NORMAL_HEIGHT    0.5f
+
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_GRAVITY			0.002f
@@ -234,8 +241,10 @@
 #define MARIO_GRAVITY_SWING_TAIL			0.00005f
 
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
+#define TypeBulletMarioFire 7
+#define MaxBulletMarioFire 2
 
-#define MARIO_SPEED_VX_RUN_FAST	 0.3f
+
 
 #define MARIO_STATE_IDLE			            0
 #define MARIO_STATE_WALKING_RIGHT	            100
@@ -357,6 +366,11 @@
 #define MARIO_ANI_LEVEL_4_RUN_FAST_LEFT         65
 #define MARIO_ANI_LEVEL_4_SIT_LEFT              66
 #define MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT       67
+
+// define CBulletMarioFire
+#define BULLET_MARIO_FIRE_SPEED_Y		0.08f
+#define BULLET_MARIO_FIRE_SPEED_X		0.15f
+#define BULLET_MARIO_FIRE_TIME_CHANGE_DIRECTION		300
 
 // define Cloud
 #define CLOUD_BBOX_WIDTH 30

@@ -163,7 +163,6 @@ void CMario::HandleMarioSwingTail(){
 	}
 }
 
-
 void CMario::HandleTurnChangeDirection(){
 	DWORD now = GetTickCount();
 	if( now - timeTurnChangeDirection < 400 && timeTurnChangeDirection != 0){
@@ -198,6 +197,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		x += dx;
 		y += dy;
+		if (dy > 0) {
+			isJump = true;
+		}
 	}
 	else
 	{
@@ -433,40 +435,27 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
-		vx = 0.12f;
-		if (fast){
-			DebugOut(L"11111111\n");
-		 	vx = 0.2f;
-		}else{
-			DebugOut(L"11111111 ''''''''\n");
-		}
+		vx = MARIO_WALKING_SPEED_VX_NORMAL;
+		if (fast) vx = MARIO_WALKING_SPEED_VX_FAST;
 		if (GetState() == MARIO_STATE_FLY) return;
-		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = -0.05f;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = -MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		nx = DIRECTION_LEFT_X;
-		
-		vx = -0.12f;
-		if (fast) {
-			DebugOut(L"222222222\n");
-			vx = -0.2f;
-		}else {
-			DebugOut(L"222222222'''''''' \n");
-		}
+		vx = -MARIO_WALKING_SPEED_VX_NORMAL;
+		if (fast) vx = -MARIO_WALKING_SPEED_VX_FAST;
 		if (GetState() == MARIO_STATE_FLY) return;
-		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = 0.05f;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
 		break;
 	case MARIO_STATE_JUMP:
 		if (isJump) return;
 		isJump = true;
-		vy = -0.4f;
+		vy = -MARIO_SPEED_VY_JUMP_NORMAL;
 		break;
 	case MARIO_STATE_JUMP_HEIGHT:
 		if (isJump) return;
 		isJump = true;
-		vy = -0.5f;
-		// vx = 0.6f;
-		// if(nx < 0) vx = -0.6f;
+		vy = -MARIO_SPEED_VY_JUMP_NORMAL_HEIGHT;
 		break;
 	case MARIO_STATE_IDLE:
 		vx = 0;
@@ -506,8 +495,6 @@ void CMario::SetState(int state)
 		if( nx == DIRECTION_RIGHT_X ) vx = MARIO_SPEED_VX_RUN_FAST;
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
-		vx = 5.0f;
-		// if( nx == DIRECTION_RIGHT_X ) vx = 0.0f;
 		break;	
 	}
 	
@@ -666,6 +653,15 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 			obj->SetAnimationSet(ani_set);
 			dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 		}
+	}
+	else if (type == TypeBulletMarioFire)
+	{
+		
+		obj = new CBulletFireMario(nx);
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(21);
+		obj->SetAnimationSet(ani_set);
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 	}
 }
 

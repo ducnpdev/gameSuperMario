@@ -131,6 +131,7 @@
     <ClCompile Include="BrickColliBroken.cpp" />
     <ClCompile Include="BrickFloor.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletFireMario.cpp" />
     <ClCompile Include="Flower.cpp" />
     <ClCompile Include="FlowerType2.cpp" />
     <ClCompile Include="FlowSwitchScene.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="BrickColliBroken.h" />
     <ClInclude Include="BrickFloor.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletFireMario.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Flower.h" />
     <ClInclude Include="FlowerType2.h" />
