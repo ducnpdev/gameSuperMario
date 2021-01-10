@@ -15,7 +15,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_3;
+	level = MARIO_LEVEL_4;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	start_x = x;
@@ -525,7 +525,15 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			top = y + NUMBER_14;
 		}
-			bottom = y + 25;
+		bottom = y + 25;
+	}
+	else if (level == MARIO_LEVEL_4)
+	{
+		if (state == MARIO_STATE_SIT_DOWN)
+		{
+			top = y + NUMBER_14;
+		}
+		bottom = y + 25;
 	}
 	else
 	{
@@ -1016,9 +1024,13 @@ void CMario::Render()
 		}
 	}
 
+	if (level == MARIO_LEVEL_4) {
+		RenderMarioLevel4(ani);
+	}
+
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	
+
 	if (nx == DIRECTION_RIGHT_X && level == MARIO_LEVEL_3) {
 		animation_set->at(ani)->Render(x - 8, y, alpha);
 	} else {
@@ -1026,4 +1038,29 @@ void CMario::Render()
 	}
 	
 	//RenderBoundingBox();
+}
+
+void CMario::RenderMarioLevel4(int &ani) {
+	switch(state){
+	case MARIO_STATE_IDLE:
+		ani = MARIO_ANI_LEVEL_4_IDLE_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
+		break;
+	case MARIO_STATE_KICK:
+		ani = MARIO_ANI_LEVEL_4_KICK_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
+		break;
+	case MARIO_STATE_SIT_DOWN:
+		ani = MARIO_ANI_LEVEL_4_SIT_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
+		break;
+	case MARIO_STATE_WALKING_LEFT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_LEFT;
+		break;
+	case MARIO_STATE_WALKING_RIGHT:
+		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
+		break;	
+	default:
+		break;
+	}
 }

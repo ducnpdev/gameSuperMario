@@ -50,7 +50,7 @@ public:
 	bool isJump = false;
 	CMario(float x = 0.5f, float y = 0.5f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
-	virtual void Render();
+	
 	void SetState(int state);
 	void SetLevel(int l) { level = l; y += NUMBER_20; }
 	int GetLevel() { return this->level; }
@@ -111,4 +111,7 @@ public:
 
 	void HandlIsPower();
 
+	// mario renders 
+	virtual void Render();
+	void RenderMarioLevel4(int &ani); // mario fire
 };

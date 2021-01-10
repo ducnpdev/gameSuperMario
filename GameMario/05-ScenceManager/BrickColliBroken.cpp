@@ -31,11 +31,7 @@ void CBrickColliBroken::Render()
 void CBrickColliBroken::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	if(GetTickCount() - timeBrickBrokenRelive > 5000 && timeBrickBrokenRelive != 0){
-		// if(type==1){
-		//	SetState(BRICK_BROKEN_STATE_CHANGE_GOLD_BRICK);
-		//	DebugOut(L"111111111111 \n");
-		// }
+	if(GetTickCount() - timeBrickBrokenRelive > BRICK_BROKEN_TIME_RELIVE && timeBrickBrokenRelive != 0){
 		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->SetChangeBrickCollisionGold(false);
 	}
 	
