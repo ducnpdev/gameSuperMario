@@ -367,6 +367,21 @@
 #define MARIO_ANI_LEVEL_4_SIT_LEFT              66
 #define MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT       67
 
+#define MARIO_ANI_LEVEL_1_TURN_RIGHT            69
+#define MARIO_ANI_LEVEL_1_TURN_LEFT             68
+#define MARIO_ANI_LEVEL_1_RUN_FAST_RIGHT        70
+#define MARIO_ANI_LEVEL_1_RUN_FAST_LEFT         71
+
+#define MARIO_ANI_LEVEL_2_TURN_RIGHT            73
+#define MARIO_ANI_LEVEL_2_TURN_LEFT             72
+#define MARIO_ANI_LEVEL_2_RUN_FAST_RIGHT        74
+#define MARIO_ANI_LEVEL_2_RUN_FAST_LEFT         75
+
+#define MARIO_ANI_LEVEL_3_TURN_RIGHT            77
+#define MARIO_ANI_LEVEL_3_TURN_LEFT             76
+#define MARIO_ANI_LEVEL_3_RUN_FAST_RIGHT        78
+#define MARIO_ANI_LEVEL_3_RUN_FAST_LEFT         79
+
 // define CBulletMarioFire
 #define BULLET_MARIO_FIRE_SPEED_Y		0.08f
 #define BULLET_MARIO_FIRE_SPEED_X		0.15f

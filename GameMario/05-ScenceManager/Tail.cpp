@@ -107,7 +107,6 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if(dynamic_cast<CTurtle *>(c)){
 				CTurtle *turtle = dynamic_cast<CTurtle *>(c);
 				turtle->SetState(TURTLE_STATE_DIE_COLLISION_TAIL);
-				DebugOut(L"tail collisoin turtle \n");
 				turtle->SetTimeChangeDirection(GetTickCount());
 				float xTurtle, yTurtle;
 				turtle->GetPosition(xTurtle, yTurtle);

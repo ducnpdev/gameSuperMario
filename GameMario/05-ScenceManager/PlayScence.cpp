@@ -930,9 +930,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->SetLevel(MARIO_LEVEL_3);
 			break;
 		case DIK_4:
-			mario->SetPosition(NUMBER_1000, NUMBER_20);
+			// mario fire
+			float level4X, level4Y;
+			mario->GetPosition(level4X, level4Y);
+			mario->SetPosition(level4X, level4Y - NUMBER_40);
+			mario->SetLevel(MARIO_LEVEL_4);
 			break;
 		case DIK_5:
+			mario->SetPosition(NUMBER_1000, NUMBER_20);
+			break;	
+		case DIK_6:
 			mario->SetPosition(NUMBER_2000, NUMBER_20);
 			break;
 		case DIK_Q:
