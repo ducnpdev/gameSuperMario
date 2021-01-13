@@ -12,6 +12,8 @@
 #include "Goombafly.h"
 #include "Tail.h"
 #include "Hold.h"
+#include "Number.h"
+
 #include "Bullet.h"
 #include "Flower.h"
 #include "FlowerType2.h"
@@ -138,5 +140,6 @@ public:
 	void handleCarry();
 
     void isCollidingObject(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>& colidingObjects);
+	void RenderMoney(int number, float x, float y);
 
 };

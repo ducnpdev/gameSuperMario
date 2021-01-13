@@ -36,7 +36,7 @@ void CMoney::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects){
             SetStateObjectDelete(NUMBER_1);
             CAnimationSets* animation_sets = CAnimationSets::GetInstance();
             CGameObject* obj = NULL;
-            obj = new CNumber(x, y);
+            obj = new CNumber(0,x, y);
             obj->SetPosition(x, y-NUMBER_10);
             LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
             obj->SetAnimationSet(ani_set);

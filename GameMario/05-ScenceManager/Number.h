@@ -7,8 +7,10 @@ class CNumber : public CGameObject
 	float origin_x;
 	float origin_y;
 	DWORD NUMBER_TIME_START;
+	// typeNumber, 0: 100,1: 1000, 
+	int typeNumber;
 public:
-	CNumber(float x, float y);
+	CNumber(int type,float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

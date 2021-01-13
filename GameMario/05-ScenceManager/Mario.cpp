@@ -15,7 +15,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_2;
+	level = MARIO_LEVEL_1;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	start_x = x;
@@ -93,6 +93,7 @@ void CMario::upLevel()
 {
 	if (level == MARIO_LEVEL_1)
 	{
+		// SetState(MARIO_STATE_LEVEL_1_TO_2);
 		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_2;
 	}
@@ -189,7 +190,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	HandleTurnChangeDirection();
-
+HandleUpDownLevel();
 	// handleCarry();
 	// if(!fast && isCarry) 
 
@@ -584,7 +585,7 @@ void CMario::StartUpDownLevel()
 
 void CMario::HandleUpDownLevel()
 {
-	if (GetTickCount() - startUpDownLevel < NUMBER_1500)
+	if (GetTickCount() - startUpDownLevel < NUMBER_1500 && startUpDownLevel != 0)
 	{
 		SetState(MARIO_STATE_UP_LEVEL);
 	}
@@ -637,7 +638,7 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	{
 		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 		CGameObject *obj = NULL;
-		obj = new CNumber(x, y);
+		obj = new CNumber(0,x, y);
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
 		obj->SetAnimationSet(ani_set);
@@ -760,6 +761,9 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 		{
 			turtle->SetState(TURTLE_STATE_DIE);
 			JumpWhenCollision();
+			// CHud::GetInstance()->AddNumberMoney(NUMBER_100);
+			// DebugOut(L"1111111111111 \n ");
+			// RenderMoney(TYPE_RENDER_NUMBER_100, x, y);
 			return;
 		}
 		if (turtle->GetState() == TURTLE_STATE_DIE)
@@ -780,6 +784,8 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 		{
 			turtle->SetState(TURTLE_STATE_DIE);
 			JumpWhenCollision();
+			CHud::GetInstance()->AddNumberMoney(NUMBER_100);
+			RenderMoney(TYPE_RENDER_NUMBER_100, x, y);
 		}
 	}
 	else if (collisionEven->nx != 0)
@@ -820,6 +826,9 @@ void CMario::CollisionWithMushroom(LPCOLLISIONEVENT collisionEven)
 	StartUpDownLevel();
 	mushroom->SetStateObjectDelete(NUMBER_1);
 	upLevel();
+	CHud::GetInstance()->AddNumberMoney(NUMBER_1000);
+	// 1 number 1000	
+	RenderMoney(TYPE_RENDER_NUMBER_1000, x, y);
 }
 
 void CMario::CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool &tempIsCollisionGold)
@@ -881,6 +890,22 @@ void CMario::Render()
 	}
 	if (level == MARIO_LEVEL_1) {
 		RenderMarioLevel1(ani);
+	}
+	if(state == MARIO_STATE_UP_LEVEL){
+		switch (level)
+		{
+		case MARIO_LEVEL_2:
+			ani = MARIO_ANI_LEVEL_1_TO_2_LEFT;
+			if(nx > 0) ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
+			break;
+		case MARIO_LEVEL_3:
+			ani = MARIO_ANI_LEVEL_2_TO_3_RIGHT;
+			break;	
+			
+		default:
+			break;
+		}
+		
 	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -1136,4 +1161,15 @@ void CMario::isCollidingObject(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJ
 			colidingObjects.push_back(coObjects->at(i));
 		}
 	}
+}
+
+void CMario::RenderMoney(int number, float x, float y)
+{
+	CAnimationSets *animation_sets = CAnimationSets::GetInstance();
+	CGameObject *obj = NULL;
+	obj = new CNumber(0, x, y);
+	obj->SetPosition(number, y);
+	LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
+	obj->SetAnimationSet(ani_set);
+	dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 }

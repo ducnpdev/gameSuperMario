@@ -2,17 +2,24 @@
 #include "Hud.h"
 
 
-CNumber::CNumber(float x, float y) {
+CNumber::CNumber(int type,float x, float y) {
 	origin_x = x;
 	origin_y = y;
+	typeNumber = type;
 	// type = OBJECT_TYPE_NUMBER;
 	SetState(NUMBER_STATE_FLY);
 	NUMBER_TIME_START = GetTickCount();
 }
 
 void CNumber::Render() {
-
-	animation_set->at(0)->Render(x, y);
+	int ani = 0;
+	switch (typeNumber)
+	{
+	case 1:
+		ani = 1;
+		break;
+	}
+	animation_set->at(ani)->Render(x, y);
 	// RenderBoundingBox();
 }
 

@@ -135,7 +135,7 @@ void CGoomba::RenderMoney(int number, float x, float y)
 	switch (number)
 	{
 	default:
-		obj = new CNumber(x, y);
+		obj = new CNumber(0,x, y);
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
 		obj->SetAnimationSet(ani_set);

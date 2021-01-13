@@ -60,11 +60,15 @@
 // time all item 
 #define LEAF_TIME 5000
 // define Untouchable; 0 is touchable, 1 is untouchable
-#define Touchable 0
-#define UnTouchable 1
-#define NumberZero 0
-#define Modify_BBOX 12
-#define GRAVITY 0.0005f
+#define Touchable               0
+#define UnTouchable             1
+#define NumberZero              0
+#define Modify_BBOX             12
+#define GRAVITY                 0.0005f
+#define TYPE_RENDER_NUMBER_1000 1 // is the number 1000
+#define TYPE_RENDER_NUMBER_100  0 // is the number 100
+
+
 // setting start screen game and background -- Game.cpp
 #define MAX_GAME_LINE 1024
 #define GAME_FILE_SECTION_UNKNOWN -1
@@ -244,8 +248,6 @@
 #define TypeBulletMarioFire 7
 #define MaxBulletMarioFire 2
 
-
-
 #define MARIO_STATE_IDLE			            0
 #define MARIO_STATE_WALKING_RIGHT	            100
 #define MARIO_STATE_WALKING	                    50
@@ -256,6 +258,7 @@
 #define MARIO_STATE_ATTACT			            500
 #define MARIO_STATE_DIE				            600
 #define MARIO_STATE_UP_LEVEL			        700
+#define MARIO_STATE_LEVEL_1_TO_2			    750
 #define MARIO_STATE_LEVEL_2_TO_3			    800
 
 #define MARIO_STATE_LEVEL_3_ATTACK_FRAME_1		900
