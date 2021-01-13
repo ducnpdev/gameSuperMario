@@ -39,5 +39,8 @@ public:
 
 	void SetTimeRelive(DWORD time) { this->timeoutRelive = time; }
 	DWORD GetTimeRelive() { return this->timeoutRelive; }
+
+	// update position when mario carry turtle
+	void UpdatePosition();
 };
 

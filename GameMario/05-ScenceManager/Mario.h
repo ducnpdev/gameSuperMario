@@ -16,7 +16,6 @@
 #include "Flower.h"
 #include "FlowerType2.h"
 
-
 class CMario : public CGameObject
 {
 	int level;
@@ -45,6 +44,7 @@ class CMario : public CGameObject
 	bool isActiveWaiSwingTail = false;
 
 	bool isPower = false;
+	bool isCarry = false;
 	DWORD timeTurnChangeDirection; // change direction khi doi huong
 	int countBullet = 0;
 
@@ -111,6 +111,9 @@ public:
 	void SetIsPower(bool _b = true) { this->isPower = _b; }
 	bool GetIsPower() { return this->isPower; }
 
+	void SetIsCarry(bool _b = true) { this->isCarry = _b; }
+	bool GetIsCarry() { return this->isCarry; }
+
 	void HandlIsPower();
 
 	// mario renders 
@@ -131,4 +134,9 @@ public:
 		countBullet = countBullet - 1; 
 	}
 	int GetCountBullter() { return this->countBullet; }
+
+	void handleCarry();
+
+    void isCollidingObject(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>& colidingObjects);
+
 };

@@ -15,7 +15,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_4;
+	level = MARIO_LEVEL_2;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	start_x = x;
@@ -170,6 +170,13 @@ void CMario::HandleTurnChangeDirection(){
 	}
 }
 
+void CMario::handleCarry() {
+	if(level == MARIO_LEVEL_2) {
+		
+		SetState(MARIO_STATE_CARRY);
+	}
+}
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
@@ -183,6 +190,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	HandleTurnChangeDirection();
 
+	// handleCarry();
+	// if(!fast && isCarry) 
+
 	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
 	coEvents.clear();
 
@@ -192,7 +202,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 	}
 
+	vector<LPGAMEOBJECT> colidingObjects;
+	isCollidingObject(coObjects, colidingObjects);
+	for (UINT i = 0; i < colidingObjects.size(); i++)
+	{
+		LPGAMEOBJECT c = colidingObjects[i];
+		if (dynamic_cast<CTurtle *>(c))
+		{
+			CTurtle *turtle = dynamic_cast<CTurtle *>(c);
+			if(!fast && turtle->GetState() == TURTLE_STATE_MARIO_CARRY) {
+				if(nx > 0) turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
+				if(nx < 0) turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
+				isCarry = false;
+			}
+		}
+	}
+
 	if (state != MARIO_STATE_DIE) CalcPotentialCollisions(coObjects, coEvents);
+
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -412,12 +439,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			y += min_ty * dy + ny * 0.4f;
 		}
 	}
+
 	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
 	{
 		isActiveSwitchScene = false;
 		CGame::GetInstance()->SwitchScene(ID_SCENE_4);
 		CGame::GetInstance()->SetCamPos(0, 0);
 	}
+
 	ClearCollisionEvent(coEvents);
 
 	if (GetTickCount() - second > NUMBER_1000)
@@ -535,6 +564,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else if (level == MARIO_LEVEL_4)
 	{
+		
 		if (state == MARIO_STATE_SIT_DOWN)
 		{
 			top = y + NUMBER_14;
@@ -756,7 +786,13 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 	{
 		if (untouchable == 0)
 		{
-			if (turtle->GetState() == TURTLE_STATE_DIE || turtle->GetState() == TURTLE_STATE_DIE_COLLISION_TAIL)
+			if(fast) {
+				SetState(MARIO_STATE_CARRY);
+				// turtle->SetPosition(x, y);
+				isCarry = true;
+				turtle->SetState(TURTLE_STATE_MARIO_CARRY);
+			}
+			else if (turtle->GetState() == TURTLE_STATE_DIE || turtle->GetState() == TURTLE_STATE_DIE_COLLISION_TAIL)
 			{
 				if (collisionEven->nx < 0)
 				{
@@ -767,7 +803,6 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 					turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
 				}
 				renderItemCollisionBrick(2, turtle->x, turtle->y);
-				
 				timeKick = GetTickCount();
 			}
 			else
@@ -905,8 +940,15 @@ void CMario::RenderMarioLevel4(int &ani) {
 void CMario::RenderMarioLevel3(int &ani) {
 	switch(state){
 	case MARIO_STATE_IDLE:
-		ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
+		//ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
+		// if (nx > 0) ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
+		if (nx < 0) {
+			ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_LEFT;
+		}else{
+			ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_RIGHT;
+		}
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_3_KICK_LEFT;
@@ -918,15 +960,23 @@ void CMario::RenderMarioLevel3(int &ani) {
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
+		if(isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
+		if(isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_RIGHT;
 		break;	
 	case MARIO_STATE_JUMP:
 	// not
-		DebugOut(L"111111111111 \n");
-		ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
+		// ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
+		// if (nx > 0) ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
+		if (nx < 0) {
+			ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_LEFT;
+		}else{
+			ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_RIGHT;
+		}
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
 		ani = MARIO_ANI_LEVEL_3_TURN_LEFT;
@@ -960,8 +1010,13 @@ void CMario::RenderMarioLevel3(int &ani) {
 void CMario::RenderMarioLevel2(int &ani) {
 	switch(state){
 	case MARIO_STATE_IDLE:
-		ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_IDLE_RIGHT;
+		if (nx < 0) {
+			ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_LEFT;
+		}else{
+			ani = MARIO_ANI_LEVEL_2_IDLE_RIGHT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
+		}
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_2_KICK_LEFT;
@@ -973,14 +1028,20 @@ void CMario::RenderMarioLevel2(int &ani) {
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_BIG_ANI_WALKING_LEFT;
+		if(isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_BIG_ANI_WALKING_RIGHT;
+		if(isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_RIGHT;
 		break;	
 	case MARIO_STATE_JUMP:
-	// not
-		ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+		if (nx < 0) {
+			ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_LEFT;
+		}else{
+			ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
+			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_RIGHT;
+		}
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
 		ani = MARIO_ANI_LEVEL_2_TURN_LEFT;
@@ -989,12 +1050,23 @@ void CMario::RenderMarioLevel2(int &ani) {
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_2_RUN_FAST_LEFT;
 		if (nx > 0) ani = MARIO_ANI_LEVEL_2_RUN_FAST_RIGHT;
+		// if (nx < 0) {
+		// 	ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
+		// 	if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_LEFT;
+		// }else{
+		// 	ani = MARIO_ANI_LEVEL_2_IDLE_RIGHT;
+		// 	if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
+		// }
 		break;
 	case MARIO_STATE_SHOOT_FIRE:
 	// not
 		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
 		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
-		break;	
+		break;
+	case MARIO_STATE_CARRY:
+		ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_LEFT;
+		if (nx > 0) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
+		break;
 	default:
 		break;
 	}
@@ -1039,5 +1111,29 @@ void CMario::RenderMarioLevel1(int &ani) {
 		break;	
 	default:
 		break;
+	}
+}
+
+void CMario::isCollidingObject(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> &colidingObjects){
+	float otherL;
+	float otherT;
+	float otherB;
+	float otherR;
+
+	float objectL;
+	float objectT;
+	float objectB;
+	float objectR;
+	GetBoundingBox(objectL, objectT, objectR, objectB);
+	for (int i = 0; i < coObjects->size(); i++)
+	{
+		coObjects->at(i)->GetBoundingBox(otherL, otherT, otherR, otherB);
+		if (otherL <= objectR &&
+			otherR >= objectL &&
+			otherT <= objectB &&
+			otherB >= objectT)
+		{
+			colidingObjects.push_back(coObjects->at(i));
+		}
 	}
 }

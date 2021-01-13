@@ -1,14 +1,26 @@
 #include "Turtle.h"
 #include "Game.h"
+#include "PlayScence.h"
 
 CTurtle::CTurtle(int type, float x, float y)
 {
 	turtleTypeRender = type;
-	// type = OBJECT_TYPE_TURTLE;
 	SetState(TURTLE_STATE_WALKING_LEFT);
 	originX = x; originY = y;
-
 }
+
+void CTurtle::UpdatePosition(){
+	CMario *mario = dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+	if(mario->nx < 0) {
+		SetPosition(marioX-12,marioY+7);
+	}
+	if(mario->nx > 0) {
+		SetPosition(marioX+12,marioY+7);
+	}
+}
+
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	DWORD now = GetTickCount();
@@ -16,13 +28,12 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(TURTLE_STATE_TIME_OUT_RELIVE);
 		timeRelive = now;
 	}
-	if (now - timeRelive > 500 && timeRelive != 0 && state == TURTLE_STATE_TIME_OUT_RELIVE) {
-		float a, b; GetPosition(a, b);
-		
-		SetPosition(a, b - 20);
-		SetState(TURTLE_STATE_WALKING_LEFT);
+	if (now - timeRelive > 500 && timeRelive != 0 && state == TURTLE_STATE_TIME_OUT_RELIVE && state != TURTLE_STATE_MARIO_CARRY) {
+		 float a, b; GetPosition(a, b);
+		 SetPosition(a, b - 20);
+		 SetState(TURTLE_STATE_WALKING_LEFT);
+		// bo comment o trên để turtle sống lại
 	}
-	// DebugOut(L"state: %d \n", state);
 	CGameObject::Update(dt, coObjects);
 
 	vy = 0.009f * dt;
@@ -32,13 +43,10 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (x < BORDER_LEFT && state == TURTLE_STATE_WALKING_LEFT && y < 120)
 		{
 			SetState(TURTLE_STATE_WALKING_RIGHT);
-			//vx = 0.03f;
 		}
 		if (x > BORDER_RIGHT && state == TURTLE_STATE_WALKING_RIGHT && y < 120)
 		{
-
 			SetState(TURTLE_STATE_WALKING_LEFT);
-			//vx = -0.03f;
 		}
 	}
 
@@ -48,18 +56,31 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (x < 2085 && state == TURTLE_STATE_WALKING_LEFT)
 		{
 			SetState(TURTLE_STATE_WALKING_RIGHT);
-			//vx = 0.03f;
+			// vx = 0.03f;
 		}
 		if (x > 2105 && state == TURTLE_STATE_WALKING_RIGHT)
 		{
 			SetState(TURTLE_STATE_WALKING_LEFT);
-			//vx = -0.03f;
+			// vx = -0.03f;
 		}
 	}
 
 	if (now - timeChangeDirection < 300 && timeChangeDirection != NUMBER_0) // timeChangeDirection when collision with tail
 	{
 		vy = -0.1f;
+	}
+
+	if(state == TURTLE_STATE_MARIO_CARRY){
+		UpdatePosition();
+		vx = 0.0f;
+		vy=  0.0f;
+	}
+
+	if(state == TURTLE_STATE_MARIO_CARRY_DONE_RIGHT) {
+		vx = 0.3f;
+	}
+	if(state == TURTLE_STATE_MARIO_CARRY_DONE_LEFT) {
+		vx = -0.3f;
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -113,6 +134,10 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						int type = brick->GetTypeItemRender();
 						dynamic_cast<CMario *>(CGame::GetInstance()->GetCurrentScene())->renderItemCollisionBrick(type, brick->x, brick->y);
 					}
+					SetState(TURTLE_STATE_DIE_MOVING_LEFT);
+				}
+				else {
+					SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
 				}
 			}
 			if (dynamic_cast<CBrickColliBroken *>(e->obj))
@@ -137,6 +162,7 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
 }
+
 void CTurtle::Render()
 {
 	int ani = 0;
@@ -164,6 +190,10 @@ void CTurtle::Render()
 	if (state == TURTLE_STATE_TIME_OUT_RELIVE) {
 		ani = TURTLE_ANI_TIME_OUT_RELIVE;
 	}
+	if(state == TURTLE_STATE_MARIO_CARRY){
+		ani = TURTLE_ANI_DIE;
+	}  
+	// DebugOut(L"state turtle: %d %d\n",state, ani);
 	animation_set->at(ani)->Render(x, y);
 	// RenderBoundingBox();
 }
@@ -206,6 +236,10 @@ void CTurtle::SetState(int state)
 			vx = 0.08f;
 		}
 		break;
+	case TURTLE_STATE_MARIO_CARRY:
+		vx = 0.0f;
+		vy=  0.0f;
+		break;	
 	}
 }
 

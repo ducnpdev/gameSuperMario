@@ -959,6 +959,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			break;	
 		}
 	}
+	
 	if (marioWorldMap != NULL)
 	{
 		switch (KeyCode)
@@ -995,10 +996,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CMario *mario = ((CPlayScene *)scence)->GetPlayer();
 	if (mario != NULL)
 	{
-		mario->SetFast(false);
+		// mario->SetFast(false);
 		if (mario->GetState() == MARIO_STATE_DIE) return;
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
+			mario->SetFast(false);
 			float tempVx, tempVy; 
 			mario->GetSpeed(tempVx,tempVy);
 		
@@ -1017,6 +1019,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		else if (game->IsKeyDown(DIK_LEFT))
 		{
+			mario->SetFast(false);
 			float tempVx, tempVy; 
 			mario->GetSpeed(tempVx,tempVy);
 			if(tempVx != 0 && mario->GetState() == MARIO_STATE_WALKING_RIGHT ) {
@@ -1027,12 +1030,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				mario->SetFast(true);
 			}
+
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 
 			if(mario->GetIsPower()) {
 				mario->SetState(MARIO_STATE_RUN_FAST);
 			}
-
 		
 		}
 		else if (game->IsKeyDown(DIK_DOWN))
