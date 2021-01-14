@@ -8,13 +8,15 @@
 2	textures\tilemap\map2Brick.png	176	224	248
 3	textures\intro\intro.png	255	255	255
 4	textures\intro\misc.png	176	224	248
-5	textures\intro\enemies.png	176	224	248
-6	textures\intro\enemies_2.png	255	255	255
-7	textures\intro\enemies3.png	255	255	255
+5	textures\intro\enemies.png	0	128	128
+6	textures\intro\enemies_2.png	3	26	110
+7	textures\intro\enemies3.png	68	145	190
 8	textures\intro\introBackground.png	255	255	255
 9	textures\intro\BackSuperMario.png	100	255	255
-
-
+10	textures\intro\Title1.png	100	255	255
+11	textures\intro\Title2.png	100	255	255
+12	textures\intro\Title3.png	100	255	255
+13	textures\intro\Title4.png	100	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -181,6 +183,9 @@
 # chu bros
 83005	782	84	859	125	9
 
+# chon nguoi choi
+83005	516	84	773	125	9
+
 
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
@@ -328,9 +333,6 @@
 834	83004	100
 835	83005	100
 
-
-
-
 [ANIMATION_SETS]
 
 # MARIO
@@ -380,7 +382,6 @@
 833	833
 834	834
 835	835
-
 
 
 [OBJECTS]
@@ -647,17 +648,17 @@
 82	304	160	82
 
 # intro background super mario
-83	260	-565	83	1	15
-83	45	-553	83	2	33
+83	220	-565	83	1	15
+83	15	-553	83	2	33
 # vong tron nho
 83	10	-300	832	3	76
 
-83	120	-565	833	1	15
-83	65	-530	834	4	49
-83	170	-530	835	4	49
+83	90	-565	833	1	15
+83	35	-530	834	4	49
+83	140	-530	835	4	49
 
 # number three
-73	146	-489	73
+73	120	-489	73
 
 # player left
 70	0	120	70

@@ -14,6 +14,7 @@ class CGoombafly : public CGameObject
 	DWORD untouchableGoombaFly_start;
 	DWORD timeChangeDirection;
 	bool directionCollition = true; // true collision right, false collision left
+	DWORD timeDie;
 
 public:
 	CGoombafly(float x, float y);
@@ -31,6 +32,7 @@ public:
 	DWORD GetTimeChangeDirection() { return this->timeChangeDirection; }
 	void SetDirectionCollition(bool _b = true) { this->directionCollition = _b; }
 	bool GetDirectionCollition() { return this->directionCollition; }
-
+	void SetTimeStartDie(DWORD time) { this->timeDie = time; }
+	DWORD GetTimeStartDie() { return this->timeDie; }
 };
 

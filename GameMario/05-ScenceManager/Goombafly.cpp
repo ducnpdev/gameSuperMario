@@ -1,4 +1,8 @@
 #include "Goombafly.h"
+#include "Hud.h"
+#include "PlayScence.h"
+
+
 CGoombafly::CGoombafly(float x, float y ) {
 	goomba_fly_origin_x = x;
 	goomba_fly_origin_y = y;
@@ -47,6 +51,13 @@ void CGoombafly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (now - timeChangeDirection < GOOMBA_TIME_CHANGE_DIRECTION && timeChangeDirection != NUMBER_0)
 	{
 		vy = -GOOMBA_SPEED_CHANGE_DIRECTION;
+	}
+	if (now - timeDie > TIME_DIE && timeDie != NUMBER_0)
+	{
+		CMario *mario = dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		SetStateObjectDelete(NUMBER_1);
+		mario->RenderMoney(0,x,y);
+		CHud::GetInstance()->AddNumberMoney(NUMBER_100);
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -102,8 +113,9 @@ void CGoombafly::SetState(int state) {
 	switch (state)
 	{
 		case GOOMBA_FLY_STATE_DIE:
-			y += GOOMBA_FLY_BBOX_HEIGHT - GOOMBA_FLY_BBOX_HEIGHT_DIE + 1;
+			// y += GOOMBA_FLY_BBOX_HEIGHT - GOOMBA_FLY_BBOX_HEIGHT_DIE + 1;
 			vx = 0;
+			vy = GOOMBA_WALKING_SPEED;
 			break;
 		case GOOMBA_FLY_STATE_WALKING: 
 			vx = -GOOMBA_FLY_WALKING_SPEED

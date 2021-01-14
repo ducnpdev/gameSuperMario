@@ -7,7 +7,7 @@
 #define MAIN_WINDOW_TITLE L"Game Mario"
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(176, 244, 248) 
 #define SCREEN_WIDTH 270
-#define SCREEN_HEIGHT 262	
+#define SCREEN_HEIGHT 262
 #define MAX_FRAME_RATE 120
 #define STATE_NUMBER_DIE 9999
 #define STATE_GOOMBA_DIE 10000
@@ -223,30 +223,29 @@
 #define TIME_SPLUS_ARROW 300
 
 
-#define MARIO_WALKING_SPEED_NORMAL		0.07f 
-#define MARIO_WALKING_SPEED_PAST		0.15f
-#define MARIO_WALKING_SPEED_VX_NORMAL   0.12f
-#define MARIO_WALKING_SPEED_VX_FAST     0.22f
-#define MARIO_SPEED_VX_RUN_FAST	        0.3f
+#define MARIO_WALKING_SPEED_NORMAL		        0.07f 
+#define MARIO_WALKING_SPEED_PAST		        0.15f
+#define MARIO_WALKING_SPEED_VX_NORMAL           0.12f
+#define MARIO_WALKING_SPEED_VX_FAST             0.22f
+#define MARIO_SPEED_VX_RUN_FAST	                0.3f
 #define MARIO_SPEED_VX_TURN_CHANGE_DIRECTION    0.05f
-#define MARIO_SPEED_VY_JUMP_NORMAL           0.4f
-#define MARIO_SPEED_VY_JUMP_NORMAL_HEIGHT    0.5f
+#define MARIO_SPEED_VY_JUMP_NORMAL              0.4f
+#define MARIO_SPEED_VY_JUMP_NORMAL_HEIGHT       0.5f
 
+#define MARIO_JUMP_SPEED_Y		                0.5f
+#define MARIO_GRAVITY			                0.002f
+#define MARIO_JUMP_SPEED_Y_LEVEL_2		        0.47f
+#define MARIO_JUMP_SPEED_Y_SWING_TAIL		    0.25f
+#define MARIO_SPEED_AUTO_SWITCH_SCENE			0.04f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_GRAVITY			0.002f
-#define MARIO_JUMP_SPEED_Y_LEVEL_2		0.47f
-#define MARIO_JUMP_SPEED_Y_SWING_TAIL		0.25f
-#define MARIO_SPEED_AUTO_SWITCH_SCENE			0.03f
-
-#define MARIO_JUMP_DEFLECT_SPEED 0.2f
+#define MARIO_JUMP_DEFLECT_SPEED                0.2f
 #define MARIO_GRAVITY_HAVE_STATE_FLY			0.005f
 
-#define MARIO_GRAVITY_SWING_TAIL			0.00005f
+#define MARIO_GRAVITY_SWING_TAIL			    0.00005f
 
-#define MARIO_DIE_DEFLECT_SPEED	 0.5f
-#define TypeBulletMarioFire 7
-#define MaxBulletMarioFire 2
+#define MARIO_DIE_DEFLECT_SPEED	                0.5f
+#define TypeBulletMarioFire                     7   
+#define MaxBulletMarioFire                      2
 
 #define MARIO_STATE_IDLE			            0
 #define MARIO_STATE_WALKING_RIGHT	            100
@@ -275,26 +274,26 @@
 #define MARIO_STATE_SHOOT_FIRE   	            2000
 #define MARIO_STATE_CARRY         	            2100
 
-#define	MARIO_LEVEL_1	1
-#define	MARIO_LEVEL_2   2
-#define	MARIO_LEVEL_3	3
-#define	MARIO_LEVEL_4	4 // MARIO FIRE
+#define	MARIO_LEVEL_1	                        1
+#define	MARIO_LEVEL_2                           2
+#define	MARIO_LEVEL_3	                        3
+#define	MARIO_LEVEL_4	                        4 // MARIO FIRE
 
-#define MARIO_BIG_BBOX_WIDTH  15
-#define MARIO_LEVEL3_BBOX_WIDTH  22
+#define MARIO_BIG_BBOX_WIDTH                    15
+#define MARIO_LEVEL3_BBOX_WIDTH                 22
 
-#define MARIO_BIG_BBOX_HEIGHT 27
+#define MARIO_BIG_BBOX_HEIGHT                   27
 //#define MARIO_BIG_BBOX_HEIGHT 27
-#define MARIO_BIG_ATTACT_BBOX_WIDTH  23
-#define MARIO_BIG_ATTACT_BBOX_HEIGHT 27
-#define MARIO_BIG_ATTACT_SITDOWN_BBOX_WIDTH  16
-#define MARIO_BIG_ATTACT_SITDOWN_BBOX_HEIGHT 21
-#define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 15
+#define MARIO_BIG_ATTACT_BBOX_WIDTH             23
+#define MARIO_BIG_ATTACT_BBOX_HEIGHT            27
+#define MARIO_BIG_ATTACT_SITDOWN_BBOX_WIDTH     16
+#define MARIO_BIG_ATTACT_SITDOWN_BBOX_HEIGHT    21
+#define MARIO_SMALL_BBOX_WIDTH                  13
+#define MARIO_SMALL_BBOX_HEIGHT                 15
 
-#define MARIO_UNTOUCHABLE_TIME 5000
+#define MARIO_UNTOUCHABLE_TIME                  5000
 
-#define MARIO_TIME_KICK 200
+#define MARIO_TIME_KICK                         200
 
 // mario ani
 #define MARIO_ANI_DIE				        0

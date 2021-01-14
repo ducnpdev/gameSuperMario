@@ -5,6 +5,7 @@
 class CTurtleJump : public CGameObject
 {
 	DWORD jump_at;
+	DWORD timeIntervalJump;
 public:
 	CTurtleJump();
 	void jump();

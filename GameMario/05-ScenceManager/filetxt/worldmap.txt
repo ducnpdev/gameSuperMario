@@ -4,7 +4,7 @@
 4	textures\selectionmap\tilemap\map.png	176	224	248
 5	textures\selectionmap\worldmapItem.png	176	224	248
 6	textures\HUD.png	176	224	248
-
+7	textures\overworld-maps.png	166	185	255
 99	textures\brickfloor.png	176	224	248
 100	textures\brickFloor\brickFloor39.png	176	224	248
 
@@ -49,7 +49,9 @@
 56000	25	0	27	200	1
 # ---------Small MARIO 
 # idle right
-10000	215	0	231	15	1
+10000	251	116	266	132	7
+10001	272	116	286	132	7
+
 
 #BRICK
 20001	0	0	1	1	99
@@ -121,7 +123,7 @@
 
 # ======= MARIO SMAIL =========
 #idle small right
-100	10000	100
+100	10000	100	10001	100
 
 # ======== BRICK =========
 201	20001	100

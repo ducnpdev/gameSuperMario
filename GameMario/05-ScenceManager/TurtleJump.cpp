@@ -4,25 +4,37 @@
 CTurtleJump::CTurtleJump() {
 	jump_at = GetTickCount();
 	SetState(TURTLE_JUMP_STATE_FLY);
+	timeIntervalJump = GetTickCount();
 }
 void CTurtleJump::jump()
 {
-	vy = -0.2f;
+	vy = -0.02f;
 	jump_at = GetTickCount();
 }
 
 void CTurtleJump::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
-	
-	if (GetTickCount() > jump_at + TURTLE_JUMP_INTERVAL) {
-		if (GetState() == TURTLE_JUMP_STATE_FLY) {
-			jump();
+	DWORD now = GetTickCount();
+	// if (now -  jump_at > TURTLE_JUMP_INTERVAL) {
+	// 	if (GetState() == TURTLE_JUMP_STATE_FLY) {
+	// 		jump();
+	//  	}else{
+	// 		vy = 0.02f ;
+	// 	}
+	// }
+	if (GetState() == TURTLE_JUMP_STATE_FLY){
+		if (now -  jump_at > 2000){
+			vy = -0.005f;
+ 			jump_at = GetTickCount();
 		}
+		if (now -  jump_at <= 2000){
+			vy = 0.2f;
+			// jump_at = GetTickCount();
+		}
+	}else{
+		vy = 0.05f * dt;
 	}
-	
-	// Simple fall down
-	vy += TURTLE_JUMP_GRAVITY * dt;
-	
+//	DebugOut(L"vy %f \n",vy);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -83,22 +95,22 @@ void CTurtleJump::SetState(int state) {
 	{
 	case TURTLE_JUMP_STATE_FLY:
 		vx = -TURTLE_JUMP_SPEED_VX;
-		vy = 0.5f;
+		// vy = 0.5f;
 		break;
 	case TURTLE_JUMP_STATE_DIE:
 		vy = 0.5f;
 		vx = 0;
 		break;
 	case TURTLE_JUMP_STATE_WALKING:
-		vx = -0.05f;
-		vy = 0.5f;
+		vx = -0.04f;
+	//	vy = 0.5f;
 		break;
 	case TURTLE_JUMP_STATE_DIE_MOVING_RIGHT:
-		vx = 0.1f;
-		vy = 0.5f;
+		vx = 0.15f;
+		//vy = 0.5f;
 		break;
 	case TURTLE_JUMP_STATE_DIE_MOVING_LEFT:
-		vx = -0.1f;
+		vx = -0.15f;
 		break;
 	}
 }

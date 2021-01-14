@@ -162,6 +162,9 @@
     <ClCompile Include="BulletFireMario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Letter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BulletFireMario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Letter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

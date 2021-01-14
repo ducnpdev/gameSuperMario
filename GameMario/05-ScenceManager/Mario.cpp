@@ -61,7 +61,7 @@ void CMario::swingTailAttack()
 	{
 		if (nx > 0)
 		{
-			tail->SetPosition(x + DEVIATION_ATTACK_FRONT_X -8, y + DEVIATION_ACTTACK_Y);
+			tail->SetPosition(x + DEVIATION_ATTACK_FRONT_X - 8, y + DEVIATION_ACTTACK_Y);
 		}
 		else
 		{
@@ -94,12 +94,12 @@ void CMario::upLevel()
 	if (level == MARIO_LEVEL_1)
 	{
 		// SetState(MARIO_STATE_LEVEL_1_TO_2);
-		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_2;
 	}
 	else if (level == MARIO_LEVEL_2)
 	{
-		dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->Pause();
+		dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->Pause();
 		level = MARIO_LEVEL_3;
 	}
 }
@@ -127,7 +127,7 @@ void CMario::HandleArrowHud()
 
 void CMario::HandleMarioFly()
 {
-	
+
 	if (state == MARIO_STATE_FLY)
 	{
 		vy = -MARIO_GRAVITY_HAVE_STATE_FLY * dt;
@@ -136,13 +136,16 @@ void CMario::HandleMarioFly()
 			y = 10;
 		}
 	}
-	else if(state == MARIO_STATE_JUMP) {
+	else if (state == MARIO_STATE_JUMP)
+	{
 		vy += 0.002f * dt;
 	}
-	else if (state == MARIO_STATE_JUMP_HEIGHT) {
+	else if (state == MARIO_STATE_JUMP_HEIGHT)
+	{
 		vy += 0.001f * dt;
 	}
-	else if(state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY && vy > 0){
+	else if (state == MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY && vy > 0)
+	{
 		vy += 0.00005f * dt;
 	}
 	else
@@ -158,43 +161,54 @@ void CMario::HandleMarioFly()
 	}
 }
 
-void CMario::HandleMarioSwingTail(){
-	if(isJump && isActiveWaiSwingTail){
+void CMario::HandleMarioSwingTail()
+{
+	if (isJump && isActiveWaiSwingTail)
+	{
 		vy += 0.0000018f * dt;
 	}
 }
 
-void CMario::HandleTurnChangeDirection(){
+void CMario::HandleTurnChangeDirection()
+{
 	DWORD now = GetTickCount();
-	if( now - timeTurnChangeDirection < 400 && timeTurnChangeDirection != 0){
+	if (now - timeTurnChangeDirection < 400 && timeTurnChangeDirection != 0)
+	{
 		SetState(MARIO_STATE_TURN_CHANGE_DIRECTION);
 	}
 }
 
-void CMario::handleCarry() {
-	if(level == MARIO_LEVEL_2) {
-		
+void CMario::handleCarry()
+{
+	if (level == MARIO_LEVEL_2)
+	{
+
 		SetState(MARIO_STATE_CARRY);
 	}
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (isActiveSwitchScene) {
+		SetState(MARIO_STATE_WALKING_RIGHT);
+		vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	}
 	CGameObject::Update(dt);
 	DWORD now = GetTickCount();
 	HandleArrowHud();
-	
+
 	HandleMarioFly();
-	if(now - timeKick < MARIO_TIME_KICK && timeKick != 0) {SetState(MARIO_STATE_KICK);}
+	if (now - timeKick < MARIO_TIME_KICK && timeKick != 0)
+	{
+		SetState(MARIO_STATE_KICK);
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	HandleTurnChangeDirection();
-HandleUpDownLevel();
-	// handleCarry();
-	// if(!fast && isCarry) 
+	HandleUpDownLevel();
 
-	if (isActiveSwitchScene) vx = MARIO_SPEED_AUTO_SWITCH_SCENE;
+	
 	coEvents.clear();
 
 	if (GetTickCount() - untouchable_start > TIME_MARIO_UNTOUCHABLE)
@@ -211,21 +225,26 @@ HandleUpDownLevel();
 		if (dynamic_cast<CTurtle *>(c))
 		{
 			CTurtle *turtle = dynamic_cast<CTurtle *>(c);
-			if(!fast && turtle->GetState() == TURTLE_STATE_MARIO_CARRY) {
-				if(nx > 0) turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
-				if(nx < 0) turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
+			if (!fast && turtle->GetState() == TURTLE_STATE_MARIO_CARRY)
+			{
+				if (nx > 0)
+					turtle->SetState(TURTLE_STATE_DIE_MOVING_RIGHT);
+				if (nx < 0)
+					turtle->SetState(TURTLE_STATE_DIE_MOVING_LEFT);
 				isCarry = false;
 			}
 		}
 	}
-
-	if (state != MARIO_STATE_DIE) CalcPotentialCollisions(coObjects, coEvents);
+	
+	if (state != MARIO_STATE_DIE)
+		CalcPotentialCollisions(coObjects, coEvents);
 
 	if (coEvents.size() == 0)
 	{
 		x += dx;
 		y += dy;
-		if (dy > 0) {
+		if (dy > 0)
+		{
 			isJump = true;
 		}
 	}
@@ -241,7 +260,7 @@ HandleUpDownLevel();
 		bool isCollisionGold = false;
 		bool isCollisionGround = false;
 		bool needPushBack = false;
-		
+
 		if (nx != 0)
 			vx = 0;
 		if (ny < 0)
@@ -284,43 +303,9 @@ HandleUpDownLevel();
 
 			if (dynamic_cast<CTurtleJump *>(e->obj))
 			{
+				CollisionWithTurtleFly(e);
 				needPushBack = true;
-
-				CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
-				if (e->ny < 0)
-				{
-					if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY)
-					{
-						turtleJump->SetState(TURTLE_JUMP_STATE_WALKING);
-					}
-					if (turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
-					{
-						turtleJump->SetState(TURTLE_JUMP_STATE_DIE);
-					}
-				}
-				else if (e->nx != 0)
-				{
-					// == 0 la co va cham
-					if (untouchable == 0)
-					{
-						if (turtleJump->GetState() == TURTLE_JUMP_STATE_DIE)
-						{
-							if (e->nx < 0)
-							{
-								turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_RIGHT);
-							}
-							if (e->nx > 0)
-							{
-								turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_LEFT);
-							}
-							timeKick = GetTickCount();
-						}
-						else if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY || turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
-						{
-							downLevel();
-						}
-					}
-				}
+				continue;
 			}
 
 			else if (dynamic_cast<CFlowSwitchScene *>(e->obj))
@@ -351,6 +336,8 @@ HandleUpDownLevel();
 						{
 							JumpWhenCollision();
 							goombafly->SetState(GOOMBA_FLY_STATE_DIE);
+							goombafly->SetTimeStartDie(GetTickCount());
+
 						}
 					}
 				}
@@ -378,10 +365,12 @@ HandleUpDownLevel();
 				money->SetStateObjectDelete(NUMBER_1);
 				CHud::GetInstance()->AddNumberGold(NUMBER_1);
 			}
+
 			else if (dynamic_cast<CMushroom *>(e->obj))
 			{
 				CollisionWithMushroom(e);
 			}
+
 			else if (dynamic_cast<CItemLeaf *>(e->obj))
 			{
 				CItemLeaf *leaf = dynamic_cast<CItemLeaf *>(e->obj);
@@ -391,6 +380,7 @@ HandleUpDownLevel();
 				upLevel();
 				CHud::GetInstance()->AddNumberMoney(NUMBER_1000);
 			}
+
 			else if (dynamic_cast<CBrick *>(e->obj))
 			{
 				needPushBack = true;
@@ -405,6 +395,7 @@ HandleUpDownLevel();
 					}
 				}
 			}
+
 			else if (dynamic_cast<CBrickFloor *>(e->obj))
 			{
 				isJump = false;
@@ -412,6 +403,7 @@ HandleUpDownLevel();
 				isCollisionGround = true;
 				SetIsActiveFly(false);
 			}
+
 			else if (dynamic_cast<CBrickColliBroken *>(e->obj))
 			{
 				needPushBack = true;
@@ -419,16 +411,18 @@ HandleUpDownLevel();
 				CollisionWithBrickColliBroken(e, tempIsCollisionGold);
 				isCollisionGold = tempIsCollisionGold;
 			}
+
 			else if (dynamic_cast<CBullet *>(e->obj))
 			{
 				downLevel();
 			}
+
 			else if (dynamic_cast<CFlower *>(e->obj) || dynamic_cast<CFlowerType2 *>(e->obj))
 			{
 				downLevel();
 			}
 		}
-	
+
 		if (isCollisionGold && !isCollisionGround)
 		{
 			WalkThrough(old_vx, old_vy);
@@ -441,7 +435,7 @@ HandleUpDownLevel();
 		}
 	}
 
-	if (GetTickCount() - timeSwitchScene > NUMBER_2500 && timeSwitchScene != 0)
+	if (GetTickCount() - timeSwitchScene > 1500 && timeSwitchScene != 0)
 	{
 		isActiveSwitchScene = false;
 		CGame::GetInstance()->SwitchScene(ID_SCENE_4);
@@ -466,24 +460,32 @@ void CMario::SetState(int state)
 	case MARIO_STATE_WALKING_RIGHT:
 		nx = DIRECTION_RIGHT_X;
 		vx = MARIO_WALKING_SPEED_VX_NORMAL;
-		if (fast) vx = MARIO_WALKING_SPEED_VX_FAST;
-		if (GetState() == MARIO_STATE_FLY) return;
-		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = -MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
+		if (fast)
+			vx = MARIO_WALKING_SPEED_VX_FAST;
+		if (GetState() == MARIO_STATE_FLY)
+			return;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION)
+			vx = -MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		nx = DIRECTION_LEFT_X;
 		vx = -MARIO_WALKING_SPEED_VX_NORMAL;
-		if (fast) vx = -MARIO_WALKING_SPEED_VX_FAST;
-		if (GetState() == MARIO_STATE_FLY) return;
-		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION) vx = MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
+		if (fast)
+			vx = -MARIO_WALKING_SPEED_VX_FAST;
+		if (GetState() == MARIO_STATE_FLY)
+			return;
+		if (GetState() == MARIO_STATE_TURN_CHANGE_DIRECTION)
+			vx = MARIO_SPEED_VX_TURN_CHANGE_DIRECTION;
 		break;
 	case MARIO_STATE_JUMP:
-		if (isJump) return;
+		if (isJump)
+			return;
 		isJump = true;
 		vy = -MARIO_SPEED_VY_JUMP_NORMAL;
 		break;
 	case MARIO_STATE_JUMP_HEIGHT:
-		if (isJump) return;
+		if (isJump)
+			return;
 		isJump = true;
 		vy = -MARIO_SPEED_VY_JUMP_NORMAL_HEIGHT;
 		break;
@@ -522,12 +524,12 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_RUN_FAST:
 		vx = -MARIO_SPEED_VX_RUN_FAST;
-		if( nx == DIRECTION_RIGHT_X ) vx = MARIO_SPEED_VX_RUN_FAST;
+		if (nx == DIRECTION_RIGHT_X)
+			vx = MARIO_SPEED_VX_RUN_FAST;
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
-		break;	
+		break;
 	}
-	
 
 	CGameObject::SetState(state);
 }
@@ -565,7 +567,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else if (level == MARIO_LEVEL_4)
 	{
-		
+
 		if (state == MARIO_STATE_SIT_DOWN)
 		{
 			top = y + NUMBER_14;
@@ -638,7 +640,7 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	{
 		CAnimationSets *animation_sets = CAnimationSets::GetInstance();
 		CGameObject *obj = NULL;
-		obj = new CNumber(0,x, y);
+		obj = new CNumber(0, x, y);
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
 		obj->SetAnimationSet(ani_set);
@@ -687,7 +689,7 @@ void CMario::renderItemCollisionBrick(int type, float x, float y)
 	}
 	else if (type == TypeBulletMarioFire)
 	{
-		
+
 		obj = new CBulletFireMario(nx);
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(21);
@@ -792,7 +794,8 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 	{
 		if (untouchable == 0)
 		{
-			if(fast) {
+			if (fast)
+			{
 				SetState(MARIO_STATE_CARRY);
 				// turtle->SetPosition(x, y);
 				isCarry = true;
@@ -819,6 +822,49 @@ void CMario::CollisionWithTurtle(LPCOLLISIONEVENT collisionEven)
 	}
 }
 
+void CMario::CollisionWithTurtleFly(LPCOLLISIONEVENT e)
+{
+	CTurtleJump *turtleJump = dynamic_cast<CTurtleJump *>(e->obj);
+	if (e->ny < 0)
+	{
+		if (turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
+		{
+			turtleJump->SetState(TURTLE_JUMP_STATE_DIE);
+			JumpWhenCollision();
+		}
+		if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY)
+		{
+			turtleJump->SetState(TURTLE_JUMP_STATE_WALKING);
+			JumpWhenCollision();
+		}
+	}
+	else if (e->nx != 0)
+	{
+		// == 0 la co va cham
+		if (untouchable == 0)
+		{
+			if (turtleJump->GetState() == TURTLE_JUMP_STATE_DIE)
+			{
+				if (e->nx < 0)
+				{
+					turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_RIGHT);
+				}
+				if (e->nx > 0)
+				{
+					turtleJump->SetState(TURTLE_JUMP_STATE_DIE_MOVING_LEFT);
+				}
+				renderItemCollisionBrick(2, turtleJump->x, turtleJump->y);
+
+				timeKick = GetTickCount();
+			}
+			else if (turtleJump->GetState() == TURTLE_JUMP_STATE_FLY || turtleJump->GetState() == TURTLE_JUMP_STATE_WALKING)
+			{
+				downLevel();
+			}
+		}
+	}
+}
+
 void CMario::CollisionWithMushroom(LPCOLLISIONEVENT collisionEven)
 {
 	CMushroom *mushroom = dynamic_cast<CMushroom *>(collisionEven->obj);
@@ -827,7 +873,7 @@ void CMario::CollisionWithMushroom(LPCOLLISIONEVENT collisionEven)
 	mushroom->SetStateObjectDelete(NUMBER_1);
 	upLevel();
 	CHud::GetInstance()->AddNumberMoney(NUMBER_1000);
-	// 1 number 1000	
+	// 1 number 1000
 	RenderMoney(TYPE_RENDER_NUMBER_1000, x, y);
 }
 
@@ -879,202 +925,258 @@ void CMario::Render()
 {
 	int ani = 0;
 
-	if (level == MARIO_LEVEL_4) {
+	if (level == MARIO_LEVEL_4)
+	{
 		RenderMarioLevel4(ani);
 	}
-	if (level == MARIO_LEVEL_3) {
+	if (level == MARIO_LEVEL_3)
+	{
 		RenderMarioLevel3(ani);
 	}
-	if (level == MARIO_LEVEL_2) {
+	if (level == MARIO_LEVEL_2)
+	{
 		RenderMarioLevel2(ani);
 	}
-	if (level == MARIO_LEVEL_1) {
+	if (level == MARIO_LEVEL_1)
+	{
 		RenderMarioLevel1(ani);
 	}
-	if(state == MARIO_STATE_UP_LEVEL){
+	if (state == MARIO_STATE_UP_LEVEL)
+	{
 		switch (level)
 		{
 		case MARIO_LEVEL_2:
 			ani = MARIO_ANI_LEVEL_1_TO_2_LEFT;
-			if(nx > 0) ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
+			if (nx > 0)
+				ani = MARIO_ANI_LEVEL_1_TO_2_RIGHT;
 			break;
 		case MARIO_LEVEL_3:
 			ani = MARIO_ANI_LEVEL_2_TO_3_RIGHT;
-			break;	
-			
+			break;
+
 		default:
 			break;
 		}
-		
 	}
 	int alpha = 255;
-	if (untouchable) alpha = 128;
-	if (nx == DIRECTION_RIGHT_X && level == MARIO_LEVEL_3) {
+	if (untouchable)
+		alpha = 128;
+	if (nx == DIRECTION_RIGHT_X && level == MARIO_LEVEL_3)
+	{
 		animation_set->at(ani)->Render(x - 8, y, alpha);
-	} else {
+	}
+	else
+	{
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
 	// RenderBoundingBox();
 }
 
-void CMario::RenderMarioLevel4(int &ani) {
-	switch(state){
+void CMario::RenderMarioLevel4(int &ani)
+{
+	switch (state)
+	{
 	case MARIO_STATE_IDLE:
 		ani = MARIO_ANI_LEVEL_4_IDLE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_IDLE_RIGHT;
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_4_KICK_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_KICK_RIGHT;
 		break;
 	case MARIO_STATE_SIT_DOWN:
 		ani = MARIO_ANI_LEVEL_4_SIT_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_SIT_RIGHT;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_ANI_LEVEL_4_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_ANI_LEVEL_4_WALKING_RIGHT;
-		break;	
+		break;
 	case MARIO_STATE_JUMP:
 		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
-		ani =  MARIO_ANI_LEVEL_4_TURN_RIGHT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
+		ani = MARIO_ANI_LEVEL_4_TURN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_TURN_LEFT;
 		break;
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_4_RUN_FAST_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_RUN_FAST_RIGHT;
 		break;
 	case MARIO_STATE_SHOOT_FIRE:
 		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
-		break;	
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;
 	case MARIO_STATE_JUMP_HEIGHT:
 		ani = MARIO_ANI_LEVEL_4_JUMP_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_JUMP_RIGHT;
 		break;
 	default:
 		break;
 	}
 }
 
-void CMario::RenderMarioLevel3(int &ani) {
-	switch(state){
+void CMario::RenderMarioLevel3(int &ani)
+{
+	switch (state)
+	{
 	case MARIO_STATE_IDLE:
 		//ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
 		// if (nx > 0) ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
-		if (nx < 0) {
+		if (nx < 0)
+		{
 			ani = MARIO_ANI_LEVEL_3_IDLE_LEFT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_LEFT;
-		}else{
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_LEFT;
+		}
+		else
+		{
 			ani = MARIO_ANI_LEVEL_3_IDLE_RIGHT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_RIGHT;
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_3_CARRY_IDLE_RIGHT;
 		}
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_3_KICK_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_KICK_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_3_KICK_RIGHT;
 		break;
 	case MARIO_STATE_SIT_DOWN:
 		ani = MARIO_ANI_LEVEL_3_SIT_DOWN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_SIT_DOWN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_3_SIT_DOWN_RIGHT;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_BIG_ATTACT_ANI_WALKING_LEFT;
-		if(isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_LEFT;
+		if (isCarry)
+			ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_BIG_ATTACT_ANI_WALKING_RIGHT;
-		if(isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_RIGHT;
-		break;	
+		if (isCarry)
+			ani = MARIO_ANI_LEVEL_3_CARRY_WALKING_RIGHT;
+		break;
 	case MARIO_STATE_JUMP:
-	// not
+		// not
 		// ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
 		// if (nx > 0) ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-		if (nx < 0) {
+		if (nx < 0)
+		{
 			ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_LEFT;
-		}else{
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_LEFT;
+		}
+		else
+		{
 			ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_RIGHT;
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_3_CARRY_JUMP_RIGHT;
 		}
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
 		ani = MARIO_ANI_LEVEL_3_TURN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_TURN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_3_TURN_RIGHT;
 		break;
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_3_RUN_FAST_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_3_RUN_FAST_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_3_RUN_FAST_RIGHT;
 		break;
 
 	case MARIO_STATE_SLOW_DOWN_SWING_TAIL_FLY:
-		ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_LEFT;	
+		ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_LEFT;
 		if (nx > 0)
 			ani = MARIO_ANI_SLOW_DOWN_SWING_TAIL_FLY_RIGHT;
 		break;
 	case MARIO_STATE_SHOOT_FIRE:
-	// not
+		// not
 		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
-		break;	
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;
 	case MARIO_STATE_JUMP_HEIGHT:
 		ani = MARIO_ANI_LEVEL_3_JUMP_LEFT;
 		if (nx > 0)
 			ani = MARIO_ANI_LEVEL_3_JUMP_RIGHT;
-		break;	
+		break;
 	default:
 		break;
 	}
 }
 
-void CMario::RenderMarioLevel2(int &ani) {
-	switch(state){
+void CMario::RenderMarioLevel2(int &ani)
+{
+	switch (state)
+	{
 	case MARIO_STATE_IDLE:
-		if (nx < 0) {
+		if (nx < 0)
+		{
 			ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_LEFT;
-		}else{
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_LEFT;
+		}
+		else
+		{
 			ani = MARIO_ANI_LEVEL_2_IDLE_RIGHT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
 		}
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_2_KICK_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_KICK_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_2_KICK_RIGHT;
 		break;
 	case MARIO_STATE_SIT_DOWN:
 		ani = MARIO_ANI_LEVEL_2_SIT_DOWN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_SIT_DOWN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_2_SIT_DOWN_RIGHT;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_BIG_ANI_WALKING_LEFT;
-		if(isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_LEFT;
+		if (isCarry)
+			ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_BIG_ANI_WALKING_RIGHT;
-		if(isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_RIGHT;
-		break;	
+		if (isCarry)
+			ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_RIGHT;
+		break;
 	case MARIO_STATE_JUMP:
-		if (nx < 0) {
+		if (nx < 0)
+		{
 			ani = MARIO_ANI_LEVEL_2_JUMP_LEFT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_LEFT;
-		}else{
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_LEFT;
+		}
+		else
+		{
 			ani = MARIO_ANI_LEVEL_2_JUMP_RIGHT;
-			if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_RIGHT;
+			if (isCarry)
+				ani = MARIO_ANI_LEVEL_2_CARRY_JUMP_RIGHT;
 		}
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
 		ani = MARIO_ANI_LEVEL_2_TURN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_TURN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_2_TURN_RIGHT;
 		break;
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_2_RUN_FAST_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_RUN_FAST_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_2_RUN_FAST_RIGHT;
 		// if (nx < 0) {
 		// 	ani = MARIO_ANI_LEVEL_2_IDLE_LEFT;
 		// 	if (isCarry) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_LEFT;
@@ -1084,62 +1186,74 @@ void CMario::RenderMarioLevel2(int &ani) {
 		// }
 		break;
 	case MARIO_STATE_SHOOT_FIRE:
-	// not
+		// not
 		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
 		break;
 	case MARIO_STATE_CARRY:
 		ani = MARIO_ANI_LEVEL_2_CARRY_WALKING_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_2_CARRY_IDLE_RIGHT;
 		break;
 	default:
 		break;
 	}
 }
 
-void CMario::RenderMarioLevel1(int &ani) {
-	switch(state){
+void CMario::RenderMarioLevel1(int &ani)
+{
+	switch (state)
+	{
 	case MARIO_STATE_IDLE:
 		ani = MARIO_ANI_IDLE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_IDLE_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_IDLE_RIGHT;
 		break;
 	case MARIO_STATE_KICK:
 		ani = MARIO_ANI_LEVEL_1_KICK_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_1_KICK_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_1_KICK_RIGHT;
 		break;
 	case MARIO_STATE_SIT_DOWN:
 		ani = MARIO_ANI_IDLE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_IDLE_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_IDLE_RIGHT;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ani = MARIO_ANI_WALKING_LEFT;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		ani = MARIO_ANI_WALKING_RIGHT;
-		break;	
+		break;
 	case MARIO_STATE_JUMP:
 		ani = MARIO_ANI_LEVEL_1_JUMP_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_1_JUMP_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_1_JUMP_RIGHT;
 		break;
 	case MARIO_STATE_TURN_CHANGE_DIRECTION:
 		ani = MARIO_ANI_LEVEL_1_TURN_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_1_TURN_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_1_TURN_RIGHT;
 		break;
 	case MARIO_STATE_RUN_FAST:
 		ani = MARIO_ANI_LEVEL_1_RUN_FAST_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_1_RUN_FAST_RIGHT;
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_1_RUN_FAST_RIGHT;
 		break;
 	case MARIO_STATE_SHOOT_FIRE:
-	// not
+		// not
 		ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_LEFT;
-		if (nx > 0) ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
-		break;	
+		if (nx > 0)
+			ani = MARIO_ANI_LEVEL_4_SHOOT_FIRE_RIGHT;
+		break;
 	default:
 		break;
 	}
 }
 
-void CMario::isCollidingObject(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> &colidingObjects){
+void CMario::isCollidingObject(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> &colidingObjects)
+{
 	float otherL;
 	float otherT;
 	float otherB;
@@ -1171,5 +1285,5 @@ void CMario::RenderMoney(int number, float x, float y)
 	obj->SetPosition(number, y);
 	LPANIMATION_SET ani_set = animation_sets->Get(OBJECT_TYPE_NUMBER);
 	obj->SetAnimationSet(ani_set);
-	dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
+	dynamic_cast<CPlayScene *>(CGame::GetInstance()->GetCurrentScene())->AddObject(obj);
 }

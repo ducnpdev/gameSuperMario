@@ -109,6 +109,7 @@ public:
 	void CollisionWithTurtle(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithMushroom(LPCOLLISIONEVENT collisionEven);
 	void CollisionWithBrickColliBroken(LPCOLLISIONEVENT collisionEven, bool &isCollision);
+	void CollisionWithTurtleFly(LPCOLLISIONEVENT collisionEven);
 
 	void SetIsPower(bool _b = true) { this->isPower = _b; }
 	bool GetIsPower() { return this->isPower; }
